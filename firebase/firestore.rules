@@ -19,9 +19,10 @@ service cloud.firestore {
       // the tablet updates its live status; it may not change its own config
       allow create: if isAdmin();
       allow update: if isAdmin() ||
+        // 'online' is owned by the heartbeat watchdog function, never by the tablet
         (isDevice(d) && onlyChanges(['last_reading', 'status', 'alarm', 'trend_falling', 'last_heartbeat',
-                                      'battery', 'charging', 'app_version', 'online', 'lost_reason',
-                                      'last_seen_local']));
+                                      'battery', 'charging', 'app_version', 'lost_reason',
+                                      'last_seen_local', 'calibration']));
       allow delete: if isAdmin();
 
       match /readings/{r} {

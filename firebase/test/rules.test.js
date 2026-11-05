@@ -38,8 +38,10 @@ test('tablet writes its readings and heartbeat', async () => {
   await assertSucceeds(updateDoc(doc(tablet(), `devices/${DEV}`), { last_heartbeat: serverTimestamp(), status: 'OK' }));
 });
 
-test('tablet cannot change its own thresholds', async () => {
+test('tablet cannot change its own thresholds or online flag', async () => {
   await assertFails(updateDoc(doc(tablet(), `devices/${DEV}`), { config: { low_threshold: 0 } }));
+  await assertFails(updateDoc(doc(tablet(), `devices/${DEV}`), { online: true }));
+  await assertSucceeds(updateDoc(doc(tablet(), `devices/${DEV}`), { calibration: '{"center":[1,2]}' }));
 });
 
 test('another tablet cannot write here', async () => {

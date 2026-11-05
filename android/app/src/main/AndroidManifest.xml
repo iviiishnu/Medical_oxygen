@@ -34,6 +34,20 @@
             </intent-filter>
         </activity>
 
+        <!-- Enabled only in Monitor mode: makes the app the tablet's home screen so it reopens
+             (and resumes monitoring) automatically after a reboot. -->
+        <activity-alias
+            android:name=".ui.MonitorHomeAlias"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".ui.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name=".ui.AlarmActivity"
             android:exported="false"
