@@ -1,0 +1,26 @@
+{
+  "magnate_10_05.40.jpg": {
+    "value": 5.4,
+    "lamp_state": "NORMAL"
+  },
+  "magnate_10_04.20.jpg": {
+    "value": 4.2,
+    "lamp_state": "NORMAL"
+  },
+  "magnate_10_03.00.jpg": {
+    "value": 3.0,
+    "lamp_state": "LOW"
+  },
+  "magnate_10_01.50.jpg": {
+    "value": 1.5,
+    "lamp_state": "LOW"
+  },
+  "magnate_10_08.00.jpg": {
+    "value": 8.0,
+    "lamp_state": "NORMAL"
+  },
+  "magnate_10_05.40_glare.jpg": {
+    "value": 5.4,
+    "lamp_state": "NORMAL"
+  }
+}

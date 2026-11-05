@@ -1,0 +1,65 @@
+rules_version = '2';
+// Roles come from custom claims set by scripts/set_role.js (admin SDK):
+//   {role: "device", device_id: "tab-main-o2-01"}  - the tablet
+//   {role: "staff"} / {role: "admin"}                - people
+// Cloud Functions use the admin SDK and bypass these rules.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function role() { return signedIn() ? request.auth.token.get('role', '') : ''; }
+    function isAdmin() { return role() == 'admin'; }
+    function isStaff() { return role() == 'staff' || isAdmin(); }
+    function isDevice(d) { return role() == 'device' && request.auth.token.get('device_id', '') == d; }
+    function onlyChanges(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+
+    match /devices/{d} {
+      allow read: if isStaff() || isDevice(d);
+      // the tablet updates its live status; it may not change its own config
+      allow create: if isAdmin();
+      allow update: if isAdmin() ||
+        (isDevice(d) && onlyChanges(['last_reading', 'status', 'alarm', 'trend_falling', 'last_heartbeat',
+                                      'battery', 'charging', 'app_version', 'online', 'lost_reason',
+                                      'last_seen_local']));
+      allow delete: if isAdmin();
+
+      match /readings/{r} {
+        allow read: if isStaff() || isDevice(d);
+        allow create: if isDevice(d) && request.resource.data.device_id == d;
+        allow update, delete: if false;
+      }
+    }
+
+    match /alerts/{a} {
+      allow read: if isStaff() || (role() == 'device' && resource.data.device_id == request.auth.token.device_id);
+      allow create: if role() == 'device'
+        && request.resource.data.device_id == request.auth.token.device_id
+        && request.resource.data.state == 'OPEN';
+      // staff acknowledge: OPEN -> ACKED, stamped with their own uid and server time
+      allow update: if (isStaff()
+          && resource.data.state == 'OPEN'
+          && request.resource.data.state == 'ACKED'
+          && request.resource.data.acked_by == request.auth.uid
+          && request.resource.data.acked_at == request.time
+          && onlyChanges(['state', 'acked_by', 'acked_by_name', 'acked_at']))
+        // the tablet resolves its own alert when the condition clears
+        || (role() == 'device'
+          && resource.data.device_id == request.auth.token.device_id
+          && request.resource.data.state == 'RESOLVED'
+          && onlyChanges(['state', 'resolved_at', 'resolve_value']));
+      allow delete: if false;
+    }
+
+    match /staff/{uid} {
+      allow read: if isStaff();
+      allow create, delete: if isAdmin();
+      // people can register their phone and toggle on-duty; order/role is admin-only
+      allow update: if isAdmin() || (request.auth.uid == uid && onlyChanges(['fcm_tokens', 'on_duty', 'last_seen']));
+    }
+
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

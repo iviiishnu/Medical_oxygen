@@ -1,0 +1,46 @@
+{
+  "device_id": "tab-main-o2-01",
+  "gauge_id": "oxygen_main",
+  "unit": "kg/cm2",
+  "center": [
+    250,
+    240
+  ],
+  "radius": 170,
+  "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+  ],
+  "max_point": [
+    364.19774516162744,
+    354.1977451616274
+  ],
+  "min_value": 0,
+  "max_value": 16,
+  "direction": "cw",
+  "needle_color": "dark",
+  "needle_r_inner": 0.3,
+  "needle_r_outer": 0.62,
+  "lamps": [
+    {
+      "name": "NORMAL",
+      "box": [
+        479,
+        159,
+        28,
+        28
+      ],
+      "hue": "green"
+    },
+    {
+      "name": "LOW",
+      "box": [
+        479,
+        239,
+        28,
+        28
+      ],
+      "hue": "red"
+    }
+  ]
+}

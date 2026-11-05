@@ -1,0 +1,26 @@
+{
+  "alarm_box_16_05.40.jpg": {
+    "value": 5.4,
+    "lamp_state": "NORMAL"
+  },
+  "alarm_box_16_04.00.jpg": {
+    "value": 4.0,
+    "lamp_state": "NORMAL"
+  },
+  "alarm_box_16_03.20.jpg": {
+    "value": 3.2,
+    "lamp_state": "LOW"
+  },
+  "alarm_box_16_02.50.jpg": {
+    "value": 2.5,
+    "lamp_state": "LOW"
+  },
+  "alarm_box_16_12.00.jpg": {
+    "value": 12.0,
+    "lamp_state": "NORMAL"
+  },
+  "alarm_box_16_05.40_glare.jpg": {
+    "value": 5.4,
+    "lamp_state": "NORMAL"
+  }
+}

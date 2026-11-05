@@ -1,0 +1,5044 @@
+{
+ "config": "contract/monitor_config.default.json",
+ "scenarios": [
+  {
+   "name": "steady_ok",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 8.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 9.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 10.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 11.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 12.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 13.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 14.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 15.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 16.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 17.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 18.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 19.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    }
+   ]
+  },
+  {
+   "name": "single_glare_frame_no_alarm",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 8.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 9.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 10.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 11.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 12.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 13.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 14.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 15.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 16.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 17.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 18.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 19.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 20.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    }
+   ]
+  },
+  {
+   "name": "isolated_low_frames_no_alarm",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 3.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 8.0,
+     "value": 3.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 9.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 10.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 11.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 12.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 13.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 14.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 15.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    }
+   ]
+  },
+  {
+   "name": "sudden_drop_low_after_3",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 8.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 9.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 10.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 11.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    }
+   ]
+  },
+  {
+   "name": "sudden_drop_critical_after_3",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 8.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 9.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 10.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 11.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    }
+   ]
+  },
+  {
+   "name": "hysteresis_clear",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 8.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 9.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 10.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 11.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 12.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 13.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 14.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 15.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 16.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 17.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 18.0,
+     "value": 4.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 19.0,
+     "value": 4.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 20.0,
+     "value": 4.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 21.0,
+     "value": 4.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 22.0,
+     "value": 4.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 23.0,
+     "value": 4.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    }
+   ]
+  },
+  {
+   "name": "critical_to_low_to_ok",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 8.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 9.0,
+     "value": 2.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 10.0,
+     "value": 3.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 11.0,
+     "value": 3.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 12.0,
+     "value": 3.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 13.0,
+     "value": 3.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "CRITICAL"
+    },
+    {
+     "t": 14.0,
+     "value": 3.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 15.0,
+     "value": 3.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 16.0,
+     "value": 4.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 17.0,
+     "value": 4.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 18.0,
+     "value": 4.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 19.0,
+     "value": 4.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 20.0,
+     "value": 4.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 21.0,
+     "value": 4.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    }
+   ]
+  },
+  {
+   "name": "falling_trend_warning",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 6.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 1.0,
+     "value": 5.98,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 2.0,
+     "value": 5.96,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 3.0,
+     "value": 5.94,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 4.0,
+     "value": 5.92,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 5.0,
+     "value": 5.9,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 6.0,
+     "value": 5.88,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 7.0,
+     "value": 5.86,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 8.0,
+     "value": 5.84,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 9.0,
+     "value": 5.82,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 10.0,
+     "value": 5.8,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 11.0,
+     "value": 5.78,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 12.0,
+     "value": 5.76,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 13.0,
+     "value": 5.74,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 14.0,
+     "value": 5.72,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 15.0,
+     "value": 5.7,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 16.0,
+     "value": 5.68,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 17.0,
+     "value": 5.66,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 18.0,
+     "value": 5.64,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 19.0,
+     "value": 5.62,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 20.0,
+     "value": 5.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 21.0,
+     "value": 5.58,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 22.0,
+     "value": 5.56,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 23.0,
+     "value": 5.54,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 24.0,
+     "value": 5.52,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 25.0,
+     "value": 5.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 26.0,
+     "value": 5.48,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 27.0,
+     "value": 5.46,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 28.0,
+     "value": 5.4399999999999995,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 29.0,
+     "value": 5.42,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 30.0,
+     "value": 5.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 31.0,
+     "value": 5.38,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 32.0,
+     "value": 5.36,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 33.0,
+     "value": 5.34,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 34.0,
+     "value": 5.32,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 35.0,
+     "value": 5.3,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 36.0,
+     "value": 5.28,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 37.0,
+     "value": 5.26,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 38.0,
+     "value": 5.24,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 39.0,
+     "value": 5.22,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 40.0,
+     "value": 5.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 41.0,
+     "value": 5.18,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 42.0,
+     "value": 5.16,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 43.0,
+     "value": 5.14,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 44.0,
+     "value": 5.12,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 45.0,
+     "value": 5.1,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 46.0,
+     "value": 5.08,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 47.0,
+     "value": 5.06,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 48.0,
+     "value": 5.04,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 49.0,
+     "value": 5.02,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 50.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 51.0,
+     "value": 4.98,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 52.0,
+     "value": 4.96,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 53.0,
+     "value": 4.9399999999999995,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 54.0,
+     "value": 4.92,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 55.0,
+     "value": 4.9,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 56.0,
+     "value": 4.88,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 57.0,
+     "value": 4.859999999999999,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 58.0,
+     "value": 4.84,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 59.0,
+     "value": 4.82,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 60.0,
+     "value": 4.8,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    }
+   ]
+  },
+  {
+   "name": "noise_no_trend",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 1.0,
+     "value": 5.042073549240395,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 2.0,
+     "value": 5.045464871341284,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 3.0,
+     "value": 5.007056000402994,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 4.0,
+     "value": 4.962159875234604,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 5.0,
+     "value": 4.952053786266843,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 6.0,
+     "value": 4.9860292250900535,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 7.0,
+     "value": 5.03284932993594,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 8.0,
+     "value": 5.049467912331169,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 9.0,
+     "value": 5.020605924262088,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 10.0,
+     "value": 4.972798944455532,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 11.0,
+     "value": 4.9500004896724645,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 12.0,
+     "value": 4.9731713540999785,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 13.0,
+     "value": 5.021008351841332,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 14.0,
+     "value": 5.049530367784744,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 15.0,
+     "value": 5.032514392007855,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 16.0,
+     "value": 4.985604834166747,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 17.0,
+     "value": 4.951930125406022,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 18.0,
+     "value": 4.962450637661417,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 19.0,
+     "value": 5.007493860483148,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 20.0,
+     "value": 5.045647262536382,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 21.0,
+     "value": 5.041832781926803,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 22.0,
+     "value": 4.99955743453548,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 23.0,
+     "value": 4.957688979791241,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 24.0,
+     "value": 4.9547210818996685,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 25.0,
+     "value": 4.993382412495111,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 26.0,
+     "value": 5.03812792252398,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 27.0,
+     "value": 5.047818796420225,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 28.0,
+     "value": 5.013545289415394,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 29.0,
+     "value": 4.966818305789352,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 30.0,
+     "value": 4.950598418795357,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 31.0,
+     "value": 4.979798117733846,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 32.0,
+     "value": 5.027571334062085,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 33.0,
+     "value": 5.049995593005363,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 34.0,
+     "value": 5.026454134306001,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 35.0,
+     "value": 4.978590866525193,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 36.0,
+     "value": 4.950411057327845,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 37.0,
+     "value": 4.96782309333215,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 38.0,
+     "value": 5.014818428935469,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 39.0,
+     "value": 5.048189769314204,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 40.0,
+     "value": 5.037255658023968,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 41.0,
+     "value": 4.992068866559764,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 42.0,
+     "value": 4.954173922604219,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 43.0,
+     "value": 4.95841126286857,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 44.0,
+     "value": 5.000885096255271,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 45.0,
+     "value": 5.042545176226706,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 46.0,
+     "value": 5.0450894173824405,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 47.0,
+     "value": 5.006178656137261,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 48.0,
+     "value": 4.961587266933817,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 49.0,
+     "value": 4.952312367362026,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 50.0,
+     "value": 4.986881257314804,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 51.0,
+     "value": 5.0335114587921685,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 52.0,
+     "value": 5.049331379602024,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 53.0,
+     "value": 5.019796257509092,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 54.0,
+     "value": 4.972060547557419,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 55.0,
+     "value": 4.950012241332069,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 56.0,
+     "value": 4.973922449895654,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 57.0,
+     "value": 5.021808237762391,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 58.0,
+     "value": 5.049643632404226,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 59.0,
+     "value": 5.031836900356957,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 60.0,
+     "value": 4.9847594689448895,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 61.0,
+     "value": 4.95169411149958,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 62.0,
+     "value": 4.963040965167539,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 63.0,
+     "value": 5.008367785015141,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 64.0,
+     "value": 5.04600130190984,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 65.0,
+     "value": 5.041341433974505,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 66.0,
+     "value": 4.998672442298802,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 67.0,
+     "value": 4.957224001051234,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 68.0,
+     "value": 4.955103615965536,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 69.0,
+     "value": 4.994260759310841,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 70.0,
+     "value": 5.038694534077894,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 71.0,
+     "value": 5.0475527326627185,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 72.0,
+     "value": 5.012691168138102,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 73.0,
+     "value": 4.966161402155635,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 74.0,
+     "value": 4.950742686976588,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 75.0,
+     "value": 4.980610918229528,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 76.0,
+     "value": 5.028305381844909,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 77.0,
+     "value": 5.049976007929037,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 78.0,
+     "value": 5.025698922799377,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 79.0,
+     "value": 4.977794366564624,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 80.0,
+     "value": 4.950305567303832,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 81.0,
+     "value": 4.968505600286277,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 82.0,
+     "value": 5.015661439121654,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 83.0,
+     "value": 5.048418223055009,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 84.0,
+     "value": 5.036659516003665,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 85.0,
+     "value": 4.99119621900257,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 86.0,
+     "value": 4.953827077649797,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 87.0,
+     "value": 4.958909108168459,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 88.0,
+     "value": 5.001769915136683,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    },
+    {
+     "t": 89.0,
+     "value": 5.043003470290623,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": false
+    }
+   ]
+  },
+  {
+   "name": "uncertain_after_3_bad",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.1,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 5.0,
+     "conf": 0.1,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 5.0,
+     "conf": 0.1,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 8.0,
+     "value": 5.0,
+     "conf": 0.1,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 9.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 10.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    }
+   ]
+  },
+  {
+   "name": "disagreement_uncertain",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": false,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": false,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": false,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    }
+   ]
+  },
+  {
+   "name": "monitoring_lost_unreadable",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 6.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 7.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 8.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 9.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 10.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 11.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 12.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 13.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 14.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 15.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 16.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 17.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 18.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 19.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 20.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 21.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 22.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 23.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 24.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 25.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 26.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 27.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 28.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 29.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 30.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 31.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 32.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 33.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 34.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 35.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 36.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 37.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "MONITORING_LOST"
+    }
+   ]
+  },
+  {
+   "name": "monitoring_lost_no_frames",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7,
+     "tick": true,
+     "expect": "OK"
+    },
+    {
+     "t": 12,
+     "tick": true,
+     "expect": "OK"
+    },
+    {
+     "t": 22,
+     "tick": true,
+     "expect": "OK"
+    },
+    {
+     "t": 31.5,
+     "tick": true,
+     "expect": "OK"
+    },
+    {
+     "t": 32,
+     "tick": true,
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 47,
+     "tick": true,
+     "expect": "MONITORING_LOST"
+    }
+   ]
+  },
+  {
+   "name": "never_readable_from_start",
+   "steps": [
+    {
+     "t": 0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 3,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 4,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 5,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 6,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 7,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 8,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 9,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 10,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 11,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 12,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 13,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 14,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 15,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 16,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 17,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 18,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 19,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 20,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 21,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 22,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 23,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 24,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 25,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 26,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 27,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 28,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 29,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "UNCERTAIN"
+    },
+    {
+     "t": 30,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 31,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "MONITORING_LOST"
+    }
+   ]
+  },
+  {
+   "name": "panel_lamp_low_raises_low",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": false,
+     "lamp": "LOW",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": false,
+     "lamp": "LOW",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": false,
+     "lamp": "LOW",
+     "expect": "LOW"
+    },
+    {
+     "t": 8.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": false,
+     "lamp": "LOW",
+     "expect": "LOW"
+    }
+   ]
+  },
+  {
+   "name": "lamp_off_lost",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 8.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 9.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 10.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 11.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 12.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 13.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 14.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 15.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 16.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 17.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 18.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 19.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 20.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 21.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 22.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 23.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 24.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 25.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 26.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 27.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 28.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 29.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 30.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 31.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 32.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "OK"
+    },
+    {
+     "t": 33.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 34.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "OFF",
+     "expect": "MONITORING_LOST"
+    }
+   ]
+  },
+  {
+   "name": "battery_low_lost",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "battery": 10,
+     "charging": false,
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "battery": 10,
+     "charging": false,
+     "expect": "MONITORING_LOST"
+    },
+    {
+     "t": 5.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "battery": 10,
+     "charging": true,
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "battery": 10,
+     "charging": true,
+     "expect": "OK"
+    }
+   ]
+  },
+  {
+   "name": "alarm_latched_through_bad_frames",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 5.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 3.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 3.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 3.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 8.0,
+     "value": 3.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 9.0,
+     "value": 3.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 10.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 11.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 12.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 13.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 14.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 15.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 16.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 17.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 18.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 19.0,
+     "value": null,
+     "conf": 0.0,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    }
+   ]
+  },
+  {
+   "name": "slow_leak_trend_then_low",
+   "steps": [
+    {
+     "t": 0.0,
+     "value": 4.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 1.0,
+     "value": 4.49,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 2.0,
+     "value": 4.48,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 3.0,
+     "value": 4.47,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 4.0,
+     "value": 4.46,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 5.0,
+     "value": 4.45,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 6.0,
+     "value": 4.44,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 7.0,
+     "value": 4.43,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 8.0,
+     "value": 4.42,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 9.0,
+     "value": 4.41,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 10.0,
+     "value": 4.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 11.0,
+     "value": 4.39,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 12.0,
+     "value": 4.38,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 13.0,
+     "value": 4.37,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 14.0,
+     "value": 4.36,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 15.0,
+     "value": 4.35,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 16.0,
+     "value": 4.34,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 17.0,
+     "value": 4.33,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 18.0,
+     "value": 4.32,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 19.0,
+     "value": 4.31,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 20.0,
+     "value": 4.3,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 21.0,
+     "value": 4.29,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 22.0,
+     "value": 4.28,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 23.0,
+     "value": 4.27,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 24.0,
+     "value": 4.26,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 25.0,
+     "value": 4.25,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 26.0,
+     "value": 4.24,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 27.0,
+     "value": 4.23,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 28.0,
+     "value": 4.22,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 29.0,
+     "value": 4.21,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 30.0,
+     "value": 4.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 31.0,
+     "value": 4.19,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 32.0,
+     "value": 4.18,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 33.0,
+     "value": 4.17,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 34.0,
+     "value": 4.16,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 35.0,
+     "value": 4.15,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 36.0,
+     "value": 4.14,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 37.0,
+     "value": 4.13,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 38.0,
+     "value": 4.12,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 39.0,
+     "value": 4.11,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 40.0,
+     "value": 4.1,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 41.0,
+     "value": 4.09,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 42.0,
+     "value": 4.08,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 43.0,
+     "value": 4.07,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 44.0,
+     "value": 4.06,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 45.0,
+     "value": 4.05,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 46.0,
+     "value": 4.04,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 47.0,
+     "value": 4.03,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 48.0,
+     "value": 4.02,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 49.0,
+     "value": 4.01,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 50.0,
+     "value": 4.0,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 51.0,
+     "value": 3.99,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 52.0,
+     "value": 3.98,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 53.0,
+     "value": 3.9699999999999998,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 54.0,
+     "value": 3.96,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 55.0,
+     "value": 3.95,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 56.0,
+     "value": 3.94,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 57.0,
+     "value": 3.9299999999999997,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 58.0,
+     "value": 3.92,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 59.0,
+     "value": 3.91,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 60.0,
+     "value": 3.9,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 61.0,
+     "value": 3.89,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 62.0,
+     "value": 3.88,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 63.0,
+     "value": 3.87,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 64.0,
+     "value": 3.86,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 65.0,
+     "value": 3.85,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 66.0,
+     "value": 3.84,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 67.0,
+     "value": 3.83,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 68.0,
+     "value": 3.82,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 69.0,
+     "value": 3.81,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 70.0,
+     "value": 3.8,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 71.0,
+     "value": 3.79,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 72.0,
+     "value": 3.7800000000000002,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 73.0,
+     "value": 3.77,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 74.0,
+     "value": 3.76,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 75.0,
+     "value": 3.75,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 76.0,
+     "value": 3.74,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 77.0,
+     "value": 3.73,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 78.0,
+     "value": 3.7199999999999998,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 79.0,
+     "value": 3.71,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 80.0,
+     "value": 3.7,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 81.0,
+     "value": 3.69,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 82.0,
+     "value": 3.6799999999999997,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 83.0,
+     "value": 3.67,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 84.0,
+     "value": 3.66,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 85.0,
+     "value": 3.65,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 86.0,
+     "value": 3.64,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 87.0,
+     "value": 3.63,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 88.0,
+     "value": 3.62,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 89.0,
+     "value": 3.61,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK",
+     "expect_trend": true
+    },
+    {
+     "t": 90.0,
+     "value": 3.6,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 91.0,
+     "value": 3.59,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 92.0,
+     "value": 3.58,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 93.0,
+     "value": 3.57,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 94.0,
+     "value": 3.56,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 95.0,
+     "value": 3.55,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 96.0,
+     "value": 3.54,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 97.0,
+     "value": 3.5300000000000002,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "OK"
+    },
+    {
+     "t": 98.0,
+     "value": 3.52,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL"
+    },
+    {
+     "t": 99.0,
+     "value": 3.51,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL"
+    },
+    {
+     "t": 100.0,
+     "value": 3.5,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL"
+    },
+    {
+     "t": 101.0,
+     "value": 3.49,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL"
+    },
+    {
+     "t": 102.0,
+     "value": 3.48,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL"
+    },
+    {
+     "t": 103.0,
+     "value": 3.4699999999999998,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL"
+    },
+    {
+     "t": 104.0,
+     "value": 3.46,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL"
+    },
+    {
+     "t": 105.0,
+     "value": 3.45,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 106.0,
+     "value": 3.44,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 107.0,
+     "value": 3.4299999999999997,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 108.0,
+     "value": 3.42,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 109.0,
+     "value": 3.41,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 110.0,
+     "value": 3.4,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 111.0,
+     "value": 3.3899999999999997,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 112.0,
+     "value": 3.38,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 113.0,
+     "value": 3.37,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 114.0,
+     "value": 3.36,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 115.0,
+     "value": 3.3499999999999996,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 116.0,
+     "value": 3.34,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 117.0,
+     "value": 3.33,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 118.0,
+     "value": 3.3200000000000003,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 119.0,
+     "value": 3.31,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 120.0,
+     "value": 3.3,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 121.0,
+     "value": 3.29,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 122.0,
+     "value": 3.2800000000000002,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 123.0,
+     "value": 3.27,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 124.0,
+     "value": 3.26,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 125.0,
+     "value": 3.25,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 126.0,
+     "value": 3.24,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 127.0,
+     "value": 3.23,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 128.0,
+     "value": 3.2199999999999998,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 129.0,
+     "value": 3.21,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 130.0,
+     "value": 3.2,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 131.0,
+     "value": 3.19,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 132.0,
+     "value": 3.1799999999999997,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 133.0,
+     "value": 3.17,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 134.0,
+     "value": 3.16,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 135.0,
+     "value": 3.15,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 136.0,
+     "value": 3.1399999999999997,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 137.0,
+     "value": 3.13,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 138.0,
+     "value": 3.12,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 139.0,
+     "value": 3.11,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 140.0,
+     "value": 3.0999999999999996,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 141.0,
+     "value": 3.09,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 142.0,
+     "value": 3.08,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 143.0,
+     "value": 3.0700000000000003,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 144.0,
+     "value": 3.06,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 145.0,
+     "value": 3.05,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 146.0,
+     "value": 3.04,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 147.0,
+     "value": 3.0300000000000002,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 148.0,
+     "value": 3.02,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    },
+    {
+     "t": 149.0,
+     "value": 3.01,
+     "conf": 0.95,
+     "agree": true,
+     "lamp": "NORMAL",
+     "expect": "LOW"
+    }
+   ]
+  }
+ ]
+}
