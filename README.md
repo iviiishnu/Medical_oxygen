@@ -75,6 +75,29 @@ git clone https://github.com/mithun2k51124/o2.git
 cd o2
 ```
 
+### 0. Quick test: drop a photo, get NORMAL / ABNORMAL (no calibration)
+
+```bash
+python vision/tools/tester_app.py          # open http://127.0.0.1:8000 and drag photos onto the page
+python vision/tools/auto_read.py photo.jpg # same from the command line (folder = batch)
+python vision/tools/live_webcam.py         # live from a webcam
+curl -F image=@photo.jpg http://127.0.0.1:8000/api/read     # HTTP API for another program
+```
+Everything is found automatically (`vision/o2gauge/auto.py`):
+* **dial(s):** circle proposals refined by the keypoint model until its predicted centre and size
+  stop moving; bezels, lamps and labels don't settle and are rejected;
+* **gauge type, and so its scale:** the dial face is matched against the reference photos in
+  `samples/real/` (alarm box 0–16, Magnate 0–10). An unrecognised dial is flagged and the
+  confidence drops. Add a new gauge type by adding `name.jpg` + `name.calibration.json` there;
+* **lamps:** lit = strongly coloured *and* brighter than its surroundings (or white-hot centre),
+  so printed labels, paint and unlit lamps are ignored. Green = normal, red = low/alarm, amber = high;
+* **verdict + confidence %:** needle vs the low limit (classical + model, less sure near the
+  limit) combined with the lamp colour. Any red/amber lamp or low needle → ABNORMAL; if needle and
+  lamp disagree it says so with ≤ 50 % confidence.
+
+Stress test (needle moved to 12 values per panel, lamps green/red/off, 11 camera conditions):
+`python vision/tools/eval_auto.py` → `docs/eval_auto.json`.
+
 ### 1. Vision: read a gauge photo (no training needed)
 
 ```bash

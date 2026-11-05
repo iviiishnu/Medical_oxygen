@@ -7,6 +7,7 @@ firebase/*.log
 firebase-debug*.log
 firestore-debug.log
 samples/debug/
+out/
 data/
 runs/
 *.pt
