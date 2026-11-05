@@ -1,0 +1,8 @@
+# Vision track: Stage A reader, lamp reader, fusion, alert engine, dataset tools, evaluation.
+# Python 3.12+ (tested on 3.14). Install:  python -m pip install -r vision/requirements.txt
+numpy>=2.0
+opencv-python>=4.10
+jsonschema>=4.20
+pytest>=8.0
+onnxruntime>=1.20          # runs gauge_pose.onnx (Stage B) on the PC
+ultralytics==8.4.173       # training / .pt inference (pulls in torch; see README for GPU builds)

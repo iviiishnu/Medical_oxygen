@@ -1,14 +1,18 @@
-"""Export the trained keypoint model to ONNX + TFLite (fp32/fp16 and int8).
+"""Export the trained keypoint model to ONNX + TFLite (LiteRT), on Windows.
 
-Run with the Python 3.12 export environment (TensorFlow has no 3.14 build):
+Ultralytics' own LiteRT exporter only runs on Linux/macOS, so we:
+  1. export ONNX with end2end=False (raw [1, 17, 2100] head - simplest graph to convert;
+     stage_b.decode() / TFLiteKeypointModel.decode() handle this layout)
+  2. convert with onnx2tf -> float32 + float16 .tflite (NHWC input [1,320,320,3])
+
+Run with the Python 3.12 export environment:
   .tools\\export-venv\\Scripts\\python.exe vision/tools/export_tflite.py
-
-Outputs in vision/models/:
-  gauge_pose.onnx, gauge_pose_float16.tflite, gauge_pose_int8.tflite
+Outputs: vision/models/gauge_pose.onnx, gauge_pose_fp32.tflite, gauge_pose_fp16.tflite
 """
 from __future__ import annotations
 
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -19,26 +23,23 @@ MODELS = ROOT / "vision" / "models"
 def main():
     from ultralytics import YOLO
     pt = MODELS / "gauge_pose.pt"
-    data = ROOT / "data" / "gauge_pose" / "data.yaml"
-
-    onnx = YOLO(str(pt)).export(format="onnx", imgsz=320, simplify=True, opset=17, dynamic=False)
-    shutil.copy(onnx, MODELS / "gauge_pose.onnx")
-
-    out = YOLO(str(pt)).export(format="tflite", imgsz=320, half=True)          # -> *_saved_model/
-    sm = Path(out).parent
-    for f in sm.glob("*.tflite"):
-        print("tflite:", f.name, f.stat().st_size // 1024, "KB")
-    for name in ("gauge_pose_float16.tflite", "gauge_pose_float32.tflite"):
-        if (sm / name).exists():
-            shutil.copy(sm / name, MODELS / name)
-
-    out8 = YOLO(str(pt)).export(format="tflite", imgsz=320, int8=True, data=str(data), fraction=0.1)
-    sm8 = Path(out8).parent
-    for f in sm8.glob("*.tflite"):
-        print("tflite:", f.name, f.stat().st_size // 1024, "KB")
-    for name in ("gauge_pose_int8.tflite", "gauge_pose_full_integer_quant.tflite"):
-        if (sm8 / name).exists():
-            shutil.copy(sm8 / name, MODELS / name)
+    onnx = Path(YOLO(str(pt)).export(format="onnx", imgsz=320, simplify=True, opset=17, dynamic=False,
+                                     end2end=False))
+    dst = MODELS / "gauge_pose.onnx"
+    if onnx.resolve() != dst.resolve():
+        shutil.copy(onnx, dst)
+    out = ROOT / "runs" / "onnx2tf"
+    if out.exists():
+        shutil.rmtree(out)
+    cmd = [sys.executable, "-m", "onnx2tf", "-i", str(dst), "-o", str(out), "-osd", "-coion"]
+    print(" ".join(cmd))
+    subprocess.run(cmd, check=True)
+    for src, name in (("gauge_pose_float32.tflite", "gauge_pose_fp32.tflite"),
+                      ("gauge_pose_float16.tflite", "gauge_pose_fp16.tflite")):
+        f = out / src
+        if f.exists():
+            shutil.copy(f, MODELS / name)
+            print("tflite:", name, f.stat().st_size // 1024, "KB")
     print("models:", sorted(p.name for p in MODELS.iterdir()))
 
 

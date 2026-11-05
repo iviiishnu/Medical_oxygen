@@ -161,7 +161,7 @@ def nr(v, c=0.9, m="stage_a"):
 
 def test_fusion_agree_ok():
     f = fuse(nr(5.4), nr(5.5, m="stage_b"), "NORMAL", CFG)
-    assert f.status == "OK" and f.method_agree and f.value == 5.5 and f.confidence > 0.9
+    assert f.status == "OK" and f.method_agree and f.value == pytest.approx(5.45) and f.confidence > 0.9
 
 
 def test_fusion_disagree_uncertain():

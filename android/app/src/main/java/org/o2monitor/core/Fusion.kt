@@ -42,13 +42,16 @@ object Fusion {
         val bOk = b?.value != null && b.confidence >= cfg.minConfidence
         var value: Double?
         var conf: Double
-        val source: String
+        var source: String
         val needlesAgree: Boolean
         if (aOk && bOk) {
             val diff = abs(b!!.value!! - a!!.value!!)
             needlesAgree = diff <= cfg.agreeTolerance
             value = b.value; source = "stage_b"
             if (needlesAgree) {
+                // confidence-weighted mean of both methods (same as fusion.py)
+                value = (a.confidence * a.value + b.confidence * b.value) / (a.confidence + b.confidence)
+                source = "a+b"
                 conf = 1.0 - (1.0 - a.confidence) * (1.0 - b.confidence)
             } else {
                 conf = 0.5 * minOf(a.confidence, b.confidence)

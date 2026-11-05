@@ -31,7 +31,18 @@ async function main() {
     if (!claims.device_id) throw new Error('--device required for role device');
   }
   await getAuth().setCustomUserClaims(user.uid, claims);
-  if (role !== 'device') {
+  if (role === 'device') {
+    // the tablet may only UPDATE its device doc, so create it here with the default thresholds
+    const fs = require('fs');
+    const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'contract', 'monitor_config.default.json'), 'utf8'));
+    delete cfg._comment;
+    const ref = getFirestore().doc(`devices/${claims.device_id}`);
+    const snap = await ref.get();
+    if (!snap.exists) {
+      await ref.set({ name: arg('name', claims.device_id), gauge_id: arg('gauge', 'oxygen_main'), config: cfg, online: true });
+      console.log(`created devices/${claims.device_id} with default config (LOW ${cfg.low_threshold}, CRITICAL ${cfg.critical_threshold})`);
+    }
+  } else {
     await getFirestore().doc(`staff/${user.uid}`).set({
       name: arg('name', email), email, role, on_duty: true,
       escalation_order: Number(arg('order', role === 'admin' ? 3 : 1)),

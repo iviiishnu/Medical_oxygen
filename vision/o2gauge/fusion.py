@@ -2,7 +2,9 @@
 into ONE per-frame reading. Mirrored in Kotlin (Fusion.kt).
 
 Rules
-  * value      = Stage B if it produced a confident value, else Stage A.
+  * value      = confidence-weighted mean of Stage A and Stage B when both are confident
+                 and agree; the single confident method otherwise; Stage B if they disagree
+                 (that frame is UNCERTAIN anyway).
   * method_agree = needle methods within agree_tolerance AND lamp consistent.
   * per-frame status:
         unreadable / low confidence / disagreement -> UNCERTAIN
@@ -59,6 +61,10 @@ def fuse(a: NeedleResult | None, b: NeedleResult | None, lamp_state: str,
         needles_agree = diff <= cfg.agree_tolerance
         value, source = b.value, "stage_b"
         if needles_agree:
+            # both methods are accurate and their errors are largely independent:
+            # the confidence-weighted mean beats either one alone (measured: docs/eval_final*.json)
+            wa, wb = a.confidence, b.confidence
+            value, source = (wa * a.value + wb * b.value) / (wa + wb), "a+b"
             conf = 1.0 - (1.0 - a.confidence) * (1.0 - b.confidence)
         else:
             conf = 0.5 * min(a.confidence, b.confidence)

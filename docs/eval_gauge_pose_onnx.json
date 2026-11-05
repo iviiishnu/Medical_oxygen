@@ -1,0 +1,91 @@
+{
+ "model": "gauge_pose.onnx",
+ "per_gauge": {
+  "alarm_box": {
+   "stage_a": {
+    "n": 197,
+    "mean": 0.0391,
+    "p95": 0.093,
+    "worst": 0.1443,
+    "within_0.2": 1.0
+   },
+   "stage_b": {
+    "n": 200,
+    "mean": 0.0555,
+    "p95": 0.1562,
+    "worst": 0.2196,
+    "within_0.2": 0.995
+   },
+   "fused": {
+    "n": 200,
+    "mean": 0.0346,
+    "p95": 0.0843,
+    "worst": 0.1378,
+    "within_0.2": 1.0
+   },
+   "fused_uncertain_frames": 0,
+   "fused_worst(err,true,A,B)": [
+    0.138,
+    9.258,
+    0.0,
+    9.396
+   ],
+   "stage_b_ms_median": 7.6
+  },
+  "magnate": {
+   "stage_a": {
+    "n": 194,
+    "mean": 0.0236,
+    "p95": 0.056,
+    "worst": 0.0919,
+    "within_0.2": 1.0
+   },
+   "stage_b": {
+    "n": 200,
+    "mean": 0.0313,
+    "p95": 0.0768,
+    "worst": 0.1224,
+    "within_0.2": 1.0
+   },
+   "fused": {
+    "n": 200,
+    "mean": 0.0223,
+    "p95": 0.054,
+    "worst": 0.0931,
+    "within_0.2": 1.0
+   },
+   "fused_uncertain_frames": 0,
+   "fused_worst(err,true,A,B)": [
+    0.093,
+    8.101,
+    10.0,
+    8.194
+   ],
+   "stage_b_ms_median": 8.5
+  }
+ },
+ "real_photos": {
+  "alarm_box": {
+   "eye": 4.75,
+   "stage_a": [
+    5.055,
+    1.0
+   ],
+   "stage_b": [
+    4.962,
+    0.971
+   ]
+  },
+  "magnate": {
+   "eye": 4.45,
+   "stage_a": [
+    4.458,
+    1.0
+   ],
+   "stage_b": [
+    4.465,
+    0.97
+   ]
+  }
+ }
+}

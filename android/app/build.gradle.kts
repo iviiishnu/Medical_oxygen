@@ -52,6 +52,10 @@ android {
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
+    // the model is memory-mapped from assets: it must be stored uncompressed in the APK
+    androidResources {
+        noCompress += "tflite"
+    }
 }
 
 dependencies {

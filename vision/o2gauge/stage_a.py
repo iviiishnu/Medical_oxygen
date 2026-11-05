@@ -31,7 +31,8 @@ N_RINGS = 48
 SMOOTH_SIGMA_BINS = 2.0
 PEAK_EXCLUDE_DEG = 12
 MIN_LOCAL_MEAN = 16.0
-COLOR_S = 90          # pixels this saturated and this bright are coloured print, not the needle
+DEAD_ZONE_MAX_CONF = 0.3   # confidence cap for a needle found deep in the dead zone
+COLOR_S = 90         # pixels this saturated and this bright are coloured print, not the needle
 COLOR_V = 60
 
 
@@ -168,7 +169,9 @@ def read_needle(img: np.ndarray, cal: Calibration) -> NeedleResult:
     angle, conf = find_peak(prof)
     value, in_range = scale.value(angle)
     if not in_range:
-        conf *= 0.5                      # needle deep in the dead zone is suspicious
+        # a real needle cannot sit deep in the dead zone: this is a false peak (print, screws).
+        # Cap below any sane min_confidence so it can never be trusted.
+        conf = min(conf, DEAD_ZONE_MAX_CONF)
     return NeedleResult(round(value, 3), round(angle, 2), round(conf, 3), in_range,
                         reason="" if conf > 0 else "no_needle_peak")
 

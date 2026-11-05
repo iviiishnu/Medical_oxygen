@@ -19,10 +19,10 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from .calibration import Calibration
+from .calibration import Calibration, apply_affine
 from .dataset import CROP_SCALE, IMGSZ, crop_affine, make_crop
 from .geometry import value_from_keypoints, dial_angle
-from .stage_a import NeedleResult
+from .stage_a import DEAD_ZONE_MAX_CONF, NeedleResult
 
 MAX_CENTER_OFFSET = 0.15     # x radius: further than this from the tapped centre is suspicious
 
@@ -50,7 +50,7 @@ def decode(out: np.ndarray, n_kpt: int = 4) -> tuple[float, np.ndarray] | None:
 
 
 class KeypointReader:
-    def __init__(self, model_path: str | Path, use_cal_marks: bool = False):
+    def __init__(self, model_path: str | Path, use_cal_marks: bool = True):
         self.path = Path(model_path)
         self.use_cal_marks = use_cal_marks
         self.backend = self.path.suffix.lower()
@@ -117,13 +117,18 @@ class KeypointReader:
         center, tip, zero, maxp = pts
         if self.use_cal_marks:
             zero, maxp = cal.zero_point, cal.max_point
+        # off-axis camera: measure angles in the perspective-corrected frame, like Stage A
+        rect = cal.rectification()
+        if rect is not None:
+            Mr = rect[0]
+            center, tip, zero, maxp = (apply_affine(Mr, p) for p in (center, tip, zero, maxp))
         value, in_range = value_from_keypoints(center, tip, zero, maxp, cal.min_value, cal.max_value, cal.direction)
         conf = det_conf * float(min(k[0, 2], k[1, 2]))
-        off = math.dist(center, cal.center) / cal.radius
+        off = math.dist(pts[0], cal.center) / cal.radius
         if off > MAX_CENTER_OFFSET:
             conf *= max(0.0, 1 - (off - MAX_CENTER_OFFSET) / MAX_CENTER_OFFSET)
         if not in_range:
-            conf *= 0.5
+            conf = min(conf, DEAD_ZONE_MAX_CONF)
         angle = dial_angle(center[0], center[1], tip[0], tip[1])
         return NeedleResult(round(float(value), 3), round(angle, 2), round(float(conf), 3), in_range,
                             method="stage_b", debug={"kpts_img": pts.tolist(), "kpt_conf": k[:, 2].tolist(),

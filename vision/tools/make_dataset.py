@@ -2,7 +2,8 @@
 
 usage: python vision/tools/make_dataset.py --out data/gauge_pose --n 6000
 
-Sources (weights):  real alarm_box photo 40%, real Magnate photo 40%, procedural 20%.
+Sources (weights):  every samples/real/<name>.jpg with .calibration.json + .needle.json
+(80 %, split evenly), procedural gauges 20 %.
 Splits: train 90% / val 10%, plus a separate held-out set "test" rendered from the
 real photos with a different seed (never seen in training) for the accuracy report.
 """
@@ -92,7 +93,13 @@ def main():
     if out.exists():
         shutil.rmtree(out)
     rng = np.random.default_rng(a.seed)
-    photos = [PhotoSource(ROOT / "samples" / "real" / s) for s in ("alarm_box", "magnate")]
+    # every real photo that has a .calibration.json and a .needle.json next to it
+    stems = sorted(p.with_name(p.name.replace(".needle.json", ""))
+                   for p in (ROOT / "samples" / "real").glob("*.needle.json"))
+    photos = [PhotoSource(s) for s in stems if Path(f"{s}.calibration.json").exists() and Path(f"{s}.jpg").exists()]
+    if not photos:
+        sys.exit("no real photos found in samples/real (need name.jpg + .calibration.json + .needle.json)")
+    print("real photo sources:", [p.name for p in photos])
     procs = [ProceduralSource(g, rng) for g in GAUGES for _ in range(4)]
     rows = []
     for split, n in (("train", int(a.n * 0.9)), ("val", a.n - int(a.n * 0.9)), ("test", a.n_test)):
@@ -101,10 +108,10 @@ def main():
         r = np.random.default_rng(a.seed + {"train": 0, "val": 1, "test": 99}[split])
         for i in range(n):
             if split == "test":
-                src = photos[i % 2]
-            else:
-                u = r.random()
-                src = photos[0] if u < 0.4 else photos[1] if u < 0.8 else procs[int(r.integers(len(procs)))]
+                src = photos[i % len(photos)]
+            else:                                   # 80 % real-photo dials (split evenly), 20 % procedural
+                src = (photos[int(r.integers(len(photos)))] if r.random() < 0.8
+                       else procs[int(r.integers(len(procs)))])
             crop, kpts, rpx, v, gt = sample(src, r, train_aug=True)
             name = f"{split}_{i:05d}_{src.name}"
             cv2.imwrite(str(out / "images" / split / f"{name}.jpg"), crop, [cv2.IMWRITE_JPEG_QUALITY, 95])

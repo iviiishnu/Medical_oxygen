@@ -55,21 +55,12 @@ class TFLiteKeypointModel(model: ByteBuffer, useGpu: Boolean = true) : StageB, A
 
     val size get() = inShape[1]
 
-    /** Build the model input crop (bilinear, replicate border) - same as dataset.crop_affine/make_crop. */
     fun fillInput(img: RgbImage, cx: Double, cy: Double, radius: Double) {
-        val n = size
-        val side = 2 * CROP_SCALE * radius
-        val s = n / side
         input.rewind()
-        for (oy in 0 until n) {
-            val y = (oy - n / 2.0) / s + cy
-            for (ox in 0 until n) {
-                val x = (ox - n / 2.0) / s + cx
-                val p = sampleReplicate(img, x, y)
-                input.putFloat(((p shr 16) and 0xFF) / 255f)
-                input.putFloat(((p shr 8) and 0xFF) / 255f)
-                input.putFloat((p and 0xFF) / 255f)
-            }
+        for (p in cropPixels(img, cx, cy, radius, size)) {
+            input.putFloat(((p shr 16) and 0xFF) / 255f)
+            input.putFloat(((p shr 8) and 0xFF) / 255f)
+            input.putFloat((p and 0xFF) / 255f)
         }
         input.rewind()
     }
@@ -86,17 +77,7 @@ class TFLiteKeypointModel(model: ByteBuffer, useGpu: Boolean = true) : StageB, A
         val cx = cal.center[0]; val cy = cal.center[1]
         fillInput(frame, cx, cy, cal.radius)
         val (det, k) = run() ?: return NeedleResult(null, null, 0.0, false, "stage_b", "no_detection")
-        val s = size / (2 * CROP_SCALE * cal.radius)
-        val pts = Array(4) { i -> doubleArrayOf((k[i][0] - size / 2.0) / s + cx, (k[i][1] - size / 2.0) / s + cy) }
-        val (c, tip, zero, mx) = pts
-        val scale = Scale.fromPoints(c[0], c[1], zero[0], zero[1], mx[0], mx[1], cal.minValue, cal.maxValue, cal.direction)
-        val angle = Geometry.dialAngle(c[0], c[1], tip[0], tip[1])
-        val (value, inRange) = scale.value(angle)
-        var conf = det * minOf(k[0][2], k[1][2])
-        val off = hypot(c[0] - cx, c[1] - cy) / cal.radius
-        if (off > MAX_CENTER_OFFSET) conf *= maxOf(0.0, 1 - (off - MAX_CENTER_OFFSET) / MAX_CENTER_OFFSET)
-        if (!inRange) conf *= 0.5
-        return NeedleResult(r3(value), Math.round(angle * 100) / 100.0, r3(conf), inRange, "stage_b")
+        return postprocess(det, k, cal, size)
     }
 
     override fun close() {
@@ -111,6 +92,41 @@ class TFLiteKeypointModel(model: ByteBuffer, useGpu: Boolean = true) : StageB, A
         const val ASSET = "gauge_pose.tflite"
 
         private fun r3(x: Double) = Math.round(x * 1000) / 1000.0
+
+        /** Model input crop as ARGB pixels (bilinear, replicate border) - same as dataset.crop_affine/make_crop. */
+        fun cropPixels(img: RgbImage, cx: Double, cy: Double, radius: Double, n: Int): IntArray {
+            val s = n / (2 * CROP_SCALE * radius)
+            val out = IntArray(n * n)
+            for (oy in 0 until n) {
+                val y = (oy - n / 2.0) / s + cy
+                for (ox in 0 until n) out[oy * n + ox] = sampleReplicate(img, (ox - n / 2.0) / s + cx, y)
+            }
+            return out
+        }
+
+        /** Keypoints in input pixels -> NeedleResult (contract/stage_b_spec.md sections 3-5). */
+        fun postprocess(det: Double, k: Array<DoubleArray>, cal: Calibration, size: Int): NeedleResult {
+        val cx = cal.center[0]; val cy = cal.center[1]
+        val s = size / (2 * CROP_SCALE * cal.radius)
+        val raw = Array(4) { i -> doubleArrayOf((k[i][0] - size / 2.0) / s + cx, (k[i][1] - size / 2.0) / s + cy) }
+        // zero / max: the tapped calibration marks (more precise than predicted; camera is fixed)
+        raw[2] = doubleArrayOf(cal.zeroPoint[0], cal.zeroPoint[1])
+        raw[3] = doubleArrayOf(cal.maxPoint[0], cal.maxPoint[1])
+        // off-axis camera: measure angles in the perspective-corrected frame, like Stage A
+        val m = cal.rectification()?.first
+        val pts = if (m == null) raw else Array(4) { i ->
+            Affine.apply(m, raw[i][0], raw[i][1]).let { doubleArrayOf(it.first, it.second) }
+        }
+        val (c, tip, zero, mx) = pts
+        val scale = Scale.fromPoints(c[0], c[1], zero[0], zero[1], mx[0], mx[1], cal.minValue, cal.maxValue, cal.direction)
+        val angle = Geometry.dialAngle(c[0], c[1], tip[0], tip[1])
+        val (value, inRange) = scale.value(angle)
+        var conf = det * minOf(k[0][2], k[1][2])
+        val off = hypot(raw[0][0] - cx, raw[0][1] - cy) / cal.radius
+        if (off > MAX_CENTER_OFFSET) conf *= maxOf(0.0, 1 - (off - MAX_CENTER_OFFSET) / MAX_CENTER_OFFSET)
+        if (!inRange) conf = minOf(conf, StageA.DEAD_ZONE_MAX_CONF)
+        return NeedleResult(r3(value), Math.round(angle * 100) / 100.0, r3(conf), inRange, "stage_b")
+        }
 
         fun loadOrNull(ctx: Context): TFLiteKeypointModel? = try {
             val fd = ctx.assets.openFd(ASSET)
@@ -148,6 +164,8 @@ class TFLiteKeypointModel(model: ByteBuffer, useGpu: Boolean = true) : StageB, A
                 rows = o.size; get = { r, c -> o[r][c] }; kOff = 6
             } else if (o.size == classic) {                              // [17][N] channels first
                 rows = o[0].size; get = { r, c -> o[c][r] }; kOff = 5
+            } else if (o[0].size == classic) {                           // [N][17] rows
+                rows = o.size; get = { r, c -> o[r][c] }; kOff = 5
             } else return null
             for (r in 0 until rows) { val c = get(r, 4); if (c > bestConf) { bestConf = c; best = r } }
             if (best < 0) return null

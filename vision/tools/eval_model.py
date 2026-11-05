@@ -38,10 +38,11 @@ def main():
     ap.add_argument("--model", default=str(ROOT / "vision" / "models" / "gauge_pose.pt"))
     ap.add_argument("--n", type=int, default=200)
     ap.add_argument("--json", default=None)
-    ap.add_argument("--cal-marks", action="store_true", help="use tapped zero/max instead of predicted")
+    ap.add_argument("--model-marks", action="store_true",
+                    help="use the model's predicted zero/max instead of the tapped ones (default: tapped)")
     a = ap.parse_args()
     cfg = MonitorConfig.load()
-    kb = KeypointReader(a.model, use_cal_marks=a.cal_marks)
+    kb = KeypointReader(a.model, use_cal_marks=not a.model_marks)
     report = {"model": Path(a.model).name, "per_gauge": {}, "real_photos": {}}
     for stem in ("alarm_box", "magnate"):
         d = load_photo_dial(ROOT / "samples" / "real" / stem)

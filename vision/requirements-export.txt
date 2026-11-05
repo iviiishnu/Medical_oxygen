@@ -1,0 +1,13 @@
+# TFLite export + LiteRT checks. Needs Python 3.12 (TensorFlow has no 3.14 build).
+#   uv venv --python 3.12 .tools/export-venv
+#   uv pip install --python .tools/export-venv -r vision/requirements-export.txt
+ultralytics==8.4.173
+tensorflow>=2.19,<2.21
+tf_keras
+onnx
+onnxslim
+onnxruntime
+onnx2tf
+sng4onnx
+onnx_graphsurgeon
+ai-edge-litert

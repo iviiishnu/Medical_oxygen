@@ -18,6 +18,7 @@ object StageA {
     const val SMOOTH_SIGMA_BINS = 2.0
     const val PEAK_EXCLUDE_DEG = 12
     const val MIN_LOCAL_MEAN = 16f
+    const val DEAD_ZONE_MAX_CONF = 0.3
     const val COLOR_S = 90
     const val COLOR_V = 60
 
@@ -173,7 +174,7 @@ object StageA {
             ?: return NeedleResult(null, null, 0.0, false, reason = "dial_outside_frame")
         var (angle, conf) = findPeak(prof)
         val (value, inRange) = geo.scale.value(angle)
-        if (!inRange) conf *= 0.5
+        if (!inRange) conf = minOf(conf, DEAD_ZONE_MAX_CONF)   // false peak in the dead zone: never trusted
         return NeedleResult(
             round(value, 3), round(angle, 2), round(conf, 3), inRange,
             reason = if (conf > 0) "" else "no_needle_peak",

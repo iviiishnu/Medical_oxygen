@@ -25,6 +25,11 @@ Keypoint order: **0 centre, 1 needle tip, 2 zero mark, 3 max mark.**
 `p_img = Minv · p_input` with `Minv` the inverse of `M` (for this M: `x = (kx - 160)/s + cx`).
 
 ## 4. Value
+Use the model's **centre and tip**, and the **tapped** zero / max marks from the calibration
+(more precise; the camera is fixed — a moved camera is caught by the centre-offset check in §5).
+If the calibration has rim points, map all four points through the rectification affine first
+(same as Stage A), so an off-axis camera does not bend the angles.
+
 `value_from_keypoints(centre, tip, zero, max, min_value, max_value, direction)`:
 dial angle = `atan2(px - cx, -(py - cy))` in degrees mod 360 (clockwise from 12 o'clock);
 `Scale(zero_angle, max_angle).value(tip_angle)` with the 4° end-stop tolerance (see Geometry.kt).
@@ -32,7 +37,8 @@ dial angle = `atan2(px - cx, -(py - cy))` in degrees mod 360 (clockwise from 12 
 ## 5. Confidence
 `conf = det_conf * min(kconf[centre], kconf[tip])`;
 if the predicted centre is more than `0.15 * radius` from the calibrated centre, multiply by
-`max(0, 1 - (off - 0.15) / 0.15)`; if the tip is out of range (dead zone) multiply by 0.5.
+`max(0, 1 - (off - 0.15) / 0.15)`; if the tip is out of range (deep in the dead zone, more than 4° past
+either end) cap the confidence at **0.3** (always below `min_confidence`). Same rule as Stage A.
 
 ## 6. Fusion
 `Fusion.fuse(stageA, stageB, lampState, config)` — unchanged (stage B value wins when both are
