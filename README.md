@@ -44,6 +44,46 @@ per frame on a desktop CPU; tablet timing comes from `connectedDebugAndroidTest`
 The physical test rig, hospital videos and an on-tablet run are still to do (see [Status](#status)).
 Full report: [`docs/eval_final.json`](docs/eval_final.json).
 
+## Try it in 5 minutes (any laptop, no graphics card)
+
+You only need **Python 3.12 or newer** ([python.org](https://www.python.org/downloads/); on Windows tick
+"Add python.exe to PATH" during install). The trained model is already in the repo, so there is
+nothing to train. It runs on the normal CPU, so no graphics card is needed.
+
+```bash
+git clone https://github.com/mithun2k51124/o2.git
+cd o2
+python -m pip install -r vision/requirements-run.txt   # numpy, opencv, onnxruntime, flask (~100 MB)
+python vision/tools/tester_app.py
+```
+
+1. Open **http://127.0.0.1:8000** in a browser.
+2. Drag a gauge photo onto the page. To start, use `samples/real/alarm_box.jpg` or
+   `samples/real/magnate.jpg`. You can also paste one with Ctrl+V or drop several at once.
+3. After about 2 seconds the page shows:
+   * **NORMAL** (green) or **ABNORMAL** (red), or **CAN'T TELL**;
+   * a **confidence %**;
+   * the pressure reading;
+   * the lamp colours it saw;
+   * the photo with the dial, needle and lamps marked.
+
+Nothing has to be clicked on the gauge. The dial, its scale and the lamps are found automatically.
+
+| Photo | Expected result |
+|---|---|
+| `samples/real/alarm_box.jpg` | NORMAL, about 5.0 kg/cm² (scale 0–16) |
+| `samples/real/magnate.jpg` | NORMAL, about 4.5 kg/cm² (scale 0–10) |
+
+The page uses one photo at a time and stays on your computer. Stop it with Ctrl+C in the terminal.
+
+Live from a webcam instead: `python vision/tools/live_webcam.py`. In the webcam window, **R** searches again,
+**F** freezes, **S** saves a snapshot and **Q** quits.
+
+Speed: about 2 s per photo and about 0.1 s per webcam frame, measured on a desktop CPU. Expect a few seconds
+per photo on a basic laptop.
+
+> **Training needs a graphics card. Running does not.** The GPU was only used once, to train the model.
+
 ## Repository layout
 
 | Folder | What it is |
@@ -68,7 +108,7 @@ Full report: [`docs/eval_final.json`](docs/eval_final.json).
 | Node.js | 20+ (tested 24) | Cloud Functions, dashboard, Firebase CLI |
 | JDK | 17 for Android; **21** for the Firebase emulators | builds and tests |
 | Android SDK | platform 36 (Android Studio installs it) | app |
-| GPU (optional) | NVIDIA (CUDA) or AMD RX 6000/7000 (ROCm) | faster training |
+| GPU (optional) | NVIDIA (CUDA) or AMD RX 6000/7000 (ROCm) | **training only**; running the model never needs one |
 
 ```bash
 git clone https://github.com/mithun2k51124/o2.git
@@ -78,6 +118,7 @@ cd o2
 ### 0. Quick test: drop a photo, get NORMAL / ABNORMAL (no calibration)
 
 ```bash
+python -m pip install -r vision/requirements-run.txt
 python vision/tools/tester_app.py          # open http://127.0.0.1:8000 and drag photos onto the page
 python vision/tools/auto_read.py photo.jpg # same from the command line (folder = batch)
 python vision/tools/live_webcam.py         # live from a webcam
@@ -159,6 +200,13 @@ the calibration walkthrough, is in **[docs/SETUP.md](docs/SETUP.md)**.
 
 ## Training the keypoint model (Stage B)
 
+**When to retrain:** the model is already trained, and more training on the same 2 photos won't
+improve it. Retrain when real photos from the panel (new gauge models, hospital lighting, the real
+camera angle) give wrong readings in the tester. Add those photos as described at the end of this
+section, rebuild the dataset and train again. The new model is the same size and still runs on a CPU.
+Adding a new gauge *type* for the auto reader usually needs no retraining, only
+`name.jpg` + `name.calibration.json` in `samples/real/`.
+
 The camera is fixed and the gauge geometry is known, so instead of one big "photo → number" network the
 model finds 4 keypoints (**centre, needle tip, zero mark, max mark**), and the value follows from geometry.
 Training data is generated from the real photos: the needle and its shadow are cut out, the dial
@@ -231,7 +279,7 @@ set per device in Firestore `devices/{id}.config`.
 
 | Suite | Command | Count |
 |---|---|---|
-| Python vision + alert engine + Stage B | `python -m pytest vision/tests` | 71 |
+| Python vision + alert engine + Stage B + auto reader | `python -m pytest vision/tests` | 86 |
 | Android JVM | `cd android && ./gradlew testDebugUnitTest` | 18 |
 | Android on-device (LiteRT) | `./gradlew connectedDebugAndroidTest` | 1 (needs a device) |
 | Cloud Functions logic | `cd firebase/functions && npm test` | 8 |

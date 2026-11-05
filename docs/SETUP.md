@@ -10,6 +10,23 @@ dashboard/   Nursing-station web dashboard (React)
 contract/    Shared JSON schema, config, alert test scenarios, parity fixtures, Stage B spec
 ```
 
+## 0. Just test the model on a laptop (no Firebase, no tablet, no graphics card)
+1. Install **Python 3.12+** from <https://www.python.org/downloads/>. On Windows, tick **Add python.exe to PATH**.
+2. Get the code and install the four run-time packages:
+   ```
+   git clone https://github.com/mithun2k51124/o2.git
+   cd o2
+   python -m pip install -r vision/requirements-run.txt
+   ```
+3. Start the tester with `python vision/tools/tester_app.py`, then open **http://127.0.0.1:8000**.
+4. Drag a gauge photo onto the page, for example `samples\real\alarm_box.jpg`. You get NORMAL / ABNORMAL, a confidence %, the reading and lamp colours.
+5. Optional:
+   * live webcam: `python vision/tools/live_webcam.py`;
+   * command line: `python vision/tools/auto_read.py photo.jpg` (a folder works too);
+   * another program can post photos with `curl -F image=@photo.jpg http://127.0.0.1:8000/api/read` and gets JSON back.
+
+The model runs on the CPU. A graphics card is only needed for re-training (section 5).
+
 ## 1. Firebase project (one time, needs your Google account)
 1. Go to <https://console.firebase.google.com>, click **Add project**, and name it `o2-monitor`. Choose the Blaze plan, which Cloud Functions require; the expected usage is far inside the free quota.
 2. Turn on **Authentication → Email/Password**, **Firestore** (region `asia-south1`) and **Cloud Messaging**.
@@ -62,6 +79,11 @@ cd ../firebase && npx firebase deploy --only hosting
 Open the hosting URL, sign in with a staff account, and click **Enable alarm sound** once. Browsers block sound until someone clicks. With no `.env.local` the dashboard runs in **DEMO** mode with simulated data.
 
 ## 5. Re-training the model on new photos or videos
+Only retrain when real photos read wrong in the tester. Each new photo goes in `samples/real/` with:
+* `name.calibration.json`: dial centre, rim, 0 and max marks, lamps. Make it with `python vision/tools/calibrate.py name.jpg samples/real/name.calibration.json --max 16`.
+* `name.needle.json`: hub, tip and tail points and widths. There is no tool for this yet; copy one of the existing files and edit it.
+
+`make_dataset.py` creates thousands of training images from each photo by moving the needle and adding glare, blur and tilt. Training needs a graphics card (or about 6.5 min per epoch on a CPU).
 ```
 python vision/tools/make_dataset.py --n 6000                     # uses samples/real/*.jpg + .calibration.json + .needle.json
 .tools\rocm-venv\Scripts\python.exe vision/tools/train_pose.py --device 0 --batch 64   # AMD RX 6600 via ROCm (about 35 s per epoch)
@@ -75,7 +97,8 @@ python vision/tools/export_parity.py
 ## 6. Tests
 | What | Command |
 |---|---|
-| Python (vision + alert engine) | `python -m pytest vision/tests` |
+| Python (vision + alert engine + auto reader) | `python -m pytest vision/tests` |
+| Auto reader stress test (312 cases) | `python vision/tools/eval_auto.py` |
 | Android JVM: alert scenarios, Kotlin vs Python parity, 24 h soak simulation | `cd android && gradlew testDebugUnitTest` |
 | Cloud Functions logic | `cd firebase/functions && npm test` |
 | Firestore rules / functions end-to-end (needs JDK 21) | `cd firebase && npm run test:rules` / `npm run test:e2e` |

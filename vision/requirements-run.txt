@@ -1,0 +1,7 @@
+# Minimal install to RUN the gauge reader (tester page, auto_read, live webcam) on any laptop.
+# No graphics card needed: the model runs on the CPU. No PyTorch / training tools.
+#   python -m pip install -r vision/requirements-run.txt
+numpy>=2.0
+opencv-python>=4.10
+onnxruntime>=1.20
+flask>=3.0
