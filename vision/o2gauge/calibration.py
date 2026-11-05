@@ -111,24 +111,73 @@ class Calibration:
 
     def rectification(self) -> tuple[np.ndarray, float] | None:
         """(affine, rim radius in the rectified image) or None."""
-        if not self.rim_points:
+        if not self.rim_points or len(self.rim_points) < 5:
             return None
-        import cv2
-
-        pts = np.asarray(self.rim_points, dtype=np.float32)
-        (ex, ey), (w, h), ang = cv2.fitEllipse(pts)
-        if min(w, h) <= 0:
+        e = fit_ellipse(np.asarray(self.rim_points, dtype=np.float64))
+        if e is None:
             return None
-        big = max(w, h)
+        ex, ey, major, minor, ang = e
         t = np.radians(ang)
-        u = np.array([np.cos(t), np.sin(t)])     # direction of the 'w' axis
-        v = np.array([-np.sin(t), np.cos(t)])    # direction of the 'h' axis
-        S = np.eye(2) + (big / w - 1) * np.outer(u, u) + (big / h - 1) * np.outer(v, v)
+        v = np.array([-np.sin(t), np.cos(t)])    # minor-axis direction
+        S = np.eye(2) + (major / minor - 1) * np.outer(v, v)
         c = np.array([ex, ey])
         M = np.zeros((2, 3))
         M[:, :2] = S
         M[:, 2] = c - S @ c
-        return M, big / 2.0
+        return M, major / 2.0
+
+
+def fit_ellipse(pts: np.ndarray):
+    """Direct least-squares ellipse fit (Fitzgibbon / Halir-Flusser).
+    Returns (cx, cy, major_diameter, minor_diameter, major_axis_angle_deg) or None.
+    Mirrored exactly by EllipseFit in Calibration.kt."""
+    mx, my = pts[:, 0].mean(), pts[:, 1].mean()
+    sc = max(np.abs(pts[:, 0] - mx).max(), np.abs(pts[:, 1] - my).max())
+    if sc <= 0:
+        return None
+    x = (pts[:, 0] - mx) / sc
+    y = (pts[:, 1] - my) / sc
+    D = np.stack([x * x, x * y, y * y, x, y, np.ones_like(x)], 1)
+    S = D.T @ D
+    S1, S2, S3 = S[:3, :3], S[:3, 3:], S[3:, 3:]
+    try:
+        T = -np.linalg.inv(S3) @ S2.T
+    except np.linalg.LinAlgError:
+        return None
+    Mm = S1 + S2 @ T
+    M = np.array([Mm[2] / 2, -Mm[1], Mm[0] / 2])
+    w, V = np.linalg.eig(M)
+    a1 = None
+    for k in range(3):
+        if abs(w[k].imag) > 1e-9:
+            continue
+        v = V[:, k].real
+        if 4 * v[0] * v[2] - v[1] ** 2 > 0:
+            a1 = v / np.linalg.norm(v)
+            break
+    if a1 is None:
+        return None
+    A, B, C = a1
+    Dd, E, F = T @ a1
+    den = B * B - 4 * A * C
+    if den >= 0:
+        return None
+    x0 = (2 * C * Dd - B * E) / den
+    y0 = (2 * A * E - B * Dd) / den
+
+    def semi(t):
+        ux, uy = np.cos(t), np.sin(t)
+        q = A * ux * ux + B * ux * uy + C * uy * uy
+        f0 = A * x0 * x0 + B * x0 * y0 + C * y0 * y0 + Dd * x0 + E * y0 + F
+        return float(np.sqrt(abs(f0 / q)))
+
+    t1 = 0.5 * np.arctan2(B, A - C)
+    r1, r2 = semi(t1), semi(t1 + np.pi / 2)
+    theta = t1 if r1 >= r2 else t1 + np.pi / 2
+    major, minor = max(r1, r2), min(r1, r2)
+    if minor <= 0:
+        return None
+    return float(x0 * sc + mx), float(y0 * sc + my), 2 * major * sc, 2 * minor * sc, float(np.degrees(theta))
 
 
 def apply_affine(M: np.ndarray, p) -> list[float]:

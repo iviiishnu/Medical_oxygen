@@ -1,0 +1,2732 @@
+[
+ {
+  "file": "alarm_box_16_00.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 2.863,
+  "value": 2.877,
+  "angle": 273.55,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7385,
+    "core": 0.2589
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_01.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 10.239,
+  "value": 10.222,
+  "angle": 37.5,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.7411,
+    "core": 0.2526
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.000378,
+   -0.002308,
+   -0.002689,
+   0.000661,
+   0.002514,
+   0.003326,
+   -0.001852,
+   -0.001891,
+   -0.002198,
+   -0.002072,
+   -0.002198,
+   0.001486,
+   0.001011,
+   0.001155,
+   0.001477,
+   0.001592
+  ]
+ },
+ {
+  "file": "alarm_box_16_02.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 14.721,
+  "value": 14.719,
+  "angle": 113.38,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.7372,
+    "core": 0.2602
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.868442,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_03.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 4.896,
+  "value": 4.897,
+  "angle": 307.63,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.7474,
+    "core": 0.2449
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_04.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 1.877,
+  "value": 1.884,
+  "angle": 256.79,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7385,
+    "core": 0.2589
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_05.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 1.469,
+  "value": 1.479,
+  "angle": 249.95,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7577,
+    "core": 0.2283
+   }
+  },
+  "profile_sample": [
+   -2.7e-05,
+   0.000251,
+   0.000175,
+   -0.000204,
+   0.0,
+   0.001037,
+   -0.000475,
+   -0.000226,
+   -0.000565,
+   -0.00048,
+   -0.000613,
+   0.110965,
+   -0.00049,
+   0.00023,
+   0.000598,
+   0.00023
+  ]
+ },
+ {
+  "file": "alarm_box_16_06.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 12.361,
+  "value": 12.345,
+  "angle": 73.32,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.7372,
+    "core": 0.2602
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_07.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 2.595,
+  "value": 2.607,
+  "angle": 269.0,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7347,
+    "core": 0.2564
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.001961,
+   0.002292,
+   0.000196,
+   0.000255,
+   0.000527,
+   -0.000751,
+   -0.000564,
+   -0.000692,
+   -0.000692,
+   -0.000787,
+   0.001397,
+   0.742287,
+   0.000632,
+   0.001066,
+   0.002218
+  ]
+ },
+ {
+  "file": "alarm_box_16_08.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 9.789,
+  "value": 9.776,
+  "angle": 29.97,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.7372,
+    "core": 0.2602
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_09.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 1.486,
+  "value": 1.498,
+  "angle": 250.29,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7372,
+    "core": 0.162
+   }
+  },
+  "profile_sample": [
+   -0.000359,
+   0.00691,
+   0.002105,
+   -0.00145,
+   0.002435,
+   0.004149,
+   -0.002851,
+   -0.003119,
+   -0.003611,
+   -0.00303,
+   -0.003022,
+   0.173349,
+   -0.002393,
+   0.003777,
+   0.000985,
+   0.002957
+  ]
+ },
+ {
+  "file": "alarm_box_16_10.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 9.753,
+  "value": 9.738,
+  "angle": 29.33,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.7372,
+    "core": 0.2602
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_11.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 1.563,
+  "value": 1.58,
+  "angle": 251.66,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7372,
+    "core": 0.2615
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_perspective.png",
+  "calibration": {
+   "center": [
+    262.0,
+    240.0
+   ],
+   "radius": 170,
+   "zero_point": [
+    153.51214209645397,
+    337.0680833873833
+   ],
+   "max_point": [
+    381.9076324197088,
+    337.06808338738324
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": [
+    [
+     253.33,
+     92.60999999999999
+    ],
+    [
+     341.1915597491889,
+     112.35651573621156
+    ],
+    [
+     407.8338050162217,
+     166.30499999999998
+    ],
+    [
+     435.4,
+     240.0
+    ],
+    [
+     416.50380501622163,
+     313.69499999999994
+    ],
+    [
+     356.20844025081107,
+     367.6434842637884
+    ],
+    [
+     270.67,
+     387.39
+    ],
+    [
+     182.80844025081106,
+     367.6434842637884
+    ],
+    [
+     116.16619498377838,
+     313.69500000000005
+    ],
+    [
+     88.6,
+     240.00000000000003
+    ],
+    [
+     107.49619498377834,
+     166.30499999999998
+    ],
+    [
+     167.79155974918885,
+     112.35651573621162
+    ]
+   ],
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 5.92,
+  "value": 5.914,
+  "angle": 323.26,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.5663,
+    "core": 0.1531
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "alarm_box_16_blocked.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 16,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": null,
+  "value": null,
+  "angle": null,
+  "confidence": 0.0,
+  "in_range": false,
+  "reason": "frame_too_dark",
+  "lamp_state": "OFF",
+  "lamp_scores": {
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_00.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 0.746,
+  "value": 0.754,
+  "angle": 245.35,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7385,
+    "core": 0.2589
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.588108,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_01.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 8.041,
+  "value": 8.034,
+  "angle": 81.91,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7398,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   -0.002676,
+   0.002101,
+   0.001462,
+   -0.003179,
+   -0.004023,
+   0.001859,
+   -0.003611,
+   -0.00347,
+   -0.003728,
+   -0.003334,
+   -0.003194,
+   0.000612,
+   0.00012,
+   0.005089,
+   0.001222,
+   0.001033
+  ]
+ },
+ {
+  "file": "magnate_10_02.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 1.208,
+  "value": 1.215,
+  "angle": 257.81,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7385,
+    "core": 0.2589
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_03.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 4.012,
+  "value": 4.008,
+  "angle": 333.23,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7679,
+    "core": 0.2258
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_04.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 7.664,
+  "value": 7.654,
+  "angle": 71.66,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7372,
+    "core": 0.2602
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_05.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 6.873,
+  "value": 6.866,
+  "angle": 50.38,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7321,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_06.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 4.372,
+  "value": 4.371,
+  "angle": 343.01,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7372,
+    "core": 0.2602
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_07.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 8.82,
+  "value": 8.818,
+  "angle": 103.09,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7334,
+    "core": 0.2628
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_08.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 6.365,
+  "value": 6.359,
+  "angle": 36.68,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7372,
+    "core": 0.2602
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_09.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 9.647,
+  "value": 9.643,
+  "angle": 125.35,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7258,
+    "core": 0.2679
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.000967,
+   0.0,
+   0.001855,
+   0.001693,
+   0.0,
+   -0.001257,
+   -0.001257,
+   -0.000697,
+   -0.000937,
+   -0.00086,
+   -0.00097,
+   0.001221,
+   -0.000206,
+   0.000573,
+   0.00101,
+   0.000571
+  ]
+ },
+ {
+  "file": "magnate_10_10.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 0.101,
+  "value": 0.107,
+  "angle": 227.89,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "LOW",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.7385,
+    "core": 0.2589
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.105766,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_11.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 5.143,
+  "value": 5.14,
+  "angle": 3.78,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.7628,
+    "core": 0.2245
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.032517,
+   -0.000344,
+   0.001544,
+   0.000835,
+   -0.000115,
+   0.0,
+   -0.000507,
+   -0.000359,
+   -0.000291,
+   -0.000359,
+   -0.000541,
+   0.000328,
+   0.000443,
+   0.000586,
+   0.000615,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_perspective.png",
+  "calibration": {
+   "center": [
+    262.0,
+    240.0
+   ],
+   "radius": 170,
+   "zero_point": [
+    153.51214209645397,
+    337.0680833873833
+   ],
+   "max_point": [
+    381.9076324197088,
+    337.06808338738324
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": [
+    [
+     253.33,
+     92.60999999999999
+    ],
+    [
+     341.1915597491889,
+     112.35651573621156
+    ],
+    [
+     407.8338050162217,
+     166.30499999999998
+    ],
+    [
+     435.4,
+     240.0
+    ],
+    [
+     416.50380501622163,
+     313.69499999999994
+    ],
+    [
+     356.20844025081107,
+     367.6434842637884
+    ],
+    [
+     270.67,
+     387.39
+    ],
+    [
+     182.80844025081106,
+     367.6434842637884
+    ],
+    [
+     116.16619498377838,
+     313.69500000000005
+    ],
+    [
+     88.6,
+     240.00000000000003
+    ],
+    [
+     107.49619498377834,
+     166.30499999999998
+    ],
+    [
+     167.79155974918885,
+     112.35651573621162
+    ]
+   ],
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": 3.7,
+  "value": 3.697,
+  "angle": 323.26,
+  "confidence": 1.0,
+  "in_range": true,
+  "reason": "",
+  "lamp_state": "NORMAL",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.6518,
+    "core": 0.125
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "file": "magnate_10_blocked.png",
+  "calibration": {
+   "center": [
+    250,
+    240
+   ],
+   "radius": 170,
+   "zero_point": [
+    135.8022548383726,
+    354.19774516162744
+   ],
+   "max_point": [
+    364.19774516162744,
+    354.1977451616274
+   ],
+   "min_value": 0,
+   "max_value": 10,
+   "direction": "cw",
+   "unit": "kg/cm2",
+   "device_id": "tab-main-o2-01",
+   "gauge_id": "oxygen_main",
+   "image_size": null,
+   "rim_points": null,
+   "needle_color": "dark",
+   "needle_r_inner": 0.3,
+   "needle_r_outer": 0.62,
+   "lamps": [
+    {
+     "name": "HIGH",
+     "box": [
+      479,
+      159,
+      28,
+      28
+     ],
+     "hue": "amber"
+    },
+    {
+     "name": "NORMAL",
+     "box": [
+      479,
+      239,
+      28,
+      28
+     ],
+     "hue": "green"
+    },
+    {
+     "name": "LOW",
+     "box": [
+      479,
+      319,
+      28,
+      28
+     ],
+     "hue": "red"
+    }
+   ],
+   "version": 1
+  },
+  "truth": null,
+  "value": null,
+  "angle": null,
+  "confidence": 0.0,
+  "in_range": false,
+  "reason": "frame_too_dark",
+  "lamp_state": "OFF",
+  "lamp_scores": {
+   "HIGH": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "NORMAL": {
+    "colored": 0.0,
+    "core": 0.0
+   },
+   "LOW": {
+    "colored": 0.0,
+    "core": 0.0
+   }
+  },
+  "profile_sample": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ }
+]
