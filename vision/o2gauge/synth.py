@@ -51,7 +51,7 @@ GAUGES = {
     # Magnate panel oxygen gauge: inner 0-10 kg/cm2 + outer psi, HIGH/NORMAL/LOW lamps
     "magnate_10": GaugeSpec("magnate_10", 0, 10, 1, 0.2, 1, outer_scale=(140, 20, "psi"),
                             lamps=("HIGH", "NORMAL", "LOW"), lamp_hues=("amber", "green", "red"),
-                            low_band=3.5, needle_color=(30, 30, 160)),
+                            low_band=3.5, needle_color=(35, 45, 25)),   # real Magnate needle: near-black green
 }
 
 HUE_BGR = {"green": ((40, 200, 40), (25, 60, 25)),     # (lit, off)
@@ -246,7 +246,7 @@ def augment(img: np.ndarray, gt: dict, rng: np.random.Generator, p: AugParams) -
     h, w = img.shape[:2]
     if p.persp > 0 or p.rot_deg > 0:
         src = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
-        dst = src + rng.uniform(-p.persp, p.persp, (4, 2)).astype(np.float32) * [w, h]
+        dst = (src + rng.uniform(-p.persp, p.persp, (4, 2)) * [w, h]).astype(np.float32)
         if p.rot_deg > 0:
             R = cv2.getRotationMatrix2D((w / 2, h / 2), float(rng.uniform(-p.rot_deg, p.rot_deg)), 1.0)
             dst = (np.c_[dst, np.ones(4)] @ R.T).astype(np.float32)

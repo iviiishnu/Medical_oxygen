@@ -14,6 +14,7 @@ object LampReader {
         val litFrac: Double = 0.12,
         val litFracWithCore: Double = 0.05,
         val coreFrac: Double = 0.15,
+        val haloFrac: Double = 0.10,
         val relativeMargin: Double = 3.0,
     )
 
@@ -50,8 +51,24 @@ object LampReader {
         }
         val n = ((x1 - x0) * (y1 - y0)).toDouble()
         val colored = col / n; val c = core / n
-        val lit = colored >= p.litFrac || (colored >= p.litFracWithCore && c >= p.coreFrac)
-        return Score(lit, colored, c, colored + c, true)
+        // blown-out white core: look for the lamp's colour in the glow ring around the box
+        var halo = 0.0
+        if (c >= p.coreFrac) {
+            val w = box[2]; val h = box[3]
+            val hx0 = maxOf(0, box[0] - w / 2); val hy0 = maxOf(0, box[1] - h / 2)
+            val hx1 = minOf(img.width, box[0] + w + w / 2); val hy1 = minOf(img.height, box[1] + h + h / 2)
+            var ring = 0; var hit = 0
+            for (y in hy0 until hy1) for (x in hx0 until hx1) {
+                if (x in x0 until x1 && y in y0 until y1) continue
+                ring++
+                ImgOps.hsv(img.argb[y * img.width + x], hsv)
+                if (ranges.any { hsv[0] in it } && hsv[1] >= p.minS && hsv[2] >= minV) hit++
+            }
+            if (ring > 0) halo = hit.toDouble() / ring
+        }
+        val lit = colored >= p.litFrac || (colored >= p.litFracWithCore && c >= p.coreFrac) ||
+            (c >= p.coreFrac && halo >= p.haloFrac)
+        return Score(lit, colored, c, colored + c + halo, true)
     }
 
     fun combine(details: Map<String, Score>, p: Params): String {

@@ -31,6 +31,8 @@ N_RINGS = 48
 SMOOTH_SIGMA_BINS = 2.0
 PEAK_EXCLUDE_DEG = 12
 MIN_LOCAL_MEAN = 16.0
+COLOR_S = 90          # pixels this saturated and this bright are coloured print, not the needle
+COLOR_V = 60
 
 
 @dataclass
@@ -69,7 +71,11 @@ def needle_map(crop: np.ndarray, color: str, k: int) -> np.ndarray:
         return red * (S.astype(np.float32) / 255.0) * np.minimum(V.astype(np.float32) / 120.0, 1.0)
     gray = to_gray(crop)
     mean = box_blur(gray, k)
-    return np.clip((mean - gray) / np.maximum(mean, MIN_LOCAL_MEAN), 0.0, 1.0).astype(np.float32)
+    n = np.clip((mean - gray) / np.maximum(mean, MIN_LOCAL_MEAN), 0.0, 1.0).astype(np.float32)
+    # a black needle is not saturated: ignore strongly coloured print (red logo, "USE NO OIL")
+    _, S, V = hsv(crop)
+    n[(S > COLOR_S) & (V > COLOR_V)] = 0.0
+    return n
 
 
 def geometry(cal: Calibration):

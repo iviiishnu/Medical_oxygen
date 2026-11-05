@@ -37,6 +37,7 @@ class LampParams:
     lit_frac: float = 0.12      # coloured-bright fraction to call it lit
     lit_frac_with_core: float = 0.05
     core_frac: float = 0.15
+    halo_frac: float = 0.10     # coloured fraction of the ring around a blown-out core
     relative_margin: float = 3.0  # several "lit": keep the strongest if it beats the next by this factor
 
 
@@ -58,16 +59,32 @@ def lamp_score(img_bgr: np.ndarray, box, hue: str, p: LampParams = LampParams(),
     H, W = img_bgr.shape[:2]
     x0, y0, x1, y1 = max(0, x), max(0, y), min(W, x + w), min(H, y + h)
     if x1 <= x0 or y1 <= y0:
-        return {"lit": False, "colored": 0.0, "core": 0.0, "score": 0.0, "valid": False}
+        return {"lit": False, "colored": 0.0, "core": 0.0, "halo": 0.0, "score": 0.0, "valid": False}
     hh, ss, vv = hsv(img_bgr[y0:y1, x0:x1])
     in_hue = np.zeros(hh.shape, bool)
     for lo, hi in HUE_RANGES[hue]:
         in_hue |= (hh >= lo) & (hh <= hi)
     colored = float(np.mean(in_hue & (ss >= p.min_s) & (vv >= min_v)))
     core = float(np.mean((vv >= p.white_v) & (ss <= p.white_max_s)))
-    lit = colored >= p.lit_frac or (colored >= p.lit_frac_with_core and core >= p.core_frac)
-    return {"lit": bool(lit), "colored": round(colored, 4), "core": round(core, 4),
-            "score": round(colored + core, 4), "valid": True}
+    # a very bright lamp blows out to white; its colour is then only in the glow around it
+    halo = 0.0
+    if core >= p.core_frac:
+        hx0, hy0 = max(0, x - w // 2), max(0, y - h // 2)
+        hx1, hy1 = min(W, x + w + w // 2), min(H, y + h + h // 2)
+        hh2, ss2, vv2 = hsv(img_bgr[hy0:hy1, hx0:hx1])
+        inside = np.zeros(hh2.shape, bool)
+        inside[y0 - hy0:y1 - hy0, x0 - hx0:x1 - hx0] = True
+        hue2 = np.zeros(hh2.shape, bool)
+        for lo, hi in HUE_RANGES[hue]:
+            hue2 |= (hh2 >= lo) & (hh2 <= hi)
+        ring = ~inside
+        if ring.any():
+            halo = float(np.mean((hue2 & (ss2 >= p.min_s) & (vv2 >= min_v))[ring]))
+    lit = (colored >= p.lit_frac
+           or (colored >= p.lit_frac_with_core and core >= p.core_frac)
+           or (core >= p.core_frac and halo >= p.halo_frac))
+    return {"lit": bool(lit), "colored": round(colored, 4), "core": round(core, 4), "halo": round(halo, 4),
+            "score": round(colored + core + halo, 4), "valid": True}
 
 
 def combine(details: dict, p: LampParams = LampParams()) -> str:

@@ -1,0 +1,23 @@
+{
+  "device_id": "tab-magnate-01",
+  "gauge_id": "oxygen_magnate",
+  "unit": "kg/cm2",
+  "image_size": [1600, 1200],
+  "center": [722.0, 388.0],
+  "radius": 95.0,
+  "zero_point": [665.0, 439.0],
+  "max_point": [782.5, 437.5],
+  "min_value": 0.0,
+  "max_value": 10.0,
+  "direction": "cw",
+  "needle_color": "dark",
+  "needle_r_inner": 0.6,
+  "needle_r_outer": 0.9,
+  "rim_points": null,
+  "lamps": [
+    {"name": "HIGH", "box": [700, 670, 80, 40], "hue": "amber"},
+    {"name": "NORMAL", "box": [690, 825, 90, 50], "hue": "green"},
+    {"name": "LOW", "box": [700, 995, 80, 40], "hue": "red"}
+  ],
+  "version": 1
+}

@@ -1,0 +1,14 @@
+{
+  "_comment": "Needle geometry in the photo, used to cut the needle out (sprite) and inpaint the dial. Pixels.",
+  "hub": [898.5, 525.0],
+  "tip": [812.0, 447.0],
+  "tail": [940.0, 566.0],
+  "width_tip": 10,
+  "width_hub": 18,
+  "width_tail": 26,
+  "shadow_offset": [-10, 9],
+  "inpaint": "ns",
+  "inpaint_radius": 15,
+  "hub_radius": 15,
+  "true_value_note": "needle read by eye from the photo, about 4.7-4.8 kg/cm2 with this calibration"
+}

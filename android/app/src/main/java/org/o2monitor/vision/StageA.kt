@@ -18,6 +18,8 @@ object StageA {
     const val SMOOTH_SIGMA_BINS = 2.0
     const val PEAK_EXCLUDE_DEG = 12
     const val MIN_LOCAL_MEAN = 16f
+    const val COLOR_S = 90
+    const val COLOR_V = 60
 
     fun frameQuality(img: RgbImage): String? {
         val px = ImgOps.gridSample(img, 64)
@@ -49,9 +51,12 @@ object StageA {
         }
         val gray = ImgOps.toGray(crop)
         val mean = ImgOps.boxBlur(gray, k)
+        val hsv = IntArray(3)
         for (i in out.data.indices) {
             val m = mean.data[i]
-            out.data[i] = ((m - gray.data[i]) / maxOf(m, MIN_LOCAL_MEAN)).coerceIn(0f, 1f)
+            ImgOps.hsv(crop.argb[i], hsv)
+            out.data[i] = if (hsv[1] > COLOR_S && hsv[2] > COLOR_V) 0f      // coloured print, not the needle
+            else ((m - gray.data[i]) / maxOf(m, MIN_LOCAL_MEAN)).coerceIn(0f, 1f)
         }
         return out
     }
