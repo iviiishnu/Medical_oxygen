@@ -2,9 +2,11 @@
 
 The system is a monitoring aid on top of the hospital's existing alarm panel, not a replacement for it.
 
+The Android app (tablet Monitor mode and staff phones) is out of the repo for now while it is
+redesigned. It is in the git history up to commit `8011e1d`.
+
 ```
 vision/      Python: Stage A reader, lamps, fusion, alert engine (reference), synthetic data, training
-android/     Kotlin app: Monitor mode (tablet) + Staff mode (phones)
 firebase/    Firestore rules, Cloud Functions (push, escalation, heartbeat watchdog), scripts
 dashboard/   Nursing-station web dashboard (React)
 contract/    Shared JSON schema, config, alert test scenarios, parity fixtures, Stage B spec
@@ -25,13 +27,13 @@ contract/    Shared JSON schema, config, alert test scenarios, parity fixtures, 
    * command line: `python vision/tools/auto_read.py photo.jpg` (a folder works too);
    * another program can post photos with `curl -F image=@photo.jpg http://127.0.0.1:8000/api/read` and gets JSON back.
 
-The model runs on the CPU. A graphics card is only needed for re-training (section 5).
+The model runs on the CPU. A graphics card is only needed for re-training (section 4).
 
 ## 1. Firebase project (one time, needs your Google account)
 1. Go to <https://console.firebase.google.com>, click **Add project**, and name it `o2-monitor`. Choose the Blaze plan, which Cloud Functions require; the expected usage is far inside the free quota.
 2. Turn on **Authentication → Email/Password**, **Firestore** (region `asia-south1`) and **Cloud Messaging**.
 3. Under **Project settings → Your apps**:
-   * add an **Android** app with package `org.o2monitor`, and download `google-services.json` to `android/app/`;
+   * (later, when the app returns) add an **Android** app with package `org.o2monitor` and keep its `google-services.json`;
    * add a **Web** app, and copy its config into `dashboard/.env.local` (see `.env.example`).
 4. Under **Project settings → Service accounts → Generate new private key**, save the file outside the repo, then:
    `set GOOGLE_APPLICATION_CREDENTIALS=C:\keys\o2-monitor-sa.json`
@@ -53,23 +55,12 @@ The model runs on the CPU. A graphics card is only needed for re-training (secti
 7. Set the thresholds **from the hospital** in Firestore: `devices/tab-main-o2-01.config.low_threshold` and
    `critical_threshold`. The values 3.5 and 3.0 kg/cm² are only placeholders.
 
-## 2. Tablet (Monitor mode)
-1. Build the app: `cd android && gradlew assembleDebug` (with `google-services.json` in place). Then install it: `adb install app/build/outputs/apk/debug/app-debug.apk`.
-2. Open the app, sign in as the tablet account, choose **MONITOR**, and allow camera and notifications. Allow "ignore battery optimisation" too.
-3. Android will ask which home app to use. Pick **O2 Monitor → Always**, so monitoring restarts by itself after a reboot.
-4. Mounting:
-   * Fix the tablet **slightly off-axis** so ceiling lights don't reflect into the lens.
-   * Keep it on a **charger** at all times.
-   * The dial should fill about a third of the frame height.
-5. Press **Calibrate**, choose the panel preset, and tap: centre, rim, 0 mark, max mark, then each lamp's corners. Press **Test reading**, and only press **Save** if it matches the gauge.
-6. Test the full chain:
-   * cover the camera: MONITORING LOST should sound within 30 s;
-   * unplug Wi-Fi: the local alarm still works, and staff get TABLET OFFLINE within about 2 min.
+## 2. Camera placement (for photos and the future tablet)
+* Mount the camera **slightly off-axis** so ceiling lights don't reflect into the lens.
+* The dial should fill about a third of the frame height.
+* Keep the lamps in view, at least 2.5 dial-widths away from the gauge.
 
-## 3. Staff phones (Staff mode)
-Install the same APK. Sign in with a staff account, choose **STAFF**, and allow notifications. Alarms arrive as a full-screen screen with a loud sound, even when the phone is locked. Press **ACKNOWLEDGE** to stop the alarm on every phone.
-
-## 4. Nursing-station dashboard
+## 3. Nursing-station dashboard
 ```
 cd dashboard
 npm install
@@ -78,7 +69,7 @@ cd ../firebase && npx firebase deploy --only hosting
 ```
 Open the hosting URL, sign in with a staff account, and click **Enable alarm sound** once. Browsers block sound until someone clicks. With no `.env.local` the dashboard runs in **DEMO** mode with simulated data.
 
-## 5. Re-training the model on new photos or videos
+## 4. Re-training the model on new photos or videos
 Only retrain when real photos read wrong in the tester. Each new photo goes in `samples/real/` with:
 * `name.calibration.json`: dial centre, rim, 0 and max marks, lamps. Make it with `python vision/tools/calibrate.py name.jpg samples/real/name.calibration.json --max 16`.
 * `name.needle.json`: hub, tip and tail points and widths. There is no tool for this yet; copy one of the existing files and edit it.
@@ -88,18 +79,14 @@ Only retrain when real photos read wrong in the tester. Each new photo goes in `
 python vision/tools/make_dataset.py --n 6000                     # uses samples/real/*.jpg + .calibration.json + .needle.json
 .tools\rocm-venv\Scripts\python.exe vision/tools/train_pose.py --device 0 --batch 64   # AMD RX 6600 via ROCm (about 35 s per epoch)
 python vision/tools/eval_model.py --model vision/models/gauge_pose.pt
-.tools\export-venv\Scripts\python.exe vision/tools/export_tflite.py
-copy vision\models\gauge_pose_fp32.tflite android\app\src\main\assets\gauge_pose.tflite
-python vision/tools/export_parity.py
-.tools\export-venv\Scripts\python.exe vision/tools/export_stageb_parity.py    # then: gradlew testDebugUnitTest
 ```
+Restart the tester page to use the new model. TFLite export (`export_tflite.py`) is only needed for a future mobile app.
 
-## 6. Tests
+## 5. Tests
 | What | Command |
 |---|---|
 | Python (vision + alert engine + auto reader) | `python -m pytest vision/tests` |
 | Auto reader stress test (312 cases) | `python vision/tools/eval_auto.py` |
-| Android JVM: alert scenarios, Kotlin vs Python parity, 24 h soak simulation | `cd android && gradlew testDebugUnitTest` |
 | Cloud Functions logic | `cd firebase/functions && npm test` |
 | Firestore rules / functions end-to-end (needs JDK 21) | `cd firebase && npm run test:rules` / `npm run test:e2e` |
 | Dashboard | `cd dashboard && npm test` |

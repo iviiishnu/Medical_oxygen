@@ -1,11 +1,15 @@
 # O2 Monitor: camera-based oxygen pressure monitor
 
-An Android tablet mounted in front of a hospital's main oxygen supply panel reads the analog
+A camera (planned: an Android tablet) mounted in front of a hospital's main oxygen supply panel reads the analog
 pressure gauge **and** the panel's status lamps with its camera, about once per second. When pressure
 drops, it alarms locally and alerts staff phones and the nursing-station desktop.
 
 > **This is a monitoring aid on top of the hospital's existing alarm panel, not a replacement for it.**
 > It must never fail silently: if the camera cannot read the gauge, that is itself an alert.
+
+> **Current focus: the vision model on a PC.** The Android app has been taken out of this repo for
+> now while it is redesigned. It is still in the git history (commit `8011e1d` and earlier). The
+> tablet parts of the diagram below are the planned design.
 
 ```
  Tablet at the oxygen panel (works with NO internet)                 Firebase (2nd layer)
@@ -36,12 +40,15 @@ blur, noise and JPEG artefacts added. None of these frames were used in training
 
 The plan's targets are a mean error of 0.2 kg/cm² or less and a worst case of 0.5 or less.
 Lamp state: 99.3–100 % on synthetic frames, and both real panels read correctly.
-Alert logic: 19 shared scenarios pass in both Python and Kotlin, and a simulated 24-hour soak with
-10 % glare frames raised 0 false alarms. Model speed: about 8 ms (ONNX) / 75 ms (TFLite, 1 thread)
-per frame on a desktop CPU; tablet timing comes from `connectedDebugAndroidTest`.
+Alert logic: 19 scenarios pass in the Python reference engine.
+Model speed: about 8 ms (ONNX) / 75 ms (TFLite, 1 thread) per frame on a desktop CPU.
+
+**Automatic reader (no calibration)**: 312 of 312 NORMAL/ABNORMAL verdicts were correct on the stress test
+(both panels, 12 needle values, lamps green/red/off, 11 camera conditions). The mean reading error was
+0.03 kg/cm² and the worst was 0.17. See [`docs/eval_auto.json`](docs/eval_auto.json).
 
 **Not yet validated on real hardware.** These numbers use frames *synthesised* from two real photos.
-The physical test rig, hospital videos and an on-tablet run are still to do (see [Status](#status)).
+The physical test rig and hospital photos/videos are still to do (see [Status](#status)).
 Full report: [`docs/eval_final.json`](docs/eval_final.json).
 
 ## Try it in 5 minutes (any laptop, no graphics card)
@@ -90,10 +97,9 @@ per photo on a basic laptop.
 |---|---|
 | `vision/` | Python: Stage A reader, lamp reader, fusion, reference alert engine, synthetic + photo-based data generator, training/eval/export tools, tests |
 | `vision/models/` | Trained keypoint model: `gauge_pose.pt`, `.onnx`, `_fp32.tflite`, `_fp16.tflite` |
-| `android/` | Kotlin app with two modes: **Monitor** (tablet: CameraX, LiteRT, local alarm, calibration) and **Staff** (phones: full-screen alarm + acknowledge) |
 | `firebase/` | Firestore rules + indexes, Cloud Functions (push, escalation, heartbeat watchdog), admin scripts, emulator tests |
 | `dashboard/` | Nursing-station web dashboard (React + Vite + Firebase), with a demo mode |
-| `contract/` | Single source of truth shared by all parts: reading JSON schema, default thresholds, alert test scenarios, Kotlin↔Python parity fixtures, Stage B spec |
+| `contract/` | Single source of truth shared by all parts: reading JSON schema, default thresholds, alert test scenarios, parity fixtures and Stage B spec (for a future app port) |
 | `samples/real/` | The two real panel photos with their calibration and needle geometry |
 | `docs/` | Setup guide, architecture, dataset survey, questions for the hospital, evaluation reports |
 
@@ -106,8 +112,7 @@ per photo on a basic laptop.
 | Git | any | cloning |
 | Python | 3.12+ (tested 3.14) | vision code, tests, dataset, training |
 | Node.js | 20+ (tested 24) | Cloud Functions, dashboard, Firebase CLI |
-| JDK | 17 for Android; **21** for the Firebase emulators | builds and tests |
-| Android SDK | platform 36 (Android Studio installs it) | app |
+| JDK | **21** for the Firebase emulators | backend tests |
 | GPU (optional) | NVIDIA (CUDA) or AMD RX 6000/7000 (ROCm) | **training only**; running the model never needs one |
 
 ```bash
@@ -156,21 +161,7 @@ Output (one JSON message per frame, schema in `contract/reading.schema.json`):
  "value": 4.98, "unit": "kg/cm2", "confidence": 0.97, "lamp_state": "NORMAL", "method_agree": true, "status": "OK"}
 ```
 
-### 2. Android app
-
-```bash
-cd android
-# Windows: gradlew.bat   macOS/Linux: ./gradlew
-./gradlew testDebugUnitTest          # alert scenarios, Kotlin vs Python parity, Stage B maths, 24 h soak
-./gradlew assembleDebug              # -> app/build/outputs/apk/debug/app-debug.apk
-adb install app/build/outputs/apk/debug/app-debug.apk
-./gradlew connectedDebugAndroidTest  # with a device attached: real LiteRT model vs Python, <= 100 ms check
-```
-Without `android/app/google-services.json` the app builds in **local-only** mode: it reads and
-alarms on the tablet, but sends nothing to phones. In **Settings → Simulation** you can demo every
-scenario (slow leak, sudden drop, glare, unreadable) without a gauge.
-
-### 3. Firebase backend
+### 2. Firebase backend
 
 ```bash
 cd firebase
@@ -185,7 +176,7 @@ node scripts/set_role.js --email nurse1@hospital.org  --role staff --name "Nurse
 node scripts/send_test_alert.js --token <FCM token>   # push test to one phone
 ```
 
-### 4. Dashboard
+### 3. Dashboard
 
 ```bash
 cd dashboard
@@ -195,8 +186,8 @@ cp .env.example .env.local   # fill in your Firebase web config for live data
 npm run build && (cd ../firebase && npx firebase deploy --only hosting)
 ```
 
-Step-by-step installation at the hospital, including the Firebase console clicks, tablet mounting and
-the calibration walkthrough, is in **[docs/SETUP.md](docs/SETUP.md)**.
+Step-by-step setup, including the laptop test and the Firebase console clicks, is in
+**[docs/SETUP.md](docs/SETUP.md)**.
 
 ## Training the keypoint model (Stage B)
 
@@ -240,14 +231,16 @@ python -m uv pip install --python .tools/rocm-venv/Scripts/python.exe ultralytic
 # 3. accuracy report on held-out frames from the real photos
 python vision/tools/eval_model.py --model vision/models/gauge_pose.pt --json docs/eval_final.json
 
-# 4. export to TFLite (Python 3.12 env; Ultralytics' own LiteRT export is Linux/macOS-only,
-#    so this goes ONNX -> onnx2tf)
+```
+The tester page, `auto_read.py` and the webcam use `vision/models/gauge_pose.onnx`, which
+`train_pose.py` writes. They pick up a new model as soon as they are restarted.
+
+Optional, for a future mobile app: export to TFLite and refresh the parity fixtures.
+```bash
+# Python 3.12 env; Ultralytics' own LiteRT export is Linux/macOS-only, so this goes ONNX -> onnx2tf
 python -m uv venv --python 3.12 .tools/export-venv
 python -m uv pip install --python .tools/export-venv/Scripts/python.exe -r vision/requirements-export.txt
 .tools/export-venv/Scripts/python.exe vision/tools/export_tflite.py
-cp vision/models/gauge_pose_fp32.tflite android/app/src/main/assets/gauge_pose.tflite
-
-# 5. refresh the Kotlin parity fixtures, then re-run the Android tests
 python vision/tools/export_parity.py
 .tools/export-venv/Scripts/python.exe vision/tools/export_stageb_parity.py
 ```
@@ -280,8 +273,7 @@ set per device in Firestore `devices/{id}.config`.
 | Suite | Command | Count |
 |---|---|---|
 | Python vision + alert engine + Stage B + auto reader | `python -m pytest vision/tests` | 86 |
-| Android JVM | `cd android && ./gradlew testDebugUnitTest` | 18 |
-| Android on-device (LiteRT) | `./gradlew connectedDebugAndroidTest` | 1 (needs a device) |
+| Auto reader stress test | `python vision/tools/eval_auto.py` | 312 cases |
 | Cloud Functions logic | `cd firebase/functions && npm test` | 8 |
 | Firestore rules | `cd firebase && npm run test:rules` | 11 |
 | Functions end-to-end (emulators) | `cd firebase && npm run test:e2e` | 3 |
@@ -292,9 +284,10 @@ set per device in Firestore `devices/{id}.config`.
 | Phase | State |
 |---|---|
 | 0: research, Stage A, contract, questions | ✅ done (slide deck pending) |
-| 1: data, calibration, tablet app, alert engine, Firestore | ✅ done in software; physical test rig and 300 hand-labelled real frames still needed |
-| 2: model, lamps, fusion, staff mode, escalation, dashboard | ✅ done |
-| 3: on-device integration and testing | 🟡 Kotlin port verified on the JVM against Python; needs a real tablet (`connectedDebugAndroidTest`), rig pump-down and failure tests |
+| 1: data, calibration, alert engine, Firestore | ✅ done in software; physical test rig and 300 hand-labelled real frames still needed |
+| 2: model, lamps, fusion, escalation, dashboard | ✅ done |
+| 2b: automatic reader (no calibration), drop-a-photo tester, live webcam | ✅ done |
+| 3: tablet/phone app | ⏸️ paused. The app was removed from the repo for a redesign; the vision model is tested on a PC for now |
 | 4: hospital pilot and handover | ⏳ not started |
 
 **Open questions for the hospital** are in [docs/phase0_hospital_collection_and_questions.md](docs/phase0_hospital_collection_and_questions.md):
