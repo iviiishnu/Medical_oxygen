@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/>
+    </marker>
+    <style>
+      .t  { font-size: 19px; font-weight: 700; fill: #0f172a; }
+      .s  { font-size: 14.5px; fill: #334155; }
+      .z  { font-size: 15px; font-weight: 700; fill: #475569; letter-spacing: 1.5px; }
+      .built   { fill: #ffffff; stroke: #15803d; stroke-width: 2.5; }
+      .planned { fill: #ffffff; stroke: #64748b; stroke-width: 2; stroke-dasharray: 7 5; }
+      .ln  { stroke: #334155; stroke-width: 2.2; fill: none; marker-end: url(#a); }
+      .lr  { stroke: #b91c1c; stroke-width: 2.4; fill: none; marker-end: url(#r); }
+      .lab { font-size: 13.5px; fill: #475569; font-style: italic; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#f8fafc"/>
+  <text x="40" y="52" font-size="30" font-weight="800" fill="#0f172a">O2 Monitor: how it works</text>
+  <text x="40" y="80" font-size="16" fill="#475569">A camera watches the hospital's main oxygen panel and reads the pressure gauge and status lamps about once per second, then raises the alarm when pressure drops.</text>
+
+  <!-- zone: at the panel -->
+  <rect x="30" y="105" width="1020" height="680" rx="16" fill="#eef2f7" stroke="#cbd5e1"/>
+  <text x="52" y="134" class="z">1  AT THE OXYGEN PANEL: TABLET / PC, WORKS WITH NO INTERNET</text>
+
+  <!-- camera -->
+  <rect x="55" y="215" width="190" height="105" rx="12" class="built"/>
+  <text x="75" y="248" class="t">Camera</text>
+  <text x="75" y="273" class="s">Live video feed</text>
+  <text x="75" y="294" class="s">~1 frame per second</text>
+
+  <!-- find & track -->
+  <rect x="290" y="215" width="200" height="105" rx="12" class="built"/>
+  <text x="310" y="248" class="t">Find the dial</text>
+  <text x="310" y="273" class="s">Search once (~1 s),</text>
+  <text x="310" y="294" class="s">then track (~0.05 s/frame)</text>
+
+  <!-- three readers -->
+  <rect x="540" y="155" width="230" height="72" rx="12" class="built"/>
+  <text x="558" y="184" class="t">Stage A: classical</text>
+  <text x="558" y="207" class="s">needle angle from the image</text>
+
+  <rect x="540" y="232" width="230" height="72" rx="12" class="built"/>
+  <text x="558" y="261" class="t">Stage B: AI model</text>
+  <text x="558" y="284" class="s">YOLO keypoints → needle value</text>
+
+  <rect x="540" y="309" width="230" height="72" rx="12" class="built"/>
+  <text x="558" y="338" class="t">Lamp reader</text>
+  <text x="558" y="361" class="s">green / red / amber / off</text>
+
+  <!-- fusion -->
+  <rect x="805" y="215" width="235" height="105" rx="12" class="built"/>
+  <text x="825" y="248" class="t">Fusion</text>
+  <text x="825" y="273" class="s">pressure + confidence</text>
+  <text x="825" y="294" class="s">disagree → UNCERTAIN</text>
+
+  <!-- alert engine -->
+  <rect x="805" y="440" width="235" height="215" rx="12" class="built"/>
+  <text x="825" y="473" class="t">Alert engine</text>
+  <text x="825" y="500" class="s">• median of last 5</text>
+  <text x="825" y="524" class="s">• LOW after 3 low in a row</text>
+  <text x="825" y="548" class="s">• fast fall → early warning</text>
+  <text x="825" y="572" class="s">• red lamp → LOW anyway</text>
+  <text x="825" y="596" class="s">• can't read 30 s →</text>
+  <text x="837" y="618" class="s">MONITORING LOST</text>
+  <text x="825" y="642" class="s" font-weight="700">OK · LOW · CRITICAL</text>
+
+  <!-- local alarm -->
+  <rect x="540" y="470" width="230" height="95" rx="12" class="planned"/>
+  <text x="558" y="503" class="t">Local alarm</text>
+  <text x="558" y="528" class="s">sound + flashing screen</text>
+  <text x="558" y="549" class="s">at the panel itself</text>
+
+  <!-- audit -->
+  <rect x="290" y="470" width="200" height="95" rx="12" class="planned"/>
+  <text x="310" y="503" class="t">Audit log</text>
+  <text x="310" y="528" class="s">reading every minute,</text>
+  <text x="310" y="549" class="s">photo at every alert</text>
+
+  <!-- arrows inside panel -->
+  <path d="M245,267 L284,267" class="ln"/>
+  <path d="M490,267 L515,267 L515,191 L534,191" class="ln"/>
+  <path d="M515,267 L534,267" class="ln"/>
+  <path d="M515,267 L515,345 L534,345" class="ln"/>
+  <path d="M770,191 L792,191 L792,267 L799,267" class="ln"/>
+  <path d="M770,267 L799,267" class="ln"/>
+  <path d="M770,345 L792,345 L792,267" stroke="#334155" stroke-width="2.2" fill="none"/>
+  <path d="M922,320 L922,434" class="ln"/>
+  <text x="932" y="385" class="lab">every reading</text>
+  <path d="M805,517 L776,517" class="lr"/>
+  <path d="M540,517 L496,517" class="ln"/>
+
+  <!-- legend -->
+  <rect x="55" y="690" width="40" height="26" rx="6" class="built"/>
+  <text x="105" y="709" class="s">Built and tested on the PC (vision model, webcam mode, alert logic, cloud functions, dashboard)</text>
+  <rect x="55" y="728" width="40" height="26" rx="6" class="planned"/>
+  <text x="105" y="747" class="s">Planned: the tablet app at the panel (being redesigned)</text>
+
+  <!-- zone: cloud -->
+  <rect x="1090" y="105" width="480" height="300" rx="16" fill="#eef2f7" stroke="#cbd5e1"/>
+  <text x="1112" y="134" class="z">2  CLOUD (SECOND LAYER)</text>
+  <rect x="1115" y="160" width="430" height="220" rx="12" class="built"/>
+  <text x="1137" y="194" class="t">Firebase</text>
+  <text x="1137" y="222" class="s">• stores live readings, 24 h history, alerts</text>
+  <text x="1137" y="248" class="s">• sends push alerts to on-duty staff</text>
+  <text x="1137" y="274" class="s">• not acknowledged in 2 min → escalate</text>
+  <text x="1150" y="296" class="s">to the next staff tier</text>
+  <text x="1137" y="322" class="s">• tablet heartbeat missed twice →</text>
+  <text x="1150" y="344" class="s">TABLET OFFLINE alert</text>
+
+  <path d="M1040,500 L1065,500 L1065,270 L1109,270" class="ln"/>
+  <text x="1083" y="420" class="lab" transform="rotate(-90 1083 420)">internet</text>
+
+  <!-- zone: people -->
+  <rect x="1090" y="440" width="480" height="345" rx="16" fill="#eef2f7" stroke="#cbd5e1"/>
+  <text x="1112" y="469" class="z">3  STAFF</text>
+  <rect x="1115" y="495" width="205" height="160" rx="12" class="planned"/>
+  <text x="1135" y="528" class="t">Staff phones</text>
+  <text x="1135" y="555" class="s">full-screen alarm</text>
+  <text x="1135" y="578" class="s">ACKNOWLEDGE button</text>
+  <rect x="1340" y="495" width="205" height="160" rx="12" class="built"/>
+  <text x="1360" y="528" class="t">Nursing desk</text>
+  <text x="1360" y="555" class="s">web dashboard:</text>
+  <text x="1360" y="578" class="s">live value, 24 h chart,</text>
+  <text x="1360" y="601" class="s">alarm sound, alert log</text>
+
+  <path d="M1217,380 L1217,489" class="lr"/>
+  <path d="M1442,380 L1442,489" class="ln"/>
+  <text x="1226" y="440" class="lab">push</text>
+  <text x="1451" y="440" class="lab">live</text>
+
+  <text x="1115" y="690" class="s">Nurse acknowledges → alert stops escalating</text>
+  <text x="1115" y="714" class="s">Pressure recovers → alert clears by itself</text>
+  <text x="1115" y="746" class="s" font-weight="700">The hospital's existing alarm panel stays in place.</text>
+  <text x="1115" y="768" class="s" font-weight="700">This is an extra layer, never a replacement.</text>
+
+  <text x="40" y="830" font-size="15" fill="#475569">Safety rule: if the camera can't read the gauge (blocked, dark, out of focus), that is itself an alert. It never fails silently.</text>
+  <text x="40" y="856" font-size="15" fill="#475569">Measured on the laptop: about 19 frames per second while tracking; the system only needs 1.</text>
+</svg>
