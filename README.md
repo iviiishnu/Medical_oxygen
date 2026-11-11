@@ -89,6 +89,43 @@ digital displays. All run on a normal CPU.
 The physical test rig and hospital photos/videos are still to do (see [Status](#status)).
 Full report: [`docs/eval_final.json`](docs/eval_final.json).
 
+## About: the models
+
+"The model" is really a small team of **6 small AI models**, each with one job, plus normal code for the
+geometry, the lamps and the decision. **M = million parameters** (the numbers a model learns in training);
+2.5 M is tiny - big image AI models have hundreds of millions or billions - so all of them run on a normal CPU.
+
+| # | Model (`vision/models/`) | Size | Parameters | Its one job |
+|---|---|---|---|---|
+| 1 | `gauge_pose.onnx` (general) | 9.6 MB | 2.5 M | find every round dial and mark 4 points: centre, needle tip, zero mark, max mark |
+| 2 | `gauge_pose_panel.onnx` (specialist) | 9.6 MB | 2.5 M | the same 4 points, trained on the two hospital panels, so more accurate on them |
+| 3 | `digital_det.onnx` | 9.3 MB | 2.4 M | find digital (seven-segment) number displays |
+| 4 | `digit_rec.onnx` | 6.4 MB | 1.7 M | read the digits inside a display, e.g. "4.82" |
+| 5 | `dialtext_det.onnx` | 3.6 MB | 1.0 M | find the printed numbers around a dial (0, 2, 4 ... 16) |
+| 6 | `dialtext_rec.onnx` | 6.5 MB | 1.7 M | read those printed numbers to work out an unknown gauge's scale |
+| | **Total** | **about 45 MB** (about 23 MB as fp16 for a tablet) | **about 11.7 M** | |
+
+**What runs for each photo** (tester page, `auto_read.py`, webcam):
+
+| Step | Model |
+|---|---|
+| 1. Find all round dials | **1** and **2** both search; results merged so neither misses a dial |
+| 2. Is it a gauge we know? (alarm box, Magnate oxygen / air / vacuum) | no model: the dial is matched against the reference photos in `samples/real/` |
+| 3a. Known gauge: read the needle | **2** (panel specialist) |
+| 3b. Unknown gauge: read the printed scale, then the needle | **5 + 6** for the numbers, **1** for the needle |
+| 4. Digital displays | **3** finds them, **4** reads each one |
+| 5. Camera-angle fix, lamps, NORMAL / ABNORMAL + confidence | no model: normal code (`vision/o2gauge/auto.py`) |
+
+So the hospital panels are read by models **1 + 2** (plus **3 + 4** if a panel has a digital display);
+**5 + 6** are only used for gauges the system has never seen.
+
+**Android tablet:** these are "nano" networks made for phones. The older panel model, as TFLite, ran in
+about 75 ms per frame on one desktop CPU thread; a mid-range tablet should need roughly 150-300 ms per model
+pass (estimate, not yet measured on a device) - enough for the planned 1 reading per second. The first dial
+search takes a few seconds on a tablet, after which the app only follows the dial. Still to do for the app:
+convert the new models to TFLite (ONNX -> onnx2tf), port today's Python logic to Kotlin with parity tests,
+and measure on a real tablet.
+
 ## Try it in 5 minutes (any laptop, no graphics card)
 
 You only need **Python 3.12 or newer** ([python.org](https://www.python.org/downloads/); on Windows tick
