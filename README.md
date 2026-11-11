@@ -103,31 +103,35 @@ python vision/tools/tester_app.py
 ```
 
 1. Open **http://127.0.0.1:8000** in a browser.
-2. Drag a gauge photo onto the page. To start, use `samples/real/alarm_box.jpg` or
-   `samples/real/magnate.jpg`. You can also paste one with Ctrl+V or drop several at once.
-3. After about 2 seconds the page shows:
+2. Drag a gauge photo onto the page. To start, use the ready demo set in `samples/demo/` (or
+   `samples/real/*.jpg`). You can also paste one with Ctrl+V or drop several at once.
+3. After a few seconds the page shows:
    * **NORMAL** (green) or **ABNORMAL** (red), or **CAN'T TELL**;
    * a **confidence %**;
-   * the pressure reading;
+   * every needle dial **and digital display** it found, numbered left to right, with gas, reading, scale and status;
    * the lamp colours it saw;
-   * the photo with the dial, needle and lamps marked.
+   * the photo with the dials, needles, displays and lamps marked.
 
-Nothing has to be clicked on the gauge. The dial, its scale and the lamps are found automatically.
+Nothing has to be clicked on the gauge. The dials, their scales, digital displays and the lamps are found
+automatically, also when the photo is taken at an angle.
 
 | Photo | Expected result |
 |---|---|
 | `samples/real/alarm_box.jpg` | NORMAL, about 5.0 kg/cm² (scale 0–16) |
 | `samples/real/magnate.jpg` | NORMAL, Oxygen about 4.8 kg/cm², Medical Air about 4.1, Vacuum about 580 mmHg (scale 0–10.55 = 150 psi) |
-| `samples/demo/06_alarm_box_LOW_2.6_red_lamp.jpg` | ABNORMAL (needle 2.6, red lamp) |
+| `samples/demo/03..05_magnate_*deg.jpg` | NORMAL, about the same readings from 25–35° camera angles |
+| `samples/demo/06_alarm_box_LOW_2.6_red_lamp.jpg` | ABNORMAL (needle about 2.5, red lamp) |
+| `samples/demo/07_magnate_oxygen_7.5.jpg` | NORMAL, oxygen about 7.4 |
+| `samples/demo/08_digital_meter_4.82.jpg` | NORMAL, digital display 4.82 next to the oxygen dial |
 | `samples/demo/09_digital_meter_LOW_2.95.jpg` | ABNORMAL, digital display 2.95 |
 
 The page uses one photo at a time and stays on your computer. Stop it with Ctrl+C in the terminal.
 
-Live from a webcam instead: `python vision/tools/live_webcam.py`. In the webcam window, **R** searches again,
-**F** freezes, **S** saves a snapshot and **Q** quits.
+Live from a webcam instead: `python vision/tools/live_webcam.py` (add `--digital` to also read digital
+displays, slower). In the webcam window, **R** searches again, **F** freezes, **S** saves a snapshot and **Q** quits.
 
-Speed: about 2 s per photo and about 0.1 s per webcam frame, measured on a desktop CPU. Expect a few seconds
-per photo on a basic laptop.
+Speed: about 4 s per photo on a desktop CPU (two keypoint models search for dials, plus the digital
+reader); the webcam follows the main dial at several frames per second. Expect longer on a basic laptop.
 
 > **Training needs a graphics card. Running does not.** The GPU was only used once, to train the model.
 
@@ -136,11 +140,12 @@ per photo on a basic laptop.
 | Folder | What it is |
 |---|---|
 | `vision/` | Python: Stage A reader, lamp reader, fusion, reference alert engine, synthetic + photo-based data generator, training/eval/export tools, tests |
-| `vision/models/` | Trained keypoint model: `gauge_pose.pt`, `.onnx`, `_fp32.tflite`, `_fp16.tflite` |
+| `vision/models/` | `gauge_pose.onnx/.pt` (general keypoint model: finds every dial, reads unknown gauges), `gauge_pose_panel.onnx/.pt` (specialist for the two hospital panels), `digital_det` + `digit_rec` (digital displays), `dialtext_det` + `dialtext_rec` (printed scale numbers), `gauge_pose_fp32/fp16.tflite` (older panel model for a future app) |
 | `firebase/` | Firestore rules + indexes, Cloud Functions (push, escalation, heartbeat watchdog), admin scripts, emulator tests |
 | `dashboard/` | Nursing-station web dashboard (React + Vite + Firebase), with a demo mode |
 | `contract/` | Single source of truth shared by all parts: reading JSON schema, default thresholds, alert test scenarios, parity fixtures and Stage B spec (for a future app port) |
-| `samples/real/` | The two real panel photos with their calibration and needle geometry |
+| `samples/real/` | The real panel photos with their calibration and needle geometry (one per Magnate dial) |
+| `samples/demo/` | Ready demo photos for the tester (rebuild: `python vision/tools/make_demo_set.py`) |
 | `docs/` | Setup guide, architecture, dataset survey, questions for the hospital, evaluation reports |
 
 ## Quick start
@@ -170,11 +175,18 @@ python vision/tools/live_webcam.py         # live from a webcam
 curl -F image=@photo.jpg http://127.0.0.1:8000/api/read     # HTTP API for another program
 ```
 Everything is found automatically (`vision/o2gauge/auto.py`):
-* **dial(s):** circle proposals refined by the keypoint model until its predicted centre and size
-  stop moving; bezels, lamps and labels don't settle and are rejected;
+* **dial(s):** circle proposals refined by the keypoint models (general + panel specialist, results
+  merged) until the predicted centre and size stop moving; a dial must also show a clean round rim, so
+  ghosts between two gauges, buttons and lit lamps are rejected;
+* **camera angle:** the dial rim's ellipse is fitted and the dial turned back into a circle before the
+  needle is read (only when it is clearly tilted);
 * **gauge type, and so its scale:** the dial face is matched against the reference photos in
-  `samples/real/` (alarm box 0–16, Magnate 0–10). An unrecognised dial is flagged and the
+  `samples/real/` (alarm box 0–16, Magnate 0–10.55 = 150 psi). Identical faces (Magnate oxygen / air)
+  are told apart by bezel colour and left-to-right order. An unrecognised dial gets its scale from its
+  printed numbers if they can be read, otherwise it is flagged ("?", plus % of full scale) and the
   confidence drops. Add a new gauge type by adding `name.jpg` + `name.calibration.json` there;
+* **digital displays:** seven-segment LCD / LED meters are found and read (`vision/o2gauge/digital.py`);
+  next to a needle gauge the dial stays the main reading;
 * **lamps:** lit = strongly coloured *and* brighter than its surroundings (or white-hot centre),
   so printed labels, paint and unlit lamps are ignored. Green = normal, red = low/alarm, amber = high;
 * **verdict + confidence %:** needle vs the low limit (classical + model, less sure near the
@@ -342,8 +354,10 @@ set per device in Firestore `devices/{id}.config`.
 
 | Suite | Command | Count |
 |---|---|---|
-| Python vision + alert engine + Stage B + auto reader | `python -m pytest vision/tests` | 86 |
-| Auto reader stress test | `python vision/tools/eval_auto.py` | 312 cases |
+| Python vision + alert engine + Stage B + auto reader + digital + safety regressions | `python -m pytest vision/tests` | 130 |
+| Auto reader stress test | `python vision/tools/eval_auto.py --panel-model vision/models/gauge_pose_panel.onnx` | 312 cases |
+| Camera-angle test (real panels turned up to 35°) | `python vision/tools/eval_angles.py --panel-model vision/models/gauge_pose_panel.onnx` | 20 views |
+| Digital reader (synthetic + real LCD + false alarms) | `python vision/tools/eval_digital.py` | 200 + 26 + 56 photos |
 | Cloud Functions logic | `cd firebase/functions && npm test` | 8 |
 | Firestore rules | `cd firebase && npm run test:rules` | 11 |
 | Functions end-to-end (emulators) | `cd firebase && npm run test:e2e` | 3 |
@@ -357,12 +371,18 @@ set per device in Firestore `devices/{id}.config`.
 | 1: data, calibration, alert engine, Firestore | ✅ done in software; physical test rig and 300 hand-labelled real frames still needed |
 | 2: model, lamps, fusion, escalation, dashboard | ✅ done |
 | 2b: automatic reader (no calibration), drop-a-photo tester, live webcam | ✅ done |
+| 2c: any camera angle, many gauge designs, digital displays, scale reading (11 Nov 2026) | ✅ done; training stopped early by low RAM (general model epoch 19/30, display detector 9/18) - can be resumed; real digital-gauge photos needed |
 | 3: tablet/phone app | ⏸️ paused. The app was removed from the repo for a redesign; the vision model is tested on a PC for now |
 | 4: hospital pilot and handover | ⏳ not started |
 
 **Open questions for the hospital** are in [docs/phase0_hospital_collection_and_questions.md](docs/phase0_hospital_collection_and_questions.md):
 the LOW/CRITICAL thresholds, the true readings of the two photos, the Magnate HIGH/LOW lamp colours,
 Wi-Fi/power at the panel, and the escalation order.
+
+**Known limits (vision):** real seven-segment LCD photos are read poorly so far (19 % of numbers on a
+public blood-pressure-monitor set; very large digits are missed); a printed label can look like a digital
+display when the panel is small in the photo (held back by a confidence gate); everything is validated on
+photos / re-projections of two real panels, not yet on hospital video.
 
 ## Team
 Mithun (vision track) · Nandan (app & alerts track). Engineering-student project, Dec 2026 review.
