@@ -36,7 +36,7 @@ def test_decode_rejects_unknown_shape():
 
 
 @pytest.mark.skipif(not ONNX.exists(), reason="trained model not present")
-@pytest.mark.parametrize("stem,lo,hi", [("alarm_box", 4.6, 5.3), ("magnate", 4.3, 4.6)])
+@pytest.mark.parametrize("stem,lo,hi", [("alarm_box", 4.6, 5.3), ("magnate", 4.55, 4.95)])   # magnate: 0-10.55 scale
 def test_model_reads_real_photos(stem, lo, hi):
     from o2gauge.stage_b import KeypointReader
     kb = KeypointReader(ONNX)

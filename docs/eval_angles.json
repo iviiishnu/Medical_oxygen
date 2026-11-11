@@ -1,0 +1,293 @@
+{
+ "summary": {
+  "cases": 20,
+  "dial_readings": 40,
+  "missed": 0,
+  "mean_dev": 0.101,
+  "max_dev": 0.53,
+  "within_0.2": 0.875,
+  "verdict_normal": 20
+ },
+ "rows": [
+  {
+   "panel": "magnate",
+   "yaw": 0,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.774,
+    "MEDICAL AIR": 4.143,
+    "VACUUM": 579.424
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.0,
+    "MEDICAL AIR": 0.0,
+    "VACUUM": 0.0
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": 20,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.742,
+    "MEDICAL AIR": 4.066,
+    "VACUUM": 555.613
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.032,
+    "MEDICAL AIR": 0.077,
+    "VACUUM": 0.331
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": -20,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.704,
+    "MEDICAL AIR": 4.103,
+    "VACUUM": 586.188
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.07,
+    "MEDICAL AIR": 0.04,
+    "VACUUM": 0.094
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": 0,
+   "pitch": 20,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.78,
+    "MEDICAL AIR": 4.07,
+    "VACUUM": 573.469
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.006,
+    "MEDICAL AIR": 0.073,
+    "VACUUM": 0.083
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": 0,
+   "pitch": -20,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.762,
+    "MEDICAL AIR": 4.153,
+    "VACUUM": 581.451
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.012,
+    "MEDICAL AIR": 0.01,
+    "VACUUM": 0.028
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": 35,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.7,
+    "MEDICAL AIR": 4.097,
+    "VACUUM": 550.392
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.074,
+    "MEDICAL AIR": 0.046,
+    "VACUUM": 0.403
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": -35,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.754,
+    "MEDICAL AIR": 4.022,
+    "VACUUM": 599.678
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.02,
+    "MEDICAL AIR": 0.121,
+    "VACUUM": 0.281
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": 0,
+   "pitch": 30,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.726,
+    "MEDICAL AIR": 4.042,
+    "VACUUM": 578.251
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.048,
+    "MEDICAL AIR": 0.101,
+    "VACUUM": 0.016
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": 25,
+   "pitch": 20,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.841,
+    "MEDICAL AIR": 4.236,
+    "VACUUM": 579.743
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.067,
+    "MEDICAL AIR": 0.093,
+    "VACUUM": 0.004
+   }
+  },
+  {
+   "panel": "magnate",
+   "yaw": -25,
+   "pitch": -20,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.687,
+    "MEDICAL AIR": 4.16,
+    "VACUUM": 610.096
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.087,
+    "MEDICAL AIR": 0.017,
+    "VACUUM": 0.426
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": 0,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 5.01
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.0
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": 20,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.892
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.118
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": -20,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.929
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.081
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": 0,
+   "pitch": 20,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.908
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.102
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": 0,
+   "pitch": -20,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 5.092
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.082
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": 35,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.95
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.06
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": -35,
+   "pitch": 0,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 5.54
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.53
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": 0,
+   "pitch": 30,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.892
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.118
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": 25,
+   "pitch": 20,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 4.846
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.164
+   }
+  },
+  {
+   "panel": "alarm_box",
+   "yaw": -25,
+   "pitch": -20,
+   "verdict": "NORMAL",
+   "readings": {
+    "OXYGEN": 5.143
+   },
+   "dev_kgcm2_equiv": {
+    "OXYGEN": 0.133
+   }
+  }
+ ]
+}

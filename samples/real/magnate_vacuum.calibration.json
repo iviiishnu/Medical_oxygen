@@ -1,0 +1,22 @@
+{
+  "device_id": "tab-magnate-01",
+  "gauge_id": "vacuum_magnate",
+  "unit": "mmHg",
+  "image_size": [1600, 1200],
+  "center": [1374.5, 404.0],
+  "radius": 80.0,
+  "zero_point": [1428.5, 440.0],
+  "max_point": [1324.0, 450.0],
+  "min_value": 0.0,
+  "max_value": 760.0,
+  "direction": "ccw",
+  "needle_color": "dark",
+  "needle_r_inner": 0.6,
+  "needle_r_outer": 0.9,
+  "rim_points": null,
+  "lamps": [
+    {"name": "NORMAL", "box": [1357, 810, 90, 50], "hue": "green"},
+    {"name": "LOW", "box": [1368, 960, 80, 40], "hue": "red"}
+  ],
+  "version": 1
+}

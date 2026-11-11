@@ -43,9 +43,47 @@ Lamp state: 99.3–100 % on synthetic frames, and both real panels read correctl
 Alert logic: 19 scenarios pass in the Python reference engine.
 Model speed: about 8 ms (ONNX) / 75 ms (TFLite, 1 thread) per frame on a desktop CPU.
 
-**Automatic reader (no calibration)**: 312 of 312 NORMAL/ABNORMAL verdicts were correct on the stress test
-(both panels, 12 needle values, lamps green/red/off, 11 camera conditions). The mean reading error was
-0.03 kg/cm² and the worst was 0.17. See [`docs/eval_auto.json`](docs/eval_auto.json).
+**Automatic reader (no calibration)**, 11 Nov 2026 models: 309 of 312 NORMAL/ABNORMAL verdicts correct on the
+stress test (both panels, 12 needle values, lamps green/red/off, 11 camera conditions); dial found and gauge
+type recognised in 312/312. Mean reading error 0.07 kg/cm², worst 0.23. The 3 misses are the same borderline
+case (true 3.52 vs the 3.50 limit, read 3.41-3.50 -> ABNORMAL at ~43 % confidence). See
+[`docs/eval_auto.json`](docs/eval_auto.json).
+
+| Test (11 Nov 2026) | Result |
+|---|---|
+| Real Magnate photo (by eye: O2 ~4.8, Air ~4.2, Vacuum ~575) | O2 4.77, Air 4.07-4.14, Vacuum 579 |
+| Real alarm-box photo (by eye ~5.0) | 5.01 |
+| Real panels re-projected, camera turned up to 35° (`docs/eval_angles.json`) | 87.5 % of readings within 0.2 of straight-on, 0 dials lost, 20/20 verdicts right |
+| Digital displays, held-out synthetic scenes (`docs/eval_digital.json`) | display found 99.5 %, digits exact 95.5 % |
+| Photos with no digital display (false alarms) | 0 of 56 |
+| Real seven-segment LCD photos (blood-pressure monitor) | 19 % of numbers read - **not good enough yet** (very large digits are missed) |
+| Unknown internet gauge photos (12) | dial found in 12/12 with the new model (3/12 before) |
+
+Models: `gauge_pose.onnx` = general model (finds every dial, reads unknown gauges), `gauge_pose_panel.onnx`
+= specialist for the two hospital panels (reads recognised gauges), `digital_det.onnx` + `digit_rec.onnx` =
+digital displays. All run on a normal CPU.
+
+### New (11 Nov 2026): smarter reader
+
+* **Magnate scale fixed.** The Magnate pressure dials' arc ends at 150 psi = **10.55 kg/cm²**, not 10. The
+  old setting made every Magnate reading about 5 % low (Medical Air 3.86 instead of about 4.2).
+* **Any camera angle.** A dial seen from the side is an ellipse, so equal steps of the scale are no longer
+  equal angles. Each dial's rim is now fitted (three concentric bands, consensus) and the dial is turned
+  back into a circle before the needle is read. Test: the real panels re-projected as if the camera were
+  turned up to 35° (`vision/tools/eval_angles.py`), see `docs/eval_angles.json`.
+* **Many more gauge designs.** The keypoint model was retrained on 16,400 dials: the hospital panels, the
+  Synanthropic *reading-analog-dial* set (34k labelled dials of many designs, MIT licence), generated gauges,
+  and half of them seen at up to 40°. Ghost "dials" (circles between two gauges, round buttons) are
+  rejected by a rim check.
+* **Digital (seven-segment) displays.** New reader `vision/o2gauge/digital.py`: a display detector
+  (YOLO nano) + a digit recogniser (CTC), both trained only on synthetic LCD / LED meters pasted into real
+  photos at random angles. Tested on held-out scenes, on a public set of real LCD photos and on photos
+  with no display (false alarms). See `docs/eval_digital.json`.
+* **Scale reading.** For a gauge that matches no reference photo the printed numbers are read to find the
+  scale; if they cannot be read, the result also shows the needle as **% of full scale** (exact even when
+  the numbers are unknown).
+* The tester shows every dial and display found, numbered left to right; `samples/demo/` has a ready
+  demo set (`python vision/tools/make_demo_set.py` rebuilds it).
 
 **Not yet validated on real hardware.** These numbers use frames *synthesised* from two real photos.
 The physical test rig and hospital photos/videos are still to do (see [Status](#status)).
@@ -79,7 +117,9 @@ Nothing has to be clicked on the gauge. The dial, its scale and the lamps are fo
 | Photo | Expected result |
 |---|---|
 | `samples/real/alarm_box.jpg` | NORMAL, about 5.0 kg/cm² (scale 0–16) |
-| `samples/real/magnate.jpg` | NORMAL, about 4.5 kg/cm² (scale 0–10) |
+| `samples/real/magnate.jpg` | NORMAL, Oxygen about 4.8 kg/cm², Medical Air about 4.1, Vacuum about 580 mmHg (scale 0–10.55 = 150 psi) |
+| `samples/demo/06_alarm_box_LOW_2.6_red_lamp.jpg` | ABNORMAL (needle 2.6, red lamp) |
+| `samples/demo/09_digital_meter_LOW_2.95.jpg` | ABNORMAL, digital display 2.95 |
 
 The page uses one photo at a time and stays on your computer. Stop it with Ctrl+C in the terminal.
 
@@ -232,8 +272,9 @@ python -m uv pip install --python .tools/rocm-venv/Scripts/python.exe ultralytic
 python vision/tools/eval_model.py --model vision/models/gauge_pose.pt --json docs/eval_final.json
 
 ```
-The tester page, `auto_read.py` and the webcam use `vision/models/gauge_pose.onnx`, which
-`train_pose.py` writes. They pick up a new model as soon as they are restarted.
+The tester page, `auto_read.py` and the webcam use `vision/models/gauge_pose.onnx`. `train_pose.py`
+copies the best weights to `vision/models/gauge_pose.pt`; export that to ONNX (command in the v2 section
+below). They pick up a new model as soon as they are restarted.
 
 Optional, for a future mobile app: export to TFLite and refresh the parity fixtures.
 ```bash
@@ -248,6 +289,35 @@ python vision/tools/export_parity.py
 Adding new real photos: put `name.jpg`, `name.calibration.json` (from `calibrate.py`) and
 `name.needle.json` (hub / tip / tail points and widths; see `samples/real/*.needle.json`) in
 `samples/real/`. `make_dataset.py` picks up every such set automatically.
+
+### v2 model (many gauge designs, any angle) and the digital reader
+
+Public data goes to `C:\o2data` (not in the repo): the Synanthropic `keypoint.zip` from
+huggingface.co/datasets/Synanthropic/reading-analog-gauge (MIT) unzipped to `C:\o2data\keypoint`, and the
+Roboflow-100 `gauge` photos (huggingface.co/datasets/Francesco/gauge-u2lwv, CC) in `C:\o2data\bg_gauge_rf`
+(used as real backgrounds). The training scripts rest the GPU after every batch (`--pause`) and cap its
+memory (`--vram`), so the card is never pinned at 100 %.
+```bash
+# analog keypoint model v2: 16,400 dials (panels 45 %, Synanthropic 30 %, generated 25 %; half tilted up to 40 deg)
+python vision/tools/make_dataset.py --out C:/o2data/gauge_pose_v2 --n 16000 --synanthropic 0.3 --random 0.15 --procedural 0.1
+.tools/rocm-venv/Scripts/python.exe vision/tools/train_pose.py --data C:/o2data/gauge_pose_v2/data.yaml \
+    --model vision/models/gauge_pose.pt --epochs 30 --batch 32 --device 0 --workers 4 --name gauge_pose_v2 --pause 0.03 --vram 0.5 --lr0 0.003
+.tools/export-venv/Scripts/python.exe -c "from ultralytics import YOLO; YOLO('vision/models/gauge_pose.pt').export(format='onnx', imgsz=320, opset=17)"
+
+# digital reader: detector data (8,000 scenes + 3,000 close-up / multi-row + 1,200 printed-text negatives)
+python vision/tools/train_digital.py det-data --out C:/o2data/digital_det --n 8000
+python vision/tools/train_digital.py det-extra --n 3000
+python vision/tools/train_digital.py det-neg --n 1200
+.tools/rocm-venv/Scripts/python.exe vision/tools/train_digital.py det --epochs 35
+.tools/rocm-venv/Scripts/python.exe vision/tools/train_digital.py rec --iters 5000     # synthetic strips, on the fly
+.tools/export-venv/Scripts/python.exe vision/tools/export_digital.py rec
+.tools/export-venv/Scripts/python.exe vision/tools/export_digital.py det
+
+# tests
+python vision/tools/eval_angles.py      # real panels, camera turned up to 35 deg
+python vision/tools/eval_digital.py     # synthetic held-out + real LCD photos + false alarms
+python vision/tools/eval_auto.py        # 312-case stress test
+```
 
 ## Safety design
 

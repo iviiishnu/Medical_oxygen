@@ -49,7 +49,9 @@ def main():
     ap.add_argument("--out", default=str(ROOT / "out/auto"))
     ap.add_argument("--json", action="store_true", help="print JSON only")
     a = ap.parse_args()
-    reader = AutoReader(KeypointReader(a.model))
+    panel = ROOT / "vision/models/gauge_pose_panel.onnx"
+    reader = AutoReader(KeypointReader(a.model), read_text=True,
+                        panel_model=KeypointReader(panel) if panel.exists() else None)
     p = Path(a.path)
     files = sorted(f for f in p.iterdir() if f.suffix.lower() in (".jpg", ".jpeg", ".png")) if p.is_dir() else [p]
     Path(a.out).mkdir(parents=True, exist_ok=True)

@@ -15,7 +15,7 @@ A dial that matches nothing is reported as an UNKNOWN gauge type (scale assumed,
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 import cv2
@@ -24,6 +24,7 @@ import numpy as np
 from .calibration import Calibration
 from .config import MonitorConfig
 from .dataset import CROP_SCALE, IMGSZ, crop_affine, make_crop
+from .dialtext import UNITS, VACUUM_UNITS
 from .pipeline import GaugePipeline
 
 KPT_CENTER, KPT_TIP, KPT_ZERO, KPT_MAX = range(4)
@@ -160,6 +161,12 @@ class GaugeType:
     r_in: float
     r_out: float
     needle_color: str
+    direction: str = "cw"                 # ccw = numbers grow anticlockwise (vacuum 0..760)
+    gas: str | None = None                # from the calibration's gauge_id: oxygen_* / air_* / vacuum_*
+
+
+GAS_FROM_ID = {"oxygen": "OXYGEN", "o2": "OXYGEN", "air": "MEDICAL AIR", "vacuum": "VACUUM", "vac": "VACUUM",
+               "n2o": "NITROUS OXIDE", "nitrous": "NITROUS OXIDE", "co2": "CARBON DIOXIDE", "nitrogen": "NITROGEN"}
 
 
 class GaugeLibrary:
@@ -183,6 +190,8 @@ class GaugeLibrary:
         self.clahe = cv2.createCLAHE(2.0, (8, 8))
         self.bf = cv2.BFMatcher(cv2.NORM_HAMMING)
         self.refs: list[tuple[GaugeType, np.ndarray, tuple]] = []
+        self.bezel: dict[str, np.ndarray] = {}
+        self.ref_photo: dict[str, tuple[str, float]] = {}    # name -> (photo hash, dial x in that photo)
         for cj in sorted(Path(folder).glob("*.calibration.json")):
             img_path = cj.with_name(cj.name.replace(".calibration.json", ".jpg"))
             img = cv2.imread(str(img_path))
@@ -196,8 +205,30 @@ class GaugeLibrary:
             tip = json.loads(nj.read_text())["tip"] if nj.exists() else None
             ring = self._ring(img, cal.center, cal.radius, tip)
             t = GaugeType(img_path.stem, cal.min_value, cal.max_value, cal.unit,
-                          cal.needle_r_inner, cal.needle_r_outer, cal.needle_color)
+                          cal.needle_r_inner, cal.needle_r_outer, cal.needle_color, cal.direction,
+                          GAS_FROM_ID.get(cal.gauge_id.split("_")[0].lower()))
             self.refs.append((t, des, ring))
+            self.bezel[t.name] = self._bezel(img, cal.center, cal.radius)
+            import hashlib
+            self.ref_photo[t.name] = (hashlib.md5(img_path.read_bytes()).hexdigest(), float(cal.center[0]))
+
+    @staticmethod
+    def _scale_key(t):
+        return (t.min_value, t.max_value, t.unit, t.direction)
+
+    @staticmethod
+    def _bezel(img, c, r):
+        """Mean Lab colour of the ring around the dial (white oxygen / black-green air / yellow vacuum
+        rings on the Magnate panel: the dial faces themselves are identical)."""
+        x0, y0 = int(max(0, c[0] - 1.5 * r)), int(max(0, c[1] - 1.5 * r))
+        crop = img[y0:int(c[1] + 1.5 * r) + 1, x0:int(c[0] + 1.5 * r) + 1]
+        yy, xx = np.mgrid[:crop.shape[0], :crop.shape[1]]
+        d = np.hypot(xx - (c[0] - x0), yy - (c[1] - y0)) / r
+        m = (d > 1.2) & (d < 1.42)
+        lab = cv2.cvtColor(crop, cv2.COLOR_BGR2LAB).reshape(-1, 3)[m.ravel()].astype(np.float32)
+        # mean, not median: a two-colour bezel (black / white sectors of the Medical Air ring) has a
+        # median that flips between the two colours with the camera angle; the mean stays put
+        return np.mean(lab, 0) if len(lab) else np.zeros(3, np.float32)
 
     def _describe(self, img, c, r):
         M = crop_affine(c[0], c[1], r, 1.05, size=256)
@@ -254,26 +285,147 @@ class GaugeLibrary:
             rng.append((self._ring_score(ring, rring), t.name, t))
         orb.sort(key=lambda s: s[0], reverse=True)
         rng.sort(key=lambda s: s[0], reverse=True)
+        key = self._scale_key
+        # the runner-up that matters is a gauge with a DIFFERENT scale: identical dial faces (oxygen and
+        # air on the Magnate panel) match each other equally well, and are told apart by the bezel below
         o_best, o_t = orb[0][0], orb[0][2]
-        o_ok = o_best >= self.MIN_MATCHES and o_best >= self.MIN_RATIO * max(orb[1][0] if len(orb) > 1 else 0, 1)
+        o_2nd = next((s[0] for s in orb[1:] if key(s[2]) != key(o_t)), 0)
+        o_ok = o_best >= self.MIN_MATCHES and o_best >= self.MIN_RATIO * max(o_2nd, 1)
         r_best, r_t = rng[0][0], rng[0][2]
-        r_ok = r_best >= self.RING_MIN and r_best - (rng[1][0] if len(rng) > 1 else -1) >= self.RING_GAP
-        if o_ok and r_ok and o_t.name != r_t.name:
+        r_2nd = next((s[0] for s in rng[1:] if key(s[2]) != key(r_t)), -1)
+        r_ok = r_best >= self.RING_MIN and r_best - r_2nd >= self.RING_GAP
+        if o_ok and r_ok and key(o_t) != key(r_t):
             return None, o_best                              # the two signatures contradict
-        if o_ok:
-            return o_t, o_best
-        if r_ok:
-            return r_t, o_best
-        return None, o_best
+        t = o_t if o_ok else r_t if r_ok else None
+        if t is None:
+            return None, o_best
+        same = [s[2] for s in orb if key(s[2]) == key(t)]
+        if len(same) > 1:                                    # same face: pick by bezel colour
+            q = self._bezel(img, d.center, d.radius)
+            t = min(same, key=lambda s: float(np.linalg.norm(self.bezel[s.name] - q)))
+        return t, o_best
+
+
+# ---------------------------------------------------------------------------- camera angle
+MIN_TILT_RATIO = 0.95          # rim axis ratio above this = seen (nearly) straight on: no correction
+
+def rim_support(img, d: Dial) -> float:
+    """Share of rays (0..1) that hit one clean elliptical edge near the dial rim. A real dial has a
+    round rim / bezel; a 'dial' found between two dials or on a button does not."""
+    try:
+        return float(dial_rectifier(img, d, return_support=True))
+    except (cv2.error, ValueError, np.linalg.LinAlgError):
+        return 0.0
+
+
+def dial_rectifier(img, d: Dial, min_inliers: float = 0.3, return_support: bool = False):
+    """Seen at an angle a round dial is an ellipse, and equal steps of the scale stop being equal
+    angles in the photo (readings come out a few % off). Fit the ellipse of the dial rim (RANSAC over
+    the strongest radial edges) and return the 2x3 affine that turns it back into a circle around the
+    dial centre, plus the axis ratio (1 = seen straight on). None when the rim is not clear enough."""
+    cx, cy = d.center
+    r = d.radius
+    g = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
+    g = cv2.GaussianBlur(g.astype(np.float32), (0, 0), max(1.0, r / 60))
+    a = np.linspace(0, 2 * np.pi, 180, endpoint=False)
+    rr = np.linspace(0.75 * r, 1.45 * r, 140)
+    xs = (cx + np.outer(np.sin(a), rr)).astype(np.float32)
+    ys = (cy - np.outer(np.cos(a), rr)).astype(np.float32)
+    prof = cv2.remap(g, xs, ys, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+    gr = np.abs(np.diff(prof, axis=1))
+    rel = rr[:-1] / r
+    rows = np.arange(len(a))
+    rng = np.random.default_rng(0)
+
+    def fit_band(lo, hi):
+        """strongest edge per ray inside the band -> RANSAC ellipse -> (w, h, theta, inlier share)"""
+        cols = np.where((rel >= lo) & (rel < hi))[0]
+        if len(cols) < 3:
+            return None
+        j = cols[np.argmax(gr[:, cols], axis=1)]
+        P = np.stack([xs[rows, j], ys[rows, j]], -1)
+        strong = gr[rows, j] > 0.35 * np.median(gr[rows, j]) + 1.0
+        P = P[strong]
+        if len(P) < 40:
+            return None
+
+        def inl(e):
+            (ex, ey), (w, h), th = e
+            t = math.radians(th)
+            R = np.array([[math.cos(t), math.sin(t)], [-math.sin(t), math.cos(t)]])
+            q = (P - [ex, ey]) @ R.T
+            return np.abs(np.hypot(q[:, 0] / (w / 2), q[:, 1] / (h / 2)) - 1) < 0.012
+
+        best, best_n = None, 0
+        for _ in range(250):
+            try:
+                e = cv2.fitEllipse(P[rng.choice(len(P), 6, replace=False)].astype(np.float32))
+            except cv2.error:
+                continue
+            (ex, ey), (w, h), _ = e
+            if not (1.3 * r < max(w, h) < 3.0 * r) or min(w, h) < 0.5 * max(w, h) \
+                    or math.dist((ex, ey), (cx, cy)) > 0.15 * r:
+                continue
+            n = int(inl(e).sum())
+            if n > best_n:
+                best, best_n = e, n
+        if best is None or best_n < 12:
+            return None
+        share = best_n / len(a)
+        e = cv2.fitEllipse(P[inl(best)].astype(np.float32))
+        return e[1][0], e[1][1], e[2], share
+
+    # every concentric circle of the dial (face edge, bezel inside, bezel outside) is distorted the
+    # same way: fit each band separately and keep the consensus (one band alone can lock onto text,
+    # the needle or a two-colour bezel)
+    fits = [f for f in (fit_band(0.8, 1.05), fit_band(1.0, 1.22), fit_band(1.18, 1.45)) if f]
+    support = max((f[3] for f in fits), default=0.0)
+    if return_support:
+        return support
+    fits = [f for f in fits if f[3] >= min_inliers + 0.1]
+    if not fits:
+        return None, 1.0
+    ratios = np.array([min(w, h) / max(w, h) for w, h, _, _ in fits])
+    if len(fits) >= 2:
+        med = float(np.median(ratios))
+        agree = [f for f, q in zip(fits, ratios) if abs(q - med) <= 0.03]
+        if not agree:
+            return None, 1.0
+        fits = agree
+    f = max(fits, key=lambda f: f[3])                                  # best-supported of the agreeing fits
+    w, h, th, _ = f
+    ratio = float(np.median([min(a_, b_) / max(a_, b_) for a_, b_, _, _ in fits]))
+    # nearly straight on: the fit's own noise (+-0.03 in ratio) would cost more than the correction gains
+    # (alarm box, ratio 0.965: corrected 4.94 vs 5.01 uncorrected, by eye 5.0-5.1)
+    if ratio > MIN_TILT_RATIO:
+        return None, ratio
+    # rebuild with the consensus ratio along the best fit's minor axis
+    if w < h:
+        w, h = ratio * h, h
+    else:
+        w, h = w, ratio * w
+    t = math.radians(th)
+    R = np.array([[math.cos(t), math.sin(t)], [-math.sin(t), math.cos(t)]])
+    A = R.T @ np.diag([max(w, h) / w, max(w, h) / h]) @ R
+    c = np.array([cx, cy])
+    return np.hstack([A, (c - A @ c)[:, None]]), ratio
+
+
+def _warp_dial(d: Dial, M: np.ndarray) -> Dial:
+    k = d.kpts.copy()
+    k[:, :2] = k[:, :2] @ M[:, :2].T + M[:, 2]
+    c = M[:, :2] @ np.asarray(d.center) + M[:, 2]
+    return Dial((float(c[0]), float(c[1])), d.radius * math.sqrt(abs(np.linalg.det(M[:, :2]))), d.det_conf, k)
 
 
 def calibration_from_dial(d: Dial, max_value: float, min_value: float = 0.0,
                           r_in: float = 0.55, r_out: float = 0.85, needle_color: str = "dark",
-                          unit: str = "kg/cm2") -> Calibration | None:
+                          unit: str = "kg/cm2", direction: str = "cw") -> Calibration | None:
     try:
         cal = Calibration(center=[d.center[0], d.center[1]], radius=d.radius,
                           zero_point=d.kpts[KPT_ZERO, :2].tolist(), max_point=d.kpts[KPT_MAX, :2].tolist(),
-                          min_value=min_value, max_value=max_value, unit=unit, needle_color=needle_color,
+                          min_value=min_value, max_value=max_value, direction=direction, unit=unit,
+                          needle_color=needle_color,
                           needle_r_inner=r_in, needle_r_outer=r_out, gauge_id="auto")
         cal.validate()
         return cal
@@ -341,6 +493,9 @@ def find_lit_lamps(img, dials: list[Dial] | None = None) -> list[LitLamp]:
             a_col = int(sel.sum())
             if a_col < min_area:
                 continue
+            # an indicator lamp is a compact blob; painted pipes, cabinets and long strips are not
+            if a_col > 0.03 * H * W or max(w, hh) > 4.5 * max(1, min(w, hh)) or a < 0.3 * w * hh:
+                continue
             cx, cy = cen[i]
             # on or around a dial = coloured dial print or a painted bezel (yellow vacuum gauge),
             # never a status lamp (bezels reach ~2.1 R; on both panels lamps sit 3.2-5 R away)
@@ -378,8 +533,22 @@ class GaugeReading:
     cal: Calibration | None
     notes: list[str] = field(default_factory=list)
     gauge_type: str | None = None        # recognised gauge (reference name) or None = unknown
-    scale: str = ""                      # e.g. "0-16 kg/cm2 (recognised: alarm_box)"
+    scale: str = ""                      # e.g. "0-16 kg/cm2 (read from the dial)"
     scale_known: bool = True
+    gas: str | None = None               # OXYGEN / MEDICAL AIR / VACUUM ... read from the dial, or None
+    unit: str = ""
+    scale_source: str = ""               # dial text / reference photo / set by you / assumed
+    secondary: str = ""                  # reading on a second printed scale, e.g. "55 psi (0-150 psi)"
+    low_limit: float | None = None       # low limit in this gauge's own unit (oxygen-type gauges only)
+    unit_per_kgcm2: float = 1.0
+    number: int = 0                      # 1, 2, 3 ... left to right
+    text: object = None                  # dialtext.DialText (debug)
+    kind: str = "analog"                 # analog (needle dial) / digital (seven-segment display)
+    box: tuple | None = None             # digital: digit-area box x0 y0 x1 y1
+
+    @property
+    def label(self):
+        return f"#{self.number}" + (f" {self.gas}" if self.gas else "")
 
 
 @dataclass
@@ -397,11 +566,14 @@ def decide(g: GaugeReading | None, lamps: list[LitLamp], cfg: MonitorConfig) -> 
     reasons = []
     # ---- needle evidence
     g_state, g_strength = None, 0.0
+    lim = cfg.low_threshold if g is None or g.low_limit is None else g.low_limit
+    per = 1.0 if g is None else g.unit_per_kgcm2
     if g is not None and g.value is not None and g.status != "UNCERTAIN":
-        g_state = "OK" if g.value >= cfg.low_threshold else "LOW"
-        margin = abs(g.value - cfg.low_threshold)
+        g_state = "OK" if g.value >= lim else "LOW"
+        margin = abs(g.value - lim) / per                    # in kg/cm2
         g_strength = g.confidence * float(np.clip(0.4 + margin / 1.0, 0.4, 1.0))   # near the limit = less sure
-        reasons.append(f"needle reads {g.value:.2f} (limit {cfg.low_threshold}) -> "
+        u = f" {g.unit}" if g.unit else ""
+        reasons.append(f"{g.label} {'display' if g.kind == 'digital' else 'needle'} reads {g.value:.{_dp(g.value)}f}{u} (limit {lim:.{_dp(lim)}f}{u}) -> "
                        f"{'above' if g_state == 'OK' else 'BELOW'} the low limit")
     elif g is not None and g.value is not None:
         reasons.append(f"needle reading {g.value:.2f} is uncertain ({'; '.join(g.notes) or 'low confidence'})")
@@ -443,15 +615,56 @@ def decide(g: GaugeReading | None, lamps: list[LitLamp], cfg: MonitorConfig) -> 
 # ---------------------------------------------------------------------------- one call
 DEFAULT_LIBRARY = Path(__file__).resolve().parents[2] / "samples" / "real"
 FALLBACK_MAX = 16.0
+MAX_DIALS = 6
+MIN_SCALE_CONF = 0.3          # a scale read from the printed numbers needs at least this confidence
+MIN_RIM_SUPPORT_KNOWN = 0.25  # recognised gauge type (Magnate vacuum dial: 0.36-0.37; ghosts 0.21)
+MIN_RIM_SUPPORT = 0.30       # (real dials 0.36-0.80, ghosts between dials / buttons 0.09-0.26) unrecognised dial: share of rays that must hit one clean elliptical rim
+
+
+def dial_angle_pt(c, p):
+    return math.degrees(math.atan2(p[0] - c[0], -(p[1] - c[1]))) % 360.0
+
+
+def point_on(c, ang, r):
+    t = math.radians(ang)
+    return (c[0] + r * math.sin(t), c[1] - r * math.cos(t))
+
+
+def _dp(v, step=None):
+    """decimals to show: enough for the scale step / value size"""
+    ref = abs(step) if step else abs(v)
+    if ref >= 50:
+        return 0
+    if ref >= 5:
+        return 1
+    return 2
 
 
 class AutoReader:
     def __init__(self, model, cfg: MonitorConfig | None = None, library: str | Path | None = DEFAULT_LIBRARY,
-                 cache_types: bool = False):
-        """cache_types: live video - remember a dial's recognised type while it stays in place."""
+                 cache_types: bool = False, read_text: bool = False, debug: bool = False, rectify: bool = True,
+                 digital: bool = True, panel_model=None):
+        """panel_model: optional second keypoint model used to READ dials recognised as a known hospital
+        gauge (the general model still finds every dial and reads unknown gauges)."""
+        self.panel_model = panel_model
+        """cache_types: live video - remember a dial's recognised type while it stays in place.
+        read_text: read the printed numbers / words (needs vision/models/dialtext_*.onnx)."""
         self.model = model
         self.cfg = cfg or MonitorConfig.load()
         self.library = GaugeLibrary(library) if library else None
+        self._debug = debug
+        self.rectify = rectify
+        self.text_always = False
+        self.digital = None
+        if digital:
+            from .digital import DigitalReader
+            if DigitalReader.available():
+                self.digital = DigitalReader()
+        self.text = None
+        if read_text:
+            from .dialtext import DialTextReader
+            if DialTextReader.available():
+                self.text = DialTextReader()
         self.cache_types = cache_types
         self._types: list[tuple[tuple[float, float], float, GaugeType | None, int, float]] = []
 
@@ -470,36 +683,268 @@ class AutoReader:
             return t, n
         return self.library.identify(img, d)
 
+    def _read_text(self, img, d: Dial):
+        if self.text is None:
+            return None
+        try:
+            return self.text.read(img, d.center[0], d.center[1], d.radius, d.kpts)
+        except Exception:                                        # never let text reading break a reading
+            if self._debug:
+                raise
+            return None
+
     def read_dial(self, img, d: Dial, max_value: float | None = None) -> GaugeReading:
-        """max_value None = recognise the gauge and use its scale."""
+        """max_value None = read the scale off the dial (numbers printed on it); falls back to a
+        reference-photo match, then to an assumed 0-16."""
         t, n = self._identify(img, d)
+        reader_model = self.model
+        if t is not None and self.panel_model is not None:
+            # a recognised hospital gauge: read it with the model specialised on these panels
+            dp = _refine(self.panel_model, img, d.center[0], d.center[1], d.radius, steps=2)
+            if dp.det_conf >= DIAL_MIN_CONF:
+                d, reader_model = dp, self.panel_model
+        # printed numbers are read only for a gauge that matches no reference photo (they are slow, and a
+        # recognised gauge already has an exact scale)
+        dt = self._read_text(img, d) if max_value is None and (t is None or self.text_always) else None
+        fit = dt.scales[0] if dt and dt.scales else None
+        if fit is not None and fit.confidence < MIN_SCALE_CONF:
+            fit = None
+        r_in, r_out, col = (t.r_in, t.r_out, t.needle_color) if t else (0.55, 0.85, "dark")
+        gas = (dt.gas if dt else None) or (t.gas if t else None)
+        notes, secondary = [], ""
+        direction = t.direction if t else "cw"
+        zero_pt = max_pt = None
         if max_value is not None:
             lo, hi, unit = 0.0, float(max_value), "kg/cm2"
-            r_in, r_out, col = (t.r_in, t.r_out, t.needle_color) if t else (0.55, 0.85, "dark")
-            scale, known = f"0-{hi:g} {unit} (set by you)", True
+            source, known = "set by you", True
+        elif fit is not None:
+            lo, hi = fit.vmin, fit.vmax
+            # the end marks are sometimes past the last printed number (vacuum 0..700 + 760 mark)
+            # (only by one whole step: an end label hidden by the needle / stop pin)
+            ext = sorted(fit.value_at(dial_angle_pt(d.center, d.kpts[k, :2])) for k in (KPT_ZERO, KPT_MAX))
+            st = abs(fit.step)
+            if abs(ext[0] - (lo - st)) < 0.3 * st:
+                lo = lo - st
+            if abs(ext[1] - (hi + st)) < 0.3 * st:
+                hi = hi + st
+            lo, hi = lo + 0.0, hi + 0.0                     # no "-0"
+            unit = fit.unit or (t.unit if t else "")
+            direction = "cw" if fit.b > 0 else "ccw"
+            source, known = "read from the dial", True
+            # (numbers inside the reference range also confirm it: the needle can hide an end number)
+            same_dir = (fit.b > 0) == (t is None or t.direction == "cw")
+            if t is not None and same_dir and t.min_value - 1e-6 <= lo and hi <= t.max_value + 1e-6:
+                lo, hi = t.min_value, t.max_value
+                # the numbers confirm a known gauge: its tick-mark geometry (model marks) is more precise
+                # than the centres of the printed numbers, so keep that and use the numbers as a check
+                source = f"read from the dial, matches reference '{t.name}'"
+                unit = t.unit
+            else:
+                zero_pt = point_on(d.center, fit.angle_of(lo), 0.8 * d.radius)
+                max_pt = point_on(d.center, fit.angle_of(hi), 0.8 * d.radius)
+                if t is not None:
+                    notes.append(f"looks like reference '{t.name}' ({t.min_value:g}-{t.max_value:g}) but the "
+                                 f"dial reads {lo:g}-{hi:g}: using the dial")
         elif t is not None:
-            lo, hi, unit, r_in, r_out, col = t.min_value, t.max_value, t.unit, t.r_in, t.r_out, t.needle_color
-            scale, known = f"{lo:g}-{hi:g} {unit} (recognised: {t.name})", True
+            lo, hi, unit = t.min_value, t.max_value, t.unit
+            source, known = f"reference photo '{t.name}'", True
         else:
-            lo, hi, unit, r_in, r_out, col = 0.0, FALLBACK_MAX, "kg/cm2", 0.55, 0.85, "dark"
-            scale, known = f"0-{hi:g} {unit}", False
-        cal = calibration_from_dial(d, hi, lo, r_in, r_out, col, unit)
+            lo, hi, unit = 0.0, FALLBACK_MAX, ""
+            source, known = "assumed", False
+        if fit is None and dt and dt.units and max_value is None:
+            unit = unit or dt.units[0]
         name = t.name if t else None
+        scale = f"{lo:g}-{hi:g}" + (f" {unit}" if unit else "") + f" ({source})"
+        per = 98.0665 / UNITS[unit] if unit in UNITS else 1.0       # this unit per kg/cm2
+        # vacuum: named so, a vacuum unit, all <= 0, or numbers that FALL clockwise (0..760 printed backwards)
+        is_vac = gas == "VACUUM" or unit in VACUUM_UNITS or hi <= 0 or (fit is not None and fit.b < 0)
+        low = None if is_vac or gas not in (None, "OXYGEN") else self.cfg.low_threshold * per
+        # camera at an angle: read the needle on a view where the dial is a true circle again
+        img_r, d_r = img, d
+        try:
+            M, _ = dial_rectifier(img, d) if self.rectify else (None, 1.0)
+        except (cv2.error, ValueError, np.linalg.LinAlgError):
+            if self._debug:
+                raise
+            M = None                                               # never let the angle fix break a reading
+        if M is not None:
+            img_r = cv2.warpAffine(img, M, (img.shape[1], img.shape[0]), flags=cv2.INTER_LINEAR,
+                                   borderMode=cv2.BORDER_REPLICATE)
+            d_r = _warp_dial(d, M)
+            if zero_pt is not None:
+                zero_pt, max_pt = (tuple(M[:, :2] @ np.asarray(p) + M[:, 2]) for p in (zero_pt, max_pt))
+        if zero_pt is not None:
+            try:
+                cal = Calibration(center=list(d_r.center), radius=d_r.radius, zero_point=list(zero_pt),
+                                  max_point=list(max_pt), min_value=lo, max_value=hi, direction=direction,
+                                  unit=unit or "kg/cm2", needle_color=col, needle_r_inner=r_in,
+                                  needle_r_outer=r_out, gauge_id="auto")
+                cal.validate()
+            except ValueError:
+                cal = None
+        else:
+            cal = calibration_from_dial(d_r, hi, lo, r_in, r_out, col, unit or "kg/cm2", direction)
+        common = dict(gauge_type=name, scale=scale, scale_known=known, gas=gas, unit=unit, scale_source=source,
+                      low_limit=low, unit_per_kgcm2=per, text=dt)
         if cal is None:
             return GaugeReading(None, 0.0, None, None, "UNCERTAIN", d, None, ["could not locate 0 / max marks"],
-                                name, scale, known)
-        msg, dbg = GaugePipeline(cal, self.cfg, self.model).read(img)
+                                **common)
+        # the fusion tolerances are in kg/cm2 on a 0-16 dial: scale them to this dial
+        span = (hi - lo) / 16.0
+        cfg = replace(self.cfg, agree_tolerance=self.cfg.agree_tolerance * span,
+                      low_threshold=(low if low is not None else -1e9),
+                      critical_threshold=(self.cfg.critical_threshold * per if low is not None else -2e9),
+                      lamp_tolerance=self.cfg.lamp_tolerance * span)
+        msg, dbg = GaugePipeline(cal, cfg, reader_model).read(img_r)
         a, b, f = dbg["stage_a"], dbg["stage_b"], dbg["fusion"]
+        status = msg["status"]
+        if low is None and status != "UNCERTAIN":
+            status = "READ"                                       # no limit configured for this gas
+        if not known and msg["value"] is not None and hi > lo:
+            # scale numbers not readable: the needle's position on the dial is still exact
+            secondary = f"{(msg['value'] - lo) / (hi - lo) * 100:.0f} % of the dial's full scale (numbers not readable)"
+        if fit is not None and msg["value"] is not None and len(dt.scales) > 1:
+            s2 = dt.scales[1]
+            v2 = s2.value_at(fit.angle_of(msg["value"]))
+            secondary = f"{v2:.{_dp(v2, s2.step)}f}" + (f" {s2.unit}" if s2.unit else "") + f" (scale {s2.describe()})"
         return GaugeReading(msg["value"], msg["confidence"], a.value, b.value if b else None,
-                            msg["status"], d, cal, list(f.notes), name, scale, known)
+                            status, d, cal, notes + list(f.notes), secondary=secondary, **common)
+
+    def _unique_types(self, img, readings: list[GaugeReading]):
+        """Identical dial faces (Magnate oxygen / air) are told apart by bezel colour, dial by dial. When two
+        dials in one photo claim the SAME reference, assign the references jointly (each reference once,
+        lowest total bezel-colour distance) - a panel never has two identical gauges of different gases
+        labelled the same."""
+        if not self.library:
+            return
+        import itertools
+        by_type = {t.name: t for t, _, _ in self.library.refs}
+        key = GaugeLibrary._scale_key
+        groups: dict = {}
+        for g in readings:
+            if g.gauge_type in by_type:
+                groups.setdefault(key(by_type[g.gauge_type]), []).append(g)
+        for k, gs in groups.items():
+            names = [t.name for t, _, _ in self.library.refs if key(t) == k]
+            # (also when every dial already has its own type: oxygen and air can be swapped, not only duplicated)
+            if len(gs) < 2 or len(names) < len(gs) or len(names) > 6:
+                continue
+            q = [self.library._bezel(img, g.dial.center, g.dial.radius) for g in gs]
+            rp = self.library.ref_photo
+
+            def cost(perm):
+                c = sum(float(np.linalg.norm(self.library.bezel[n] - qi)) for n, qi in zip(perm, q))
+                # references photographed together on one panel keep their left-to-right order
+                for (g1, n1), (g2, n2) in itertools.combinations(zip(gs, perm), 2):
+                    if rp[n1][0] == rp[n2][0] and (g1.dial.center[0] - g2.dial.center[0]) * (rp[n1][1] - rp[n2][1]) < 0:
+                        c += 1000.0
+                return c
+            best = min(itertools.permutations(names, len(gs)), key=cost)
+            for g, n in zip(gs, best):
+                if g.gauge_type != n:
+                    t = by_type[n]
+                    g.gauge_type = n
+                    g.gas = t.gas or g.gas
+                    g.scale = g.scale.replace(f"'{g.scale.split(chr(39))[1]}'", f"'{n}'") if "'" in g.scale else g.scale
+                    # only oxygen has a low limit: the gas decides whether this dial can alarm
+                    if g.gas == "OXYGEN":
+                        g.low_limit = self.cfg.low_threshold * g.unit_per_kgcm2
+                        if g.value is not None and g.status != "UNCERTAIN":
+                            g.status = "OK" if g.value >= g.low_limit else (
+                                "CRITICAL" if g.value < self.cfg.critical_threshold * g.unit_per_kgcm2 else "LOW")
+                    else:
+                        g.low_limit = None
+                        if g.status in ("OK", "LOW", "CRITICAL"):
+                            g.status = "READ"
+
+    def read_digital(self, img, analog: list[GaugeReading]) -> list[GaugeReading]:
+        """Seven-segment displays -> readings (unit assumed kg/cm2 unless configured otherwise)."""
+        if self.digital is None:
+            return []
+        try:
+            found = self.digital.read(img)
+        except Exception:
+            if self._debug:
+                raise
+            return []
+        out = []
+        for r in found:
+            x0, y0, x1, y1 = r.box
+            c = ((x0 + x1) / 2, (y0 + y1) / 2)
+            # a "display" inside an analog dial is printed text on the face, not a meter
+            if any(math.dist(c, g.dial.center) < g.dial.radius for g in analog):
+                continue
+            if r.value is None and r.confidence < 0.5:
+                continue
+            # plausibility: a pressure display shows at most 5 digits; next to a needle gauge a printed
+            # label can look like an LCD window, so then ask for a clearly confident detection
+            ndig = sum(ch.isdigit() for ch in r.text)
+            if ndig == 0 or ndig > 5:
+                continue
+            # (measured: printed "LOW" label at half size det 0.73 / read 0.77; a real meter det 0.80 / read 0.90)
+            if analog and (r.det_conf < 0.77 or r.confidence < 0.85):
+                continue
+            d = Dial(c, max(4.0, (y1 - y0) / 2), r.det_conf, np.zeros((4, 3)))
+            unit = self.cfg_digital_unit
+            per = 98.0665 / UNITS[unit] if unit in UNITS else 1.0
+            ok = r.value is not None and r.confidence >= 0.5
+            status = ("OK" if r.value >= self.cfg.low_threshold * per else "LOW") if ok else "UNCERTAIN"
+            notes = [] if ok else [f"display text '{r.text}' is not a clear number"]
+            out.append(GaugeReading(r.value, r.confidence, None, None, status, d, None, notes,
+                                    gauge_type="digital display", scale="digital display", scale_known=True,
+                                    gas=None, unit=unit, scale_source="digits read off the display",
+                                    low_limit=self.cfg.low_threshold * per, unit_per_kgcm2=per,
+                                    kind="digital", box=r.box))
+        return out
+
+    cfg_digital_unit = "kg/cm2"
 
     def read(self, img, max_value: float | None = None, dials: list[Dial] | None = None) -> dict:
         if dials is None:
-            dials = find_dials(img, self.model)
+            dials = find_dials(img, self.model, MAX_DIALS)
+            if self.panel_model is not None:
+                # the panel specialist sometimes finds a hospital dial the general model misses (small / far)
+                for d2 in find_dials(img, self.panel_model, MAX_DIALS):
+                    if all(math.dist(d2.center, d.center) > 0.5 * min(d.radius, d2.radius) for d in dials):
+                        dials.append(d2)
+                dials = dials[:MAX_DIALS + 2]
+        # a lit lamp is round and bright: never let it pass as an (unknown) dial - that would also hide
+        # the lamp itself from the lamp check below (a red alarm lamp read as "dial #2")
+        lit = find_lit_lamps(img, None)
         readings = [self.read_dial(img, d, max_value) for d in dials]
-        # main gauge: a recognised one beats an unknown one; then the find_dials order (conf, size)
-        readings.sort(key=lambda g: 0 if g.gauge_type else 1)
+        readings = [g for g in readings if g.gauge_type or not any(
+            math.dist(g.dial.center, (l.box[0] + l.box[2] / 2, l.box[1] + l.box[3] / 2)) < 0.6 * g.dial.radius
+            for l in lit)]
+        # a round "dial" that matches no known gauge and has no readable needle is something else
+        # (a lit round lamp, a knob): drop it, otherwise the lamp next to it would be ignored too
+        readings = [g for g in readings if g.gauge_type or g.status != "UNCERTAIN" or g.confidence >= 0.5]
+        # an unrecognised "dial" with no clean round rim is a button, a lamp or a ghost between two dials
+        # (a recognised gauge type lowers the bar - the yellow vacuum bezel gives a weak rim - but does not
+        # remove it: a ghost circle can still match a reference face by chance)
+        readings = [g for g in readings
+                    if rim_support(img, g.dial) >= (MIN_RIM_SUPPORT_KNOWN if g.gauge_type else MIN_RIM_SUPPORT)]
+        self._unique_types(img, readings)
+        digital = self.read_digital(img, readings)
+        readings += digital
+        dials = [g.dial for g in readings if g.kind == "analog"]
+        for i, g in enumerate(sorted(readings, key=lambda g: (g.dial.center[0], g.dial.center[1])), 1):
+            g.number = i
+        # main gauge = the oxygen gauge: named OXYGEN > unnamed pressure gauge > other gases;
+        # then a known scale beats an assumed one; then find_dials order (conf, size)
+        def rank(g):
+            vac = (g.gas == "VACUUM" or g.unit in VACUUM_UNITS or (g.cal is not None and g.cal.max_value <= 0)
+                   or (g.cal is not None and g.scale_source == "read from the dial" and g.cal.direction == "ccw"))
+            gas = 0 if g.gas == "OXYGEN" else (1 if g.gas is None and not vac else 2)
+            # a needle gauge outranks a digital display of the same tier (the dial is the proven reader)
+            return (gas, 1 if g.kind == "digital" else 0, 0 if g.scale_known else 1)
+        readings.sort(key=rank)
         lamps = find_lit_lamps(img, dials)
+        # a lit LED display is not a status lamp
+        for g in digital:
+            x0, y0, x1, y1 = g.box
+            m = 0.5 * (y1 - y0)
+            lamps = [l for l in lamps if not (x0 - m <= l.box[0] + l.box[2] / 2 <= x1 + m
+                                              and y0 - m <= l.box[1] + l.box[3] / 2 <= y1 + m)]
         main = readings[0] if readings else None
         v = decide(main, lamps, self.cfg)
         return {"verdict": v, "main": main, "readings": readings, "lamps": lamps}
@@ -522,15 +967,24 @@ def draw(img, result: dict, show_header: bool = True):
         d = g.dial
         c = tuple(int(t) for t in d.center)
         col = (0, 255, 255) if i == 0 else (200, 200, 200)
+        if g.kind == "digital":
+            x0, y0, x1, y1 = g.box
+            cv2.rectangle(out, (x0, y0), (x1, y1), col, max(2, int(2 * sc)), cv2.LINE_AA)
+            val = "--" if g.value is None else f"{g.value:g}"
+            txt(f"{g.label} DIGITAL {val}" + (f" {g.unit}" if g.unit else ""), (x0, max(16, y0 - 8)), col,
+                1.2 if i == 0 else 1.0)
+            continue
         cv2.circle(out, c, int(d.radius), col, max(2, int(2 * sc)), cv2.LINE_AA)
         tip = tuple(int(t) for t in d.kpts[KPT_TIP, :2])
         cv2.line(out, c, tip, (255, 0, 255), max(2, int(3 * sc)), cv2.LINE_AA)
         for k, kc in ((KPT_ZERO, (0, 200, 0)), (KPT_MAX, (0, 0, 255))):
             cv2.circle(out, tuple(int(t) for t in d.kpts[k, :2]), max(4, int(5 * sc)), kc, -1, cv2.LINE_AA)
-        label = f"{g.value:.2f}" if g.value is not None else "--"
-        if i == 0:
-            label = f"MAIN {label}  ({g.gauge_type or 'unknown type'})"
+        val = f"{g.value:.{_dp(g.value, (g.cal.max_value - g.cal.min_value) / 10 if g.cal else None)}f}" \
+            if g.value is not None else "--"
+        label = f"{g.label} {val}" + (f" {g.unit}" if g.unit else "")
         txt(label, (c[0] - int(d.radius), c[1] - int(d.radius) - 8), col, 1.2 if i == 0 else 1.0)
+        txt(f"scale {g.scale.split(' (')[0]}" + ("" if g.scale_known else " ?"),
+            (c[0] - int(d.radius), c[1] + int(d.radius) + int(22 * sc)), col, 0.85)
     for l in result["lamps"]:
         x, y, w, h = l.box
         cv2.rectangle(out, (x, y), (x + w, y + h), LAMP_BGR[l.color], max(2, int(3 * sc)))

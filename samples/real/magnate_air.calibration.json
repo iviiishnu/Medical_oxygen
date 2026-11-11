@@ -1,0 +1,23 @@
+{
+  "device_id": "tab-magnate-01",
+  "gauge_id": "air_magnate",
+  "unit": "kg/cm2",
+  "image_size": [1600, 1200],
+  "center": [1054.0, 409.0],
+  "radius": 88.0,
+  "zero_point": [999.0, 450.0],
+  "max_point": [1109.0, 445.0],
+  "min_value": 0.0,
+  "max_value": 10.55,
+  "direction": "cw",
+  "needle_color": "dark",
+  "needle_r_inner": 0.6,
+  "needle_r_outer": 0.9,
+  "rim_points": null,
+  "lamps": [
+    {"name": "HIGH", "box": [1030, 670, 80, 40], "hue": "amber"},
+    {"name": "NORMAL", "box": [1030, 820, 90, 50], "hue": "green"},
+    {"name": "LOW", "box": [1030, 985, 80, 40], "hue": "red"}
+  ],
+  "version": 1
+}

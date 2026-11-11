@@ -33,6 +33,7 @@ def main():
     ap.add_argument("--max", type=float, default=None)
     ap.add_argument("--width", type=int, default=1280)
     ap.add_argument("--height", type=int, default=720)
+    ap.add_argument("--digital", action="store_true", help="also read seven-segment displays (slower: ~0.5 s/frame)")
     a = ap.parse_args()
 
     cap = cv2.VideoCapture(a.camera, cv2.CAP_DSHOW)
@@ -43,7 +44,9 @@ def main():
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, a.width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, a.height)
 
-    reader = AutoReader(KeypointReader(a.model), cache_types=True)
+    panel = ROOT / "vision/models/gauge_pose_panel.onnx"
+    reader = AutoReader(KeypointReader(a.model), cache_types=True, digital=a.digital,
+                        panel_model=KeypointReader(panel) if panel.exists() else None)
     state = {"dials": [], "searching": False, "last_search": 0.0}
     lock = threading.Lock()
 

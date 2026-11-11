@@ -37,7 +37,9 @@ _lock = threading.Lock()
 def reader() -> AutoReader:
     global _reader
     if _reader is None:
-        _reader = AutoReader(KeypointReader(ROOT / "vision/models/gauge_pose.onnx"))
+        panel = ROOT / "vision/models/gauge_pose_panel.onnx"        # specialist for the hospital panels
+        _reader = AutoReader(KeypointReader(ROOT / "vision/models/gauge_pose.onnx"), read_text=True,
+                             panel_model=KeypointReader(panel) if panel.exists() else None)
     return _reader
 
 
@@ -69,14 +71,22 @@ def api_read():
         confidence_pct=round(v.confidence * 100),
         reasons=v.reasons,
         reading=None if m is None or m.value is None else round(m.value, 2),
-        unit=None if m is None or m.cal is None else m.cal.unit,
+        unit=None if m is None else (m.cal.unit if m.cal is not None else m.unit) or None,
         reading_confidence_pct=None if m is None else round(m.confidence * 100),
         classical=None if m is None else m.stage_a,
         model=None if m is None else m.stage_b,
         gauge_type=None if m is None else m.gauge_type,
         scale=None if m is None else m.scale,
         low_limit=reader().cfg.low_threshold,
-        other_dials=[{"reading": g.value, "type": g.gauge_type} for g in r["readings"][1:]],
+        main_gauge=None if m is None else m.number,
+        gas=None if m is None else m.gas,
+        gauges=[{"number": g.number, "gas": g.gas, "reading": None if g.value is None else round(g.value, 3),
+                 "unit": g.unit, "scale": g.scale, "scale_source": g.scale_source, "secondary": g.secondary,
+                 "confidence_pct": round(g.confidence * 100), "status": g.status, "main": g is m, "kind": g.kind,
+                 "numbers_read": [] if g.text is None else [b.text for b in g.text.boxes if b.num is not None]}
+                for g in sorted(r["readings"], key=lambda g: g.number)],
+        other_dials=[{"reading": g.value, "type": g.gauge_type, "gas": g.gas, "unit": g.unit}
+                     for g in r["readings"][1:]],
         lamps=[{"color": l.color, "strength": l.strength} for l in r["lamps"]],
         ms=round(ms),
         image="data:image/jpeg;base64," + base64.b64encode(cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 85])[1]).decode(),
@@ -118,12 +128,15 @@ dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0}dt{color:va
 ul{margin:8px 0 0;padding-left:18px}li{margin:2px 0}
 .note{color:var(--mute);font-size:13px;margin-top:10px}
 .spin{padding:18px;color:var(--mute)}
+table.g{width:100%;border-collapse:collapse;font-size:14px}table.g th,table.g td{text-align:left;padding:6px 8px;border-top:1px solid var(--line);vertical-align:top}
+table.g th{color:var(--mute);font-weight:600}table.g tr.main td{font-weight:600}table.g .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+table.g small{color:var(--mute);font-weight:400}
 </style></head><body><main>
 <h1>Oxygen gauge tester</h1>
-<p class="sub">Drop a panel photo. The dial, gauge type and lamp colours are found automatically, with no clicking.</p>
+<p class="sub">Drop a panel photo. Needle dials, digital displays, gauge type and lamp colours are found automatically, from any reasonable camera angle, with no clicking.</p>
 <div class="bar"><label>Scale&nbsp;<select id="max">
-<option value="auto" selected>Auto (recognise gauge)</option><option value="16">0 - 16 kg/cm² (alarm box)</option>
-<option value="10">0 - 10 kg/cm² (Magnate)</option></select></label>
+<option value="auto" selected>Auto (read the numbers on each dial)</option><option value="16">0 - 16 kg/cm² (alarm box)</option>
+<option value="10.55">0 - 10.55 kg/cm² = 150 psi (Magnate)</option></select></label>
 <button id="clear" type="button">Clear results</button></div>
 <div id="drop" tabindex="0"><b>Drop photos here</b><small>or click to choose · or paste (Ctrl+V) · JPG / PNG · several at once is fine</small>
 <input id="file" type="file" accept="image/*" multiple hidden></div>
@@ -155,16 +168,20 @@ async function send(files){
 function render(j,name){
   const cls=j.verdict==='NORMAL'?'NORMAL':j.verdict==='ABNORMAL'?'ABNORMAL':'CANT';
   const lamps=j.lamps.length?j.lamps.map(l=>`<span class="chip ${l.color}">${l.color.toUpperCase()}</span>`).join(''):'none lit';
-  const other=j.other_dials.length?j.other_dials.map(d=>`${d.reading??'--'}${d.type?' ('+esc(d.type)+')':''}`).join(', '):'none';
+  const rows=j.gauges.map(g=>`<tr${g.main?' class="main"':''}><td>#${g.number}${g.main?' ★':''}</td><td>${g.kind==='digital'?'<b>digital display</b>':esc(g.gas||'—')}</td>
+   <td class="num">${g.reading??'--'} ${esc(g.unit||'')}${g.secondary?'<br><small>'+esc(g.secondary)+'</small>':''}</td>
+   <td>${esc(g.scale)}</td><td class="num">${g.confidence_pct}%</td><td>${esc(g.status)}</td></tr>`).join('');
+  const table=`<table class="g"><thead><tr><th>Dial</th><th>Gas</th><th>Reading</th><th>Scale</th><th>Conf.</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>`;
   return `<div class="head ${cls}"><div class="v">${esc(j.verdict)}</div>
    <div class="conf"><div class="t">confidence ${j.confidence_pct}%</div><div class="meter"><i style="width:${j.confidence_pct}%"></i></div></div>
    <div class="f">${esc(name)} · ${j.ms} ms</div></div>
    <div class="body"><div><img src="${j.image}" alt="annotated result"></div><div>
    <div class="big">${j.reading??'--'} <small style="font-size:15px">${esc(j.unit||'')}</small></div>
-   <dl><dt>Low limit</dt><dd>${j.low_limit}</dd><dt>Reading conf.</dt><dd>${j.reading_confidence_pct??'--'}%</dd>
-   <dt>Classical</dt><dd>${j.classical??'--'}</dd><dt>Model</dt><dd>${j.model??'--'}</dd>
-   <dt>Gauge</dt><dd>${esc(j.scale||'not found')}</dd><dt>Lamps</dt><dd>${lamps}</dd><dt>Other dials</dt><dd>${other}</dd></dl>
-   <ul>${j.reasons.map(r=>'<li>'+esc(r)+'</li>').join('')}</ul></div></div>`;
+   <div class="note" style="margin-top:0">main gauge${j.main_gauge?' #'+j.main_gauge:''}${j.gas?' · '+esc(j.gas):''}</div>
+   <dl><dt>Reading conf.</dt><dd>${j.reading_confidence_pct??'--'}%</dd>
+   <dt>Scale</dt><dd>${esc(j.scale||'not found')}</dd><dt>Lamps</dt><dd>${lamps}</dd></dl>
+   <ul>${j.reasons.map(r=>'<li>'+esc(r)+'</li>').join('')}</ul></div></div>
+   <div style="padding:0 16px 16px;overflow-x:auto">${table}</div>`;
 }
 </script></body></html>"""
 

@@ -2,33 +2,33 @@
  "summary": {
   "overall": {
    "n": 312,
-   "verdict_acc": 1.0,
+   "verdict_acc": 0.99,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.032,
-   "worst": 0.172,
-   "within_0.2": 1.0,
+   "mae": 0.074,
+   "worst": 0.226,
+   "within_0.2": 0.981,
    "mean_conf_correct": 0.942,
-   "mean_conf_wrong": null
+   "mean_conf_wrong": 0.43
   },
   "alarm_box": {
    "n": 156,
-   "verdict_acc": 1.0,
+   "verdict_acc": 0.981,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.038,
-   "worst": 0.172,
-   "within_0.2": 1.0,
+   "mae": 0.078,
+   "worst": 0.226,
+   "within_0.2": 0.962,
    "mean_conf_correct": 0.94,
-   "mean_conf_wrong": null
+   "mean_conf_wrong": 0.43
   },
   "magnate": {
    "n": 156,
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.026,
-   "worst": 0.085,
+   "mae": 0.07,
+   "worst": 0.184,
    "within_0.2": 1.0,
    "mean_conf_correct": 0.944,
    "mean_conf_wrong": null
@@ -38,10 +38,10 @@
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.031,
-   "worst": 0.073,
+   "mae": 0.079,
+   "worst": 0.195,
    "within_0.2": 1.0,
-   "mean_conf_correct": 0.811,
+   "mean_conf_correct": 0.81,
    "mean_conf_wrong": null
   },
   "camera: far (50% size)": {
@@ -49,10 +49,10 @@
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.034,
-   "worst": 0.084,
-   "within_0.2": 1.0,
-   "mean_conf_correct": 0.982,
+   "mae": 0.069,
+   "worst": 0.207,
+   "within_0.2": 0.917,
+   "mean_conf_correct": 0.981,
    "mean_conf_wrong": null
   },
   "camera: low-res 640px": {
@@ -60,43 +60,43 @@
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.033,
-   "worst": 0.077,
-   "within_0.2": 1.0,
-   "mean_conf_correct": 0.987,
+   "mae": 0.067,
+   "worst": 0.208,
+   "within_0.2": 0.917,
+   "mean_conf_correct": 0.986,
    "mean_conf_wrong": null
   },
   "camera: tilted 8deg": {
    "n": 24,
-   "verdict_acc": 1.0,
+   "verdict_acc": 0.958,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.041,
-   "worst": 0.087,
+   "mae": 0.082,
+   "worst": 0.184,
    "within_0.2": 1.0,
-   "mean_conf_correct": 0.987,
-   "mean_conf_wrong": null
+   "mean_conf_correct": 0.989,
+   "mean_conf_wrong": 0.436
   },
   "camera: perspective": {
    "n": 24,
-   "verdict_acc": 1.0,
+   "verdict_acc": 0.958,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.03,
-   "worst": 0.085,
+   "mae": 0.064,
+   "worst": 0.178,
    "within_0.2": 1.0,
-   "mean_conf_correct": 0.987,
-   "mean_conf_wrong": null
+   "mean_conf_correct": 0.989,
+   "mean_conf_wrong": 0.45
   },
   "camera: blur": {
    "n": 24,
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.039,
-   "worst": 0.077,
-   "within_0.2": 1.0,
-   "mean_conf_correct": 0.982,
+   "mae": 0.089,
+   "worst": 0.226,
+   "within_0.2": 0.958,
+   "mean_conf_correct": 0.981,
    "mean_conf_wrong": null
   },
   "camera: dark": {
@@ -104,10 +104,10 @@
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.027,
-   "worst": 0.083,
+   "mae": 0.075,
+   "worst": 0.195,
    "within_0.2": 1.0,
-   "mean_conf_correct": 0.952,
+   "mean_conf_correct": 0.95,
    "mean_conf_wrong": null
   },
   "camera: bright": {
@@ -115,10 +115,10 @@
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.032,
-   "worst": 0.099,
+   "mae": 0.063,
+   "worst": 0.157,
    "within_0.2": 1.0,
-   "mean_conf_correct": 0.981,
+   "mean_conf_correct": 0.979,
    "mean_conf_wrong": null
   },
   "camera: noise": {
@@ -126,52 +126,52 @@
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.03,
-   "worst": 0.077,
+   "mae": 0.064,
+   "worst": 0.132,
    "within_0.2": 1.0,
    "mean_conf_correct": 0.987,
    "mean_conf_wrong": null
   },
   "camera: jpeg q25": {
    "n": 24,
-   "verdict_acc": 1.0,
+   "verdict_acc": 0.958,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.02,
-   "worst": 0.057,
+   "mae": 0.073,
+   "worst": 0.175,
    "within_0.2": 1.0,
-   "mean_conf_correct": 0.985,
-   "mean_conf_wrong": null
+   "mean_conf_correct": 0.989,
+   "mean_conf_wrong": 0.405
   },
   "camera: glare": {
    "n": 24,
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.039,
-   "worst": 0.172,
-   "within_0.2": 1.0,
+   "mae": 0.078,
+   "worst": 0.21,
+   "within_0.2": 0.958,
    "mean_conf_correct": 0.987,
    "mean_conf_wrong": null
   },
   "lamps: matched": {
    "n": 264,
-   "verdict_acc": 1.0,
+   "verdict_acc": 0.989,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.032,
-   "worst": 0.172,
-   "within_0.2": 1.0,
+   "mae": 0.073,
+   "worst": 0.226,
+   "within_0.2": 0.977,
    "mean_conf_correct": 0.982,
-   "mean_conf_wrong": null
+   "mean_conf_wrong": 0.43
   },
   "lamps: conflict": {
    "n": 24,
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.031,
-   "worst": 0.073,
+   "mae": 0.081,
+   "worst": 0.195,
    "within_0.2": 1.0,
    "mean_conf_correct": 0.494,
    "mean_conf_wrong": null
@@ -181,14 +181,72 @@
    "verdict_acc": 1.0,
    "dial_found": 1.0,
    "type_ok": 1.0,
-   "mae": 0.033,
-   "worst": 0.062,
+   "mae": 0.081,
+   "worst": 0.195,
    "within_0.2": 1.0,
-   "mean_conf_correct": 0.952,
+   "mean_conf_correct": 0.949,
    "mean_conf_wrong": null
   }
  },
- "wrong": [],
+ "wrong": [
+  {
+   "panel": "alarm_box",
+   "true_value": 3.52,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "tilted 8deg",
+   "expect": "NORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.436,
+   "correct": false,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 3.412,
+   "abs_err": 0.108,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 3.52,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "NORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.45,
+   "correct": false,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 3.461,
+   "abs_err": 0.059,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 3.52,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "jpeg q25",
+   "expect": "NORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.405,
+   "correct": false,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 3.495,
+   "abs_err": 0.025,
+   "lamps_seen": [
+    "green"
+   ]
+  }
+ ],
  "rows": [
   {
    "panel": "alarm_box",
@@ -203,8 +261,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.894,
-   "abs_err": 0.066,
+   "reading": 0.867,
+   "abs_err": 0.093,
    "lamps_seen": [
     "red"
    ]
@@ -222,8 +280,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.881,
-   "abs_err": 0.079,
+   "reading": 0.875,
+   "abs_err": 0.085,
    "lamps_seen": [
     "red"
    ]
@@ -241,8 +299,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.891,
-   "abs_err": 0.069,
+   "reading": 0.876,
+   "abs_err": 0.084,
    "lamps_seen": [
     "red"
    ]
@@ -260,8 +318,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.873,
-   "abs_err": 0.087,
+   "reading": 0.854,
+   "abs_err": 0.106,
    "lamps_seen": [
     "red"
    ]
@@ -279,8 +337,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.903,
-   "abs_err": 0.057,
+   "reading": 0.88,
+   "abs_err": 0.08,
    "lamps_seen": [
     "red"
    ]
@@ -298,8 +356,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.896,
-   "abs_err": 0.064,
+   "reading": 0.91,
+   "abs_err": 0.05,
    "lamps_seen": [
     "red"
    ]
@@ -312,13 +370,13 @@
    "camera": "dark",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.987,
+   "confidence": 0.99,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.877,
-   "abs_err": 0.083,
+   "reading": 0.849,
+   "abs_err": 0.111,
    "lamps_seen": []
   },
   {
@@ -334,8 +392,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.904,
-   "abs_err": 0.056,
+   "reading": 0.876,
+   "abs_err": 0.084,
    "lamps_seen": [
     "red"
    ]
@@ -353,8 +411,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.891,
-   "abs_err": 0.069,
+   "reading": 0.856,
+   "abs_err": 0.104,
    "lamps_seen": [
     "red"
    ]
@@ -372,8 +430,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.905,
-   "abs_err": 0.055,
+   "reading": 0.853,
+   "abs_err": 0.107,
    "lamps_seen": [
     "red"
    ]
@@ -391,8 +449,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.904,
-   "abs_err": 0.056,
+   "reading": 0.865,
+   "abs_err": 0.095,
    "lamps_seen": [
     "red"
    ]
@@ -410,8 +468,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.887,
-   "abs_err": 0.073,
+   "reading": 0.866,
+   "abs_err": 0.094,
    "lamps_seen": [
     "green"
    ]
@@ -429,8 +487,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 0.904,
-   "abs_err": 0.056,
+   "reading": 0.867,
+   "abs_err": 0.093,
    "lamps_seen": []
   },
   {
@@ -446,8 +504,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.292,
-   "abs_err": 0.052,
+   "reading": 2.166,
+   "abs_err": 0.074,
    "lamps_seen": [
     "red"
    ]
@@ -465,64 +523,7 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.297,
-   "abs_err": 0.057,
-   "lamps_seen": [
-    "red"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 2.24,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "low-res 640px",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 2.291,
-   "abs_err": 0.051,
-   "lamps_seen": [
-    "red"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 2.24,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "tilted 8deg",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 2.269,
-   "abs_err": 0.029,
-   "lamps_seen": [
-    "red"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 2.24,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "perspective",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 2.289,
+   "reading": 2.191,
    "abs_err": 0.049,
    "lamps_seen": [
     "red"
@@ -533,6 +534,63 @@
    "true_value": 2.24,
    "lamp": "red",
    "lamp_case": "matched",
+   "camera": "low-res 640px",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 2.201,
+   "abs_err": 0.039,
+   "lamps_seen": [
+    "red"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 2.24,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "tilted 8deg",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 2.145,
+   "abs_err": 0.095,
+   "lamps_seen": [
+    "red"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 2.24,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 2.146,
+   "abs_err": 0.094,
+   "lamps_seen": [
+    "red"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 2.24,
+   "lamp": "red",
+   "lamp_case": "matched",
    "camera": "blur",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
@@ -541,8 +599,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.306,
-   "abs_err": 0.066,
+   "reading": 2.221,
+   "abs_err": 0.019,
    "lamps_seen": [
     "red"
    ]
@@ -560,8 +618,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.277,
-   "abs_err": 0.037,
+   "reading": 2.173,
+   "abs_err": 0.067,
    "lamps_seen": []
   },
   {
@@ -577,8 +635,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.3,
-   "abs_err": 0.06,
+   "reading": 2.173,
+   "abs_err": 0.067,
    "lamps_seen": [
     "red"
    ]
@@ -596,9 +654,11 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.27,
-   "abs_err": 0.03,
-   "lamps_seen": []
+   "reading": 2.162,
+   "abs_err": 0.078,
+   "lamps_seen": [
+    "red"
+   ]
   },
   {
    "panel": "alarm_box",
@@ -613,8 +673,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.293,
-   "abs_err": 0.053,
+   "reading": 2.161,
+   "abs_err": 0.079,
    "lamps_seen": [
     "red"
    ]
@@ -632,11 +692,9 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.305,
-   "abs_err": 0.065,
-   "lamps_seen": [
-    "red"
-   ]
+   "reading": 2.172,
+   "abs_err": 0.068,
+   "lamps_seen": []
   },
   {
    "panel": "alarm_box",
@@ -651,8 +709,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.297,
-   "abs_err": 0.057,
+   "reading": 2.163,
+   "abs_err": 0.077,
    "lamps_seen": [
     "green"
    ]
@@ -670,8 +728,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 2.297,
-   "abs_err": 0.057,
+   "reading": 2.165,
+   "abs_err": 0.075,
    "lamps_seen": []
   },
   {
@@ -682,13 +740,13 @@
    "camera": "clean",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.938,
+   "confidence": 0.936,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.529,
-   "abs_err": 0.009,
+   "reading": 3.509,
+   "abs_err": 0.011,
    "lamps_seen": [
     "green"
    ]
@@ -701,13 +759,13 @@
    "camera": "far (50% size)",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.943,
+   "confidence": 0.942,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.527,
-   "abs_err": 0.007,
+   "reading": 3.522,
+   "abs_err": 0.002,
    "lamps_seen": [
     "green"
    ]
@@ -738,14 +796,14 @@
    "lamp_case": "matched",
    "camera": "tilted 8deg",
    "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.935,
-   "correct": true,
+   "verdict": "ABNORMAL",
+   "confidence": 0.436,
+   "correct": false,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.585,
-   "abs_err": 0.065,
+   "reading": 3.412,
+   "abs_err": 0.108,
    "lamps_seen": [
     "green"
    ]
@@ -757,14 +815,14 @@
    "lamp_case": "matched",
    "camera": "perspective",
    "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.945,
-   "correct": true,
+   "verdict": "ABNORMAL",
+   "confidence": 0.45,
+   "correct": false,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.55,
-   "abs_err": 0.03,
+   "reading": 3.461,
+   "abs_err": 0.059,
    "lamps_seen": [
     "green"
    ]
@@ -777,13 +835,13 @@
    "camera": "blur",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.867,
+   "confidence": 0.859,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.593,
-   "abs_err": 0.073,
+   "reading": 3.56,
+   "abs_err": 0.04,
    "lamps_seen": [
     "green"
    ]
@@ -796,13 +854,13 @@
    "camera": "dark",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.429,
+   "confidence": 0.417,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.53,
-   "abs_err": 0.01,
+   "reading": 3.52,
+   "abs_err": 0.0,
    "lamps_seen": []
   },
   {
@@ -813,13 +871,13 @@
    "camera": "bright",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.795,
+   "confidence": 0.775,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.572,
-   "abs_err": 0.052,
+   "reading": 3.521,
+   "abs_err": 0.001,
    "lamps_seen": [
     "green"
    ]
@@ -832,13 +890,13 @@
    "camera": "noise",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.95,
+   "confidence": 0.943,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.595,
-   "abs_err": 0.075,
+   "reading": 3.53,
+   "abs_err": 0.01,
    "lamps_seen": [
     "green"
    ]
@@ -850,14 +908,14 @@
    "lamp_case": "matched",
    "camera": "jpeg q25",
    "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.896,
-   "correct": true,
+   "verdict": "ABNORMAL",
+   "confidence": 0.405,
+   "correct": false,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.551,
-   "abs_err": 0.031,
+   "reading": 3.495,
+   "abs_err": 0.025,
    "lamps_seen": [
     "green"
    ]
@@ -870,13 +928,13 @@
    "camera": "glare",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.938,
+   "confidence": 0.935,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.536,
-   "abs_err": 0.016,
+   "reading": 3.508,
+   "abs_err": 0.012,
    "lamps_seen": [
     "green"
    ]
@@ -894,8 +952,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.559,
-   "abs_err": 0.039,
+   "reading": 3.509,
+   "abs_err": 0.011,
    "lamps_seen": [
     "red"
    ]
@@ -908,13 +966,13 @@
    "camera": "clean",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.459,
+   "confidence": 0.409,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 3.559,
-   "abs_err": 0.039,
+   "reading": 3.509,
+   "abs_err": 0.011,
    "lamps_seen": []
   },
   {
@@ -930,8 +988,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.787,
-   "abs_err": 0.013,
+   "reading": 4.79,
+   "abs_err": 0.01,
    "lamps_seen": [
     "green"
    ]
@@ -949,8 +1007,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.757,
-   "abs_err": 0.043,
+   "reading": 4.8,
+   "abs_err": 0.0,
    "lamps_seen": [
     "green"
    ]
@@ -968,8 +1026,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.799,
-   "abs_err": 0.001,
+   "reading": 4.8,
+   "abs_err": 0.0,
    "lamps_seen": [
     "green"
    ]
@@ -987,8 +1045,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.744,
-   "abs_err": 0.056,
+   "reading": 4.717,
+   "abs_err": 0.083,
    "lamps_seen": [
     "green"
    ]
@@ -1006,8 +1064,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.758,
-   "abs_err": 0.042,
+   "reading": 4.826,
+   "abs_err": 0.026,
    "lamps_seen": [
     "green"
    ]
@@ -1025,8 +1083,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.783,
-   "abs_err": 0.017,
+   "reading": 4.834,
+   "abs_err": 0.034,
    "lamps_seen": [
     "green"
    ]
@@ -1044,8 +1102,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.811,
-   "abs_err": 0.011,
+   "reading": 4.809,
+   "abs_err": 0.009,
    "lamps_seen": []
   },
   {
@@ -1061,8 +1119,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.773,
-   "abs_err": 0.027,
+   "reading": 4.791,
+   "abs_err": 0.009,
    "lamps_seen": [
     "green"
    ]
@@ -1080,8 +1138,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.767,
-   "abs_err": 0.033,
+   "reading": 4.807,
+   "abs_err": 0.007,
    "lamps_seen": [
     "green"
    ]
@@ -1099,8 +1157,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.784,
-   "abs_err": 0.016,
+   "reading": 4.791,
+   "abs_err": 0.009,
    "lamps_seen": [
     "green"
    ]
@@ -1137,8 +1195,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.756,
-   "abs_err": 0.044,
+   "reading": 4.792,
+   "abs_err": 0.008,
    "lamps_seen": [
     "red"
    ]
@@ -1156,8 +1214,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 4.749,
-   "abs_err": 0.051,
+   "reading": 4.791,
+   "abs_err": 0.009,
    "lamps_seen": []
   },
   {
@@ -1173,8 +1231,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 6.051,
-   "abs_err": 0.029,
+   "reading": 5.966,
+   "abs_err": 0.114,
    "lamps_seen": [
     "green"
    ]
@@ -1192,8 +1250,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 6.09,
-   "abs_err": 0.01,
+   "reading": 6.12,
+   "abs_err": 0.04,
    "lamps_seen": [
     "green"
    ]
@@ -1211,8 +1269,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 6.066,
-   "abs_err": 0.014,
+   "reading": 6.002,
+   "abs_err": 0.078,
    "lamps_seen": [
     "green"
    ]
@@ -1230,8 +1288,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 6.072,
-   "abs_err": 0.008,
+   "reading": 5.994,
+   "abs_err": 0.086,
    "lamps_seen": [
     "green"
    ]
@@ -1242,6 +1300,80 @@
    "lamp": "green",
    "lamp_case": "matched",
    "camera": "perspective",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 6.056,
+   "abs_err": 0.024,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 6.08,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "blur",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 6.091,
+   "abs_err": 0.011,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 6.08,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "dark",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 5.985,
+   "abs_err": 0.095,
+   "lamps_seen": []
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 6.08,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "bright",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 6.043,
+   "abs_err": 0.037,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 6.08,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "noise",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -1260,80 +1392,6 @@
    "true_value": 6.08,
    "lamp": "green",
    "lamp_case": "matched",
-   "camera": "blur",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 6.092,
-   "abs_err": 0.012,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 6.08,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "dark",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 6.124,
-   "abs_err": 0.044,
-   "lamps_seen": []
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 6.08,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "bright",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 6.05,
-   "abs_err": 0.03,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 6.08,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "noise",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 6.08,
-   "abs_err": 0.0,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 6.08,
-   "lamp": "green",
-   "lamp_case": "matched",
    "camera": "jpeg q25",
    "expect": "NORMAL",
    "verdict": "NORMAL",
@@ -1342,8 +1400,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 6.121,
-   "abs_err": 0.041,
+   "reading": 6.072,
+   "abs_err": 0.008,
    "lamps_seen": [
     "green"
    ]
@@ -1361,8 +1419,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 6.252,
-   "abs_err": 0.172,
+   "reading": 6.164,
+   "abs_err": 0.084,
    "lamps_seen": [
     "green"
    ]
@@ -1375,13 +1433,13 @@
    "camera": "clean",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.499,
+   "confidence": 0.5,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 6.051,
-   "abs_err": 0.029,
+   "reading": 5.969,
+   "abs_err": 0.111,
    "lamps_seen": [
     "red"
    ]
@@ -1399,8 +1457,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 6.042,
-   "abs_err": 0.038,
+   "reading": 5.972,
+   "abs_err": 0.108,
    "lamps_seen": []
   },
   {
@@ -1416,8 +1474,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.416,
-   "abs_err": 0.056,
+   "reading": 7.41,
+   "abs_err": 0.05,
    "lamps_seen": [
     "green"
    ]
@@ -1435,8 +1493,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.444,
-   "abs_err": 0.084,
+   "reading": 7.397,
+   "abs_err": 0.037,
    "lamps_seen": [
     "green"
    ]
@@ -1454,8 +1512,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.437,
-   "abs_err": 0.077,
+   "reading": 7.403,
+   "abs_err": 0.043,
    "lamps_seen": [
     "green"
    ]
@@ -1473,8 +1531,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.32,
-   "abs_err": 0.04,
+   "reading": 7.347,
+   "abs_err": 0.013,
    "lamps_seen": [
     "green"
    ]
@@ -1492,8 +1550,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.362,
-   "abs_err": 0.002,
+   "reading": 7.385,
+   "abs_err": 0.025,
    "lamps_seen": [
     "green"
    ]
@@ -1511,8 +1569,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.405,
-   "abs_err": 0.045,
+   "reading": 7.504,
+   "abs_err": 0.144,
    "lamps_seen": [
     "green"
    ]
@@ -1525,13 +1583,13 @@
    "camera": "dark",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.987,
+   "confidence": 0.99,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.401,
-   "abs_err": 0.041,
+   "reading": 7.395,
+   "abs_err": 0.035,
    "lamps_seen": []
   },
   {
@@ -1547,8 +1605,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.459,
-   "abs_err": 0.099,
+   "reading": 7.407,
+   "abs_err": 0.047,
    "lamps_seen": [
     "green"
    ]
@@ -1566,9 +1624,11 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.419,
-   "abs_err": 0.059,
-   "lamps_seen": []
+   "reading": 7.429,
+   "abs_err": 0.069,
+   "lamps_seen": [
+    "green"
+   ]
   },
   {
    "panel": "alarm_box",
@@ -1583,8 +1643,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.417,
-   "abs_err": 0.057,
+   "reading": 7.408,
+   "abs_err": 0.048,
    "lamps_seen": [
     "green"
    ]
@@ -1602,8 +1662,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.465,
-   "abs_err": 0.105,
+   "reading": 7.431,
+   "abs_err": 0.071,
    "lamps_seen": [
     "green"
    ]
@@ -1616,13 +1676,13 @@
    "camera": "clean",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.496,
+   "confidence": 0.499,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.422,
-   "abs_err": 0.062,
+   "reading": 7.405,
+   "abs_err": 0.045,
    "lamps_seen": [
     "red"
    ]
@@ -1640,8 +1700,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 7.422,
-   "abs_err": 0.062,
+   "reading": 7.405,
+   "abs_err": 0.045,
    "lamps_seen": []
   },
   {
@@ -1657,8 +1717,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 8.688,
-   "abs_err": 0.048,
+   "reading": 8.72,
+   "abs_err": 0.08,
    "lamps_seen": [
     "green"
    ]
@@ -1669,6 +1729,44 @@
    "lamp": "green",
    "lamp_case": "matched",
    "camera": "far (50% size)",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 8.843,
+   "abs_err": 0.203,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 8.64,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "low-res 640px",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 8.844,
+   "abs_err": 0.204,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 8.64,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "tilted 8deg",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -1687,44 +1785,6 @@
    "true_value": 8.64,
    "lamp": "green",
    "lamp_case": "matched",
-   "camera": "low-res 640px",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 8.71,
-   "abs_err": 0.07,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 8.64,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "tilted 8deg",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 8.664,
-   "abs_err": 0.024,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 8.64,
-   "lamp": "green",
-   "lamp_case": "matched",
    "camera": "perspective",
    "expect": "NORMAL",
    "verdict": "NORMAL",
@@ -1733,8 +1793,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 8.626,
-   "abs_err": 0.014,
+   "reading": 8.677,
+   "abs_err": 0.037,
    "lamps_seen": [
     "green"
    ]
@@ -1752,8 +1812,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 8.615,
-   "abs_err": 0.025,
+   "reading": 8.866,
+   "abs_err": 0.226,
    "lamps_seen": [
     "green"
    ]
@@ -1771,8 +1831,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 8.691,
-   "abs_err": 0.051,
+   "reading": 8.835,
+   "abs_err": 0.195,
    "lamps_seen": []
   },
   {
@@ -1788,8 +1848,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 8.707,
-   "abs_err": 0.067,
+   "reading": 8.716,
+   "abs_err": 0.076,
    "lamps_seen": [
     "green"
    ]
@@ -1800,42 +1860,6 @@
    "lamp": "green",
    "lamp_case": "matched",
    "camera": "noise",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 8.717,
-   "abs_err": 0.077,
-   "lamps_seen": []
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 8.64,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "jpeg q25",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 8.664,
-   "abs_err": 0.024,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 8.64,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "glare",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -1852,6 +1876,44 @@
   {
    "panel": "alarm_box",
    "true_value": 8.64,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "jpeg q25",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 8.721,
+   "abs_err": 0.081,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 8.64,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "glare",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 8.85,
+   "abs_err": 0.21,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 8.64,
    "lamp": "red",
    "lamp_case": "conflict",
    "camera": "clean",
@@ -1862,8 +1924,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 8.683,
-   "abs_err": 0.043,
+   "reading": 8.826,
+   "abs_err": 0.186,
    "lamps_seen": [
     "red"
    ]
@@ -1881,8 +1943,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 8.683,
-   "abs_err": 0.043,
+   "reading": 8.826,
+   "abs_err": 0.186,
    "lamps_seen": []
   },
   {
@@ -1898,8 +1960,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.924,
-   "abs_err": 0.004,
+   "reading": 10.071,
+   "abs_err": 0.151,
    "lamps_seen": [
     "green"
    ]
@@ -1917,8 +1979,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.93,
-   "abs_err": 0.01,
+   "reading": 10.089,
+   "abs_err": 0.169,
    "lamps_seen": [
     "green"
    ]
@@ -1936,8 +1998,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.928,
-   "abs_err": 0.008,
+   "reading": 10.1,
+   "abs_err": 0.18,
    "lamps_seen": [
     "green"
    ]
@@ -1955,8 +2017,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.917,
-   "abs_err": 0.003,
+   "reading": 10.049,
+   "abs_err": 0.129,
    "lamps_seen": [
     "green"
    ]
@@ -1974,8 +2036,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.869,
-   "abs_err": 0.051,
+   "reading": 9.919,
+   "abs_err": 0.001,
    "lamps_seen": [
     "green"
    ]
@@ -1993,8 +2055,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.937,
-   "abs_err": 0.017,
+   "reading": 9.972,
+   "abs_err": 0.052,
    "lamps_seen": [
     "green"
    ]
@@ -2007,13 +2069,13 @@
    "camera": "dark",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.99,
+   "confidence": 0.985,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.932,
-   "abs_err": 0.012,
+   "reading": 9.967,
+   "abs_err": 0.047,
    "lamps_seen": []
   },
   {
@@ -2029,8 +2091,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.939,
-   "abs_err": 0.019,
+   "reading": 9.96,
+   "abs_err": 0.04,
    "lamps_seen": [
     "green"
    ]
@@ -2048,8 +2110,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.957,
-   "abs_err": 0.037,
+   "reading": 9.99,
+   "abs_err": 0.07,
    "lamps_seen": [
     "green"
    ]
@@ -2067,8 +2129,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.905,
-   "abs_err": 0.015,
+   "reading": 10.066,
+   "abs_err": 0.146,
    "lamps_seen": [
     "green"
    ]
@@ -2086,8 +2148,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.912,
-   "abs_err": 0.008,
+   "reading": 9.983,
+   "abs_err": 0.063,
    "lamps_seen": [
     "green"
    ]
@@ -2105,8 +2167,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.922,
-   "abs_err": 0.002,
+   "reading": 10.076,
+   "abs_err": 0.156,
    "lamps_seen": [
     "red"
    ]
@@ -2124,8 +2186,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 9.921,
-   "abs_err": 0.001,
+   "reading": 10.076,
+   "abs_err": 0.156,
    "lamps_seen": []
   },
   {
@@ -2141,8 +2203,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.212,
-   "abs_err": 0.012,
+   "reading": 11.388,
+   "abs_err": 0.188,
    "lamps_seen": [
     "green"
    ]
@@ -2160,8 +2222,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.239,
-   "abs_err": 0.039,
+   "reading": 11.407,
+   "abs_err": 0.207,
    "lamps_seen": [
     "green"
    ]
@@ -2179,8 +2241,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.256,
-   "abs_err": 0.056,
+   "reading": 11.408,
+   "abs_err": 0.208,
    "lamps_seen": [
     "green"
    ]
@@ -2191,44 +2253,6 @@
    "lamp": "green",
    "lamp_case": "matched",
    "camera": "tilted 8deg",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 11.146,
-   "abs_err": 0.054,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 11.2,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "perspective",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 11.171,
-   "abs_err": 0.029,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 11.2,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "blur",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -2247,6 +2271,44 @@
    "true_value": 11.2,
    "lamp": "green",
    "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 11.345,
+   "abs_err": 0.145,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 11.2,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "blur",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 11.398,
+   "abs_err": 0.198,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 11.2,
+   "lamp": "green",
+   "lamp_case": "matched",
    "camera": "dark",
    "expect": "NORMAL",
    "verdict": "NORMAL",
@@ -2255,8 +2317,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.246,
-   "abs_err": 0.046,
+   "reading": 11.378,
+   "abs_err": 0.178,
    "lamps_seen": []
   },
   {
@@ -2272,8 +2334,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.204,
-   "abs_err": 0.004,
+   "reading": 11.288,
+   "abs_err": 0.088,
    "lamps_seen": [
     "green"
    ]
@@ -2291,9 +2353,11 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.237,
-   "abs_err": 0.037,
-   "lamps_seen": []
+   "reading": 11.302,
+   "abs_err": 0.102,
+   "lamps_seen": [
+    "green"
+   ]
   },
   {
    "panel": "alarm_box",
@@ -2308,8 +2372,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.2,
-   "abs_err": 0.0,
+   "reading": 11.375,
+   "abs_err": 0.175,
    "lamps_seen": [
     "green"
    ]
@@ -2327,8 +2391,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.209,
-   "abs_err": 0.009,
+   "reading": 11.386,
+   "abs_err": 0.186,
    "lamps_seen": [
     "green"
    ]
@@ -2346,8 +2410,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.213,
-   "abs_err": 0.013,
+   "reading": 11.395,
+   "abs_err": 0.195,
    "lamps_seen": [
     "red"
    ]
@@ -2365,8 +2429,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 11.213,
-   "abs_err": 0.013,
+   "reading": 11.395,
+   "abs_err": 0.195,
    "lamps_seen": []
   },
   {
@@ -2382,8 +2446,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.494,
-   "abs_err": 0.014,
+   "reading": 12.58,
+   "abs_err": 0.1,
    "lamps_seen": [
     "green"
    ]
@@ -2401,8 +2465,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.524,
-   "abs_err": 0.044,
+   "reading": 12.591,
+   "abs_err": 0.111,
    "lamps_seen": [
     "green"
    ]
@@ -2420,8 +2484,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.534,
-   "abs_err": 0.054,
+   "reading": 12.602,
+   "abs_err": 0.122,
    "lamps_seen": [
     "green"
    ]
@@ -2439,8 +2503,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.422,
-   "abs_err": 0.058,
+   "reading": 12.541,
+   "abs_err": 0.061,
    "lamps_seen": [
     "green"
    ]
@@ -2458,8 +2522,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.412,
-   "abs_err": 0.068,
+   "reading": 12.557,
+   "abs_err": 0.077,
    "lamps_seen": [
     "green"
    ]
@@ -2477,8 +2541,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.528,
-   "abs_err": 0.048,
+   "reading": 12.598,
+   "abs_err": 0.118,
    "lamps_seen": [
     "green"
    ]
@@ -2496,8 +2560,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.523,
-   "abs_err": 0.043,
+   "reading": 12.581,
+   "abs_err": 0.101,
    "lamps_seen": []
   },
   {
@@ -2513,8 +2577,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.481,
-   "abs_err": 0.001,
+   "reading": 12.567,
+   "abs_err": 0.087,
    "lamps_seen": [
     "green"
    ]
@@ -2532,8 +2596,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.491,
-   "abs_err": 0.011,
+   "reading": 12.516,
+   "abs_err": 0.036,
    "lamps_seen": [
     "green"
    ]
@@ -2551,8 +2615,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.477,
-   "abs_err": 0.003,
+   "reading": 12.557,
+   "abs_err": 0.077,
    "lamps_seen": [
     "green"
    ]
@@ -2570,8 +2634,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.535,
-   "abs_err": 0.055,
+   "reading": 12.565,
+   "abs_err": 0.085,
    "lamps_seen": [
     "green"
    ]
@@ -2589,8 +2653,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.498,
-   "abs_err": 0.018,
+   "reading": 12.578,
+   "abs_err": 0.098,
    "lamps_seen": [
     "red"
    ]
@@ -2608,8 +2672,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 12.503,
-   "abs_err": 0.023,
+   "reading": 12.582,
+   "abs_err": 0.102,
    "lamps_seen": []
   },
   {
@@ -2625,8 +2689,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 13.812,
-   "abs_err": 0.052,
+   "reading": 13.826,
+   "abs_err": 0.066,
    "lamps_seen": [
     "green"
    ]
@@ -2644,8 +2708,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 13.822,
-   "abs_err": 0.062,
+   "reading": 13.842,
+   "abs_err": 0.082,
    "lamps_seen": [
     "green"
    ]
@@ -2663,8 +2727,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 13.77,
-   "abs_err": 0.01,
+   "reading": 13.849,
+   "abs_err": 0.089,
    "lamps_seen": [
     "green"
    ]
@@ -2675,118 +2739,6 @@
    "lamp": "green",
    "lamp_case": "matched",
    "camera": "tilted 8deg",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 13.749,
-   "abs_err": 0.011,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 13.76,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "perspective",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 13.746,
-   "abs_err": 0.014,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 13.76,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "blur",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 13.775,
-   "abs_err": 0.015,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 13.76,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "dark",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 13.773,
-   "abs_err": 0.013,
-   "lamps_seen": []
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 13.76,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "bright",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 13.787,
-   "abs_err": 0.027,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 13.76,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "noise",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "alarm_box",
-   "type_ok": true,
-   "reading": 13.725,
-   "abs_err": 0.035,
-   "lamps_seen": [
-    "green"
-   ]
-  },
-  {
-   "panel": "alarm_box",
-   "true_value": 13.76,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "jpeg q25",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -2805,6 +2757,118 @@
    "true_value": 13.76,
    "lamp": "green",
    "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 13.813,
+   "abs_err": 0.053,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 13.76,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "blur",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 13.861,
+   "abs_err": 0.101,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 13.76,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "dark",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 13.832,
+   "abs_err": 0.072,
+   "lamps_seen": []
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 13.76,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "bright",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 13.812,
+   "abs_err": 0.052,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 13.76,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "noise",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 13.797,
+   "abs_err": 0.037,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 13.76,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "jpeg q25",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "alarm_box",
+   "type_ok": true,
+   "reading": 13.825,
+   "abs_err": 0.065,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "alarm_box",
+   "true_value": 13.76,
+   "lamp": "green",
+   "lamp_case": "matched",
    "camera": "glare",
    "expect": "NORMAL",
    "verdict": "NORMAL",
@@ -2813,8 +2877,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 13.811,
-   "abs_err": 0.051,
+   "reading": 13.824,
+   "abs_err": 0.064,
    "lamps_seen": [
     "green"
    ]
@@ -2832,8 +2896,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 13.774,
-   "abs_err": 0.014,
+   "reading": 13.827,
+   "abs_err": 0.067,
    "lamps_seen": [
     "red"
    ]
@@ -2851,8 +2915,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 13.774,
-   "abs_err": 0.014,
+   "reading": 13.827,
+   "abs_err": 0.067,
    "lamps_seen": []
   },
   {
@@ -2887,8 +2951,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.061,
-   "abs_err": 0.021,
+   "reading": 15.092,
+   "abs_err": 0.052,
    "lamps_seen": [
     "green"
    ]
@@ -2906,8 +2970,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.048,
-   "abs_err": 0.008,
+   "reading": 15.094,
+   "abs_err": 0.054,
    "lamps_seen": [
     "green"
    ]
@@ -2925,8 +2989,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.065,
-   "abs_err": 0.025,
+   "reading": 14.995,
+   "abs_err": 0.045,
    "lamps_seen": [
     "green"
    ]
@@ -2944,8 +3008,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.058,
-   "abs_err": 0.018,
+   "reading": 15.106,
+   "abs_err": 0.066,
    "lamps_seen": [
     "green"
    ]
@@ -2963,8 +3027,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.059,
-   "abs_err": 0.019,
+   "reading": 15.07,
+   "abs_err": 0.03,
    "lamps_seen": [
     "green"
    ]
@@ -2982,8 +3046,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.062,
-   "abs_err": 0.022,
+   "reading": 15.122,
+   "abs_err": 0.082,
    "lamps_seen": []
   },
   {
@@ -2999,8 +3063,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.071,
-   "abs_err": 0.031,
+   "reading": 15.08,
+   "abs_err": 0.04,
    "lamps_seen": [
     "green"
    ]
@@ -3018,9 +3082,11 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.012,
-   "abs_err": 0.028,
-   "lamps_seen": []
+   "reading": 15.094,
+   "abs_err": 0.054,
+   "lamps_seen": [
+    "green"
+   ]
   },
   {
    "panel": "alarm_box",
@@ -3035,8 +3101,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.009,
-   "abs_err": 0.031,
+   "reading": 15.098,
+   "abs_err": 0.058,
    "lamps_seen": [
     "green"
    ]
@@ -3054,8 +3120,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.079,
-   "abs_err": 0.039,
+   "reading": 15.113,
+   "abs_err": 0.073,
    "lamps_seen": [
     "green"
    ]
@@ -3068,7 +3134,7 @@
    "camera": "clean",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.499,
+   "confidence": 0.5,
    "correct": true,
    "dial_found": true,
    "gauge_type": "alarm_box",
@@ -3092,8 +3158,8 @@
    "dial_found": true,
    "gauge_type": "alarm_box",
    "type_ok": true,
-   "reading": 15.09,
-   "abs_err": 0.05,
+   "reading": 15.091,
+   "abs_err": 0.051,
    "lamps_seen": []
   },
   {
@@ -3109,8 +3175,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 0.581,
-   "abs_err": 0.019,
+   "reading": 0.526,
+   "abs_err": 0.074,
    "lamps_seen": [
     "red",
     "red",
@@ -3131,8 +3197,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 0.582,
-   "abs_err": 0.018,
+   "reading": 0.534,
+   "abs_err": 0.066,
    "lamps_seen": [
     "red",
     "red",
@@ -3152,618 +3218,7 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 0.596,
-   "abs_err": 0.004,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "tilted 8deg",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.556,
-   "abs_err": 0.044,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "perspective",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.562,
-   "abs_err": 0.038,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "blur",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.623,
-   "abs_err": 0.023,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "dark",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.594,
-   "abs_err": 0.006,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "bright",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.582,
-   "abs_err": 0.018,
-   "lamps_seen": [
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "noise",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.585,
-   "abs_err": 0.015,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "jpeg q25",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.573,
-   "abs_err": 0.027,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "glare",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.577,
-   "abs_err": 0.023,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "green",
-   "lamp_case": "conflict",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.5,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.581,
-   "abs_err": 0.019,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 0.6,
-   "lamp": "off",
-   "lamp_case": "off",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 0.58,
-   "abs_err": 0.02,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.415,
-   "abs_err": 0.015,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "far (50% size)",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.425,
-   "abs_err": 0.025,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "low-res 640px",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.421,
-   "abs_err": 0.021,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "tilted 8deg",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.363,
-   "abs_err": 0.037,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "perspective",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.386,
-   "abs_err": 0.014,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "blur",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.433,
-   "abs_err": 0.033,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "dark",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.419,
-   "abs_err": 0.019,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "bright",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.409,
-   "abs_err": 0.009,
-   "lamps_seen": [
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "noise",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.422,
-   "abs_err": 0.022,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "jpeg q25",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.401,
-   "abs_err": 0.001,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "glare",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.408,
-   "abs_err": 0.008,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "green",
-   "lamp_case": "conflict",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.5,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.414,
-   "abs_err": 0.014,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 1.4,
-   "lamp": "off",
-   "lamp_case": "off",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 1.414,
-   "abs_err": 0.014,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.225,
-   "abs_err": 0.025,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "far (50% size)",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.215,
-   "abs_err": 0.015,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "low-res 640px",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.223,
-   "abs_err": 0.023,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "tilted 8deg",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.222,
-   "abs_err": 0.022,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "perspective",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.204,
-   "abs_err": 0.004,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "blur",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.232,
+   "reading": 0.568,
    "abs_err": 0.032,
    "lamps_seen": [
     "red",
@@ -3774,226 +3229,19 @@
   },
   {
    "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "dark",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.199,
-   "abs_err": 0.001,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "bright",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.225,
-   "abs_err": 0.025,
-   "lamps_seen": [
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "noise",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.226,
-   "abs_err": 0.026,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "jpeg q25",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.206,
-   "abs_err": 0.006,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "glare",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.194,
-   "abs_err": 0.006,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "green",
-   "lamp_case": "conflict",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.5,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.222,
-   "abs_err": 0.022,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 2.2,
-   "lamp": "off",
-   "lamp_case": "off",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 2.223,
-   "abs_err": 0.023,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 3.0,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.987,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 3.034,
-   "abs_err": 0.034,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 3.0,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "far (50% size)",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.942,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 3.04,
-   "abs_err": 0.04,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 3.0,
-   "lamp": "red",
-   "lamp_case": "matched",
-   "camera": "low-res 640px",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.983,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 3.044,
-   "abs_err": 0.044,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 3.0,
+   "true_value": 0.6,
    "lamp": "red",
    "lamp_case": "matched",
    "camera": "tilted 8deg",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.988,
+   "confidence": 0.99,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.024,
-   "abs_err": 0.024,
+   "reading": 0.477,
+   "abs_err": 0.123,
    "lamps_seen": [
     "red",
     "red",
@@ -4003,7 +3251,7 @@
   },
   {
    "panel": "magnate",
-   "true_value": 3.0,
+   "true_value": 0.6,
    "lamp": "red",
    "lamp_case": "matched",
    "camera": "perspective",
@@ -4014,8 +3262,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 2.983,
-   "abs_err": 0.017,
+   "reading": 0.529,
+   "abs_err": 0.071,
    "lamps_seen": [
     "red",
     "red",
@@ -4025,19 +3273,19 @@
   },
   {
    "panel": "magnate",
-   "true_value": 3.0,
+   "true_value": 0.6,
    "lamp": "red",
    "lamp_case": "matched",
    "camera": "blur",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.965,
+   "confidence": 0.99,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.061,
-   "abs_err": 0.061,
+   "reading": 0.436,
+   "abs_err": 0.164,
    "lamps_seen": [
     "red",
     "red",
@@ -4047,44 +3295,43 @@
   },
   {
    "panel": "magnate",
-   "true_value": 3.0,
+   "true_value": 0.6,
    "lamp": "red",
    "lamp_case": "matched",
    "camera": "dark",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.91,
+   "confidence": 0.99,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 2.99,
-   "abs_err": 0.01,
+   "reading": 0.522,
+   "abs_err": 0.078,
    "lamps_seen": []
   },
   {
    "panel": "magnate",
-   "true_value": 3.0,
+   "true_value": 0.6,
    "lamp": "red",
    "lamp_case": "matched",
    "camera": "bright",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.988,
+   "confidence": 0.99,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.024,
-   "abs_err": 0.024,
+   "reading": 0.519,
+   "abs_err": 0.081,
    "lamps_seen": [
-    "red",
     "red"
    ]
   },
   {
    "panel": "magnate",
-   "true_value": 3.0,
+   "true_value": 0.6,
    "lamp": "red",
    "lamp_case": "matched",
    "camera": "noise",
@@ -4095,8 +3342,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 2.99,
-   "abs_err": 0.01,
+   "reading": 0.477,
+   "abs_err": 0.123,
    "lamps_seen": [
     "red",
     "red",
@@ -4106,19 +3353,19 @@
   },
   {
    "panel": "magnate",
-   "true_value": 3.0,
+   "true_value": 0.6,
    "lamp": "red",
    "lamp_case": "matched",
    "camera": "jpeg q25",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.989,
+   "confidence": 0.99,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.006,
-   "abs_err": 0.006,
+   "reading": 0.504,
+   "abs_err": 0.096,
    "lamps_seen": [
     "red",
     "red",
@@ -4128,18 +3375,391 @@
   },
   {
    "panel": "magnate",
-   "true_value": 3.0,
+   "true_value": 0.6,
    "lamp": "red",
    "lamp_case": "matched",
    "camera": "glare",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.986,
+   "confidence": 0.99,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.016,
+   "reading": 0.494,
+   "abs_err": 0.106,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 0.6,
+   "lamp": "green",
+   "lamp_case": "conflict",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.5,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 0.525,
+   "abs_err": 0.075,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 0.6,
+   "lamp": "off",
+   "lamp_case": "off",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 0.526,
+   "abs_err": 0.074,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.317,
+   "abs_err": 0.083,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "far (50% size)",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.32,
+   "abs_err": 0.08,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "low-res 640px",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.347,
+   "abs_err": 0.053,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "tilted 8deg",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.265,
+   "abs_err": 0.135,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.308,
+   "abs_err": 0.092,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "blur",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.231,
+   "abs_err": 0.169,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "dark",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.306,
+   "abs_err": 0.094,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "bright",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.31,
+   "abs_err": 0.09,
+   "lamps_seen": [
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "noise",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.293,
+   "abs_err": 0.107,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "jpeg q25",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.298,
+   "abs_err": 0.102,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "glare",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.316,
+   "abs_err": 0.084,
+   "lamps_seen": [
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "green",
+   "lamp_case": "conflict",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.5,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.316,
+   "abs_err": 0.084,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 1.4,
+   "lamp": "off",
+   "lamp_case": "off",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 1.317,
+   "abs_err": 0.083,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.148,
+   "abs_err": 0.052,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "far (50% size)",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.156,
+   "abs_err": 0.044,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "low-res 640px",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.184,
    "abs_err": 0.016,
    "lamps_seen": [
     "red",
@@ -4150,19 +3770,459 @@
   },
   {
    "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "tilted 8deg",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.099,
+   "abs_err": 0.101,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.158,
+   "abs_err": 0.042,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "blur",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.146,
+   "abs_err": 0.054,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "dark",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.129,
+   "abs_err": 0.071,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "bright",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.142,
+   "abs_err": 0.058,
+   "lamps_seen": [
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "noise",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.155,
+   "abs_err": 0.045,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "jpeg q25",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.138,
+   "abs_err": 0.062,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "glare",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.153,
+   "abs_err": 0.047,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "green",
+   "lamp_case": "conflict",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.5,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.147,
+   "abs_err": 0.053,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 2.2,
+   "lamp": "off",
+   "lamp_case": "off",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.148,
+   "abs_err": 0.052,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.974,
+   "abs_err": 0.026,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "far (50% size)",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.962,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.991,
+   "abs_err": 0.009,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "low-res 640px",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.958,
+   "abs_err": 0.042,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "tilted 8deg",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.949,
+   "abs_err": 0.051,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.978,
+   "abs_err": 0.022,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "blur",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.937,
+   "abs_err": 0.063,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "dark",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.934,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.966,
+   "abs_err": 0.034,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "bright",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.964,
+   "abs_err": 0.036,
+   "lamps_seen": [
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "noise",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.971,
+   "abs_err": 0.029,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "jpeg q25",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.965,
+   "abs_err": 0.035,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 3.0,
+   "lamp": "red",
+   "lamp_case": "matched",
+   "camera": "glare",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.989,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 2.963,
+   "abs_err": 0.037,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
    "true_value": 3.0,
    "lamp": "green",
    "lamp_case": "conflict",
    "camera": "clean",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.45,
+   "confidence": 0.463,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.036,
-   "abs_err": 0.036,
+   "reading": 2.974,
+   "abs_err": 0.026,
    "lamps_seen": [
     "green",
     "green",
@@ -4178,13 +4238,13 @@
    "camera": "clean",
    "expect": "ABNORMAL",
    "verdict": "ABNORMAL",
-   "confidence": 0.866,
+   "confidence": 0.925,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.034,
-   "abs_err": 0.034,
+   "reading": 2.975,
+   "abs_err": 0.025,
    "lamps_seen": []
   },
   {
@@ -4195,13 +4255,13 @@
    "camera": "clean",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.973,
+   "confidence": 0.967,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.831,
-   "abs_err": 0.031,
+   "reading": 3.766,
+   "abs_err": 0.034,
    "lamps_seen": [
     "green",
     "green",
@@ -4217,13 +4277,13 @@
    "camera": "far (50% size)",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.887,
+   "confidence": 0.862,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.827,
-   "abs_err": 0.027,
+   "reading": 3.769,
+   "abs_err": 0.031,
    "lamps_seen": [
     "green",
     "green",
@@ -4238,13 +4298,13 @@
    "camera": "low-res 640px",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.968,
+   "confidence": 0.953,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.827,
-   "abs_err": 0.027,
+   "reading": 3.7,
+   "abs_err": 0.1,
    "lamps_seen": [
     "green",
     "green",
@@ -4260,13 +4320,13 @@
    "camera": "tilted 8deg",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.973,
+   "confidence": 0.97,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.829,
-   "abs_err": 0.029,
+   "reading": 3.797,
+   "abs_err": 0.003,
    "lamps_seen": [
     "green",
     "green",
@@ -4282,13 +4342,13 @@
    "camera": "perspective",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.971,
+   "confidence": 0.97,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.813,
-   "abs_err": 0.013,
+   "reading": 3.796,
+   "abs_err": 0.004,
    "lamps_seen": [
     "green",
     "green",
@@ -4304,13 +4364,13 @@
    "camera": "blur",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.942,
+   "confidence": 0.909,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.833,
-   "abs_err": 0.033,
+   "reading": 3.69,
+   "abs_err": 0.11,
    "lamps_seen": [
     "green",
     "green",
@@ -4326,13 +4386,13 @@
    "camera": "dark",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.719,
+   "confidence": 0.665,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.819,
-   "abs_err": 0.019,
+   "reading": 3.765,
+   "abs_err": 0.035,
    "lamps_seen": []
   },
   {
@@ -4343,15 +4403,14 @@
    "camera": "bright",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.973,
+   "confidence": 0.953,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.83,
-   "abs_err": 0.03,
+   "reading": 3.754,
+   "abs_err": 0.046,
    "lamps_seen": [
-    "green",
     "green"
    ]
   },
@@ -4363,13 +4422,13 @@
    "camera": "noise",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.969,
+   "confidence": 0.964,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.815,
-   "abs_err": 0.015,
+   "reading": 3.773,
+   "abs_err": 0.027,
    "lamps_seen": [
     "green",
     "green",
@@ -4385,13 +4444,13 @@
    "camera": "jpeg q25",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.972,
+   "confidence": 0.967,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.817,
-   "abs_err": 0.017,
+   "reading": 3.767,
+   "abs_err": 0.033,
    "lamps_seen": [
     "green",
     "green",
@@ -4407,13 +4466,13 @@
    "camera": "glare",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.972,
+   "confidence": 0.966,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.829,
-   "abs_err": 0.029,
+   "reading": 3.778,
+   "abs_err": 0.022,
    "lamps_seen": [
     "green",
     "green",
@@ -4434,8 +4493,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.832,
-   "abs_err": 0.032,
+   "reading": 3.767,
+   "abs_err": 0.033,
    "lamps_seen": [
     "red",
     "red",
@@ -4451,13 +4510,13 @@
    "camera": "clean",
    "expect": "NORMAL",
    "verdict": "NORMAL",
-   "confidence": 0.732,
+   "confidence": 0.655,
    "correct": true,
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 3.832,
-   "abs_err": 0.032,
+   "reading": 3.755,
+   "abs_err": 0.045,
    "lamps_seen": []
   },
   {
@@ -4473,8 +4532,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.629,
-   "abs_err": 0.029,
+   "reading": 4.684,
+   "abs_err": 0.084,
    "lamps_seen": [
     "green",
     "green",
@@ -4495,8 +4554,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.633,
-   "abs_err": 0.033,
+   "reading": 4.588,
+   "abs_err": 0.012,
    "lamps_seen": [
     "green",
     "green",
@@ -4516,8 +4575,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.641,
-   "abs_err": 0.041,
+   "reading": 4.565,
+   "abs_err": 0.035,
    "lamps_seen": [
     "green",
     "green",
@@ -4538,8 +4597,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.674,
-   "abs_err": 0.074,
+   "reading": 4.662,
+   "abs_err": 0.062,
    "lamps_seen": [
     "green",
     "green",
@@ -4560,8 +4619,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.602,
-   "abs_err": 0.002,
+   "reading": 4.599,
+   "abs_err": 0.001,
    "lamps_seen": [
     "green",
     "green",
@@ -4582,8 +4641,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.643,
-   "abs_err": 0.043,
+   "reading": 4.549,
+   "abs_err": 0.051,
    "lamps_seen": [
     "green",
     "green",
@@ -4604,8 +4663,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.64,
-   "abs_err": 0.04,
+   "reading": 4.669,
+   "abs_err": 0.069,
    "lamps_seen": []
   },
   {
@@ -4621,10 +4680,9 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.63,
-   "abs_err": 0.03,
+   "reading": 4.678,
+   "abs_err": 0.078,
    "lamps_seen": [
-    "green",
     "green"
    ]
   },
@@ -4641,8 +4699,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.634,
-   "abs_err": 0.034,
+   "reading": 4.664,
+   "abs_err": 0.064,
    "lamps_seen": [
     "green",
     "green",
@@ -4663,8 +4721,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.626,
-   "abs_err": 0.026,
+   "reading": 4.678,
+   "abs_err": 0.078,
    "lamps_seen": [
     "green",
     "green",
@@ -4685,8 +4743,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.627,
-   "abs_err": 0.027,
+   "reading": 4.663,
+   "abs_err": 0.063,
    "lamps_seen": [
     "green",
     "green",
@@ -4707,8 +4765,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.63,
-   "abs_err": 0.03,
+   "reading": 4.688,
+   "abs_err": 0.088,
    "lamps_seen": [
     "red",
     "red",
@@ -4729,8 +4787,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 4.658,
-   "abs_err": 0.058,
+   "reading": 4.685,
+   "abs_err": 0.085,
    "lamps_seen": []
   },
   {
@@ -4739,28 +4797,6 @@
    "lamp": "green",
    "lamp_case": "matched",
    "camera": "clean",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 5.455,
-   "abs_err": 0.055,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 5.4,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "far (50% size)",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -4773,6 +4809,28 @@
    "lamps_seen": [
     "green",
     "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 5.4,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "far (50% size)",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 5.455,
+   "abs_err": 0.055,
+   "lamps_seen": [
+    "green",
+    "green",
     "green"
    ]
   },
@@ -4789,8 +4847,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 5.444,
-   "abs_err": 0.044,
+   "reading": 5.35,
+   "abs_err": 0.05,
    "lamps_seen": [
     "green",
     "green",
@@ -4811,8 +4869,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 5.459,
-   "abs_err": 0.059,
+   "reading": 5.422,
+   "abs_err": 0.022,
    "lamps_seen": [
     "green",
     "green",
@@ -4826,6 +4884,106 @@
    "lamp": "green",
    "lamp_case": "matched",
    "camera": "perspective",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 5.436,
+   "abs_err": 0.036,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 5.4,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "blur",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 5.329,
+   "abs_err": 0.071,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 5.4,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "dark",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 5.46,
+   "abs_err": 0.06,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 5.4,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "bright",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 5.416,
+   "abs_err": 0.016,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 5.4,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "noise",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 5.42,
+   "abs_err": 0.02,
+   "lamps_seen": [
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 5.4,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "jpeg q25",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -4847,108 +5005,6 @@
    "true_value": 5.4,
    "lamp": "green",
    "lamp_case": "matched",
-   "camera": "blur",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 5.351,
-   "abs_err": 0.049,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 5.4,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "dark",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 5.43,
-   "abs_err": 0.03,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 5.4,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "bright",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 5.465,
-   "abs_err": 0.065,
-   "lamps_seen": [
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 5.4,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "noise",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 5.419,
-   "abs_err": 0.019,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 5.4,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "jpeg q25",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 5.421,
-   "abs_err": 0.021,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 5.4,
-   "lamp": "green",
-   "lamp_case": "matched",
    "camera": "glare",
    "expect": "NORMAL",
    "verdict": "NORMAL",
@@ -4957,8 +5013,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 5.443,
-   "abs_err": 0.043,
+   "reading": 5.429,
+   "abs_err": 0.029,
    "lamps_seen": [
     "green",
     "green",
@@ -4979,8 +5035,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 5.456,
-   "abs_err": 0.056,
+   "reading": 5.446,
+   "abs_err": 0.046,
    "lamps_seen": [
     "red",
     "red",
@@ -5001,8 +5057,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 5.456,
-   "abs_err": 0.056,
+   "reading": 5.443,
+   "abs_err": 0.043,
    "lamps_seen": []
   },
   {
@@ -5018,8 +5074,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.223,
-   "abs_err": 0.023,
+   "reading": 6.198,
+   "abs_err": 0.002,
    "lamps_seen": [
     "green",
     "green",
@@ -5040,8 +5096,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.221,
-   "abs_err": 0.021,
+   "reading": 6.207,
+   "abs_err": 0.007,
    "lamps_seen": [
     "green",
     "green",
@@ -5061,8 +5117,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.222,
-   "abs_err": 0.022,
+   "reading": 6.181,
+   "abs_err": 0.019,
    "lamps_seen": [
     "green",
     "green",
@@ -5083,8 +5139,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.266,
-   "abs_err": 0.066,
+   "reading": 6.196,
+   "abs_err": 0.004,
    "lamps_seen": [
     "green",
     "green",
@@ -5098,6 +5154,28 @@
    "lamp": "green",
    "lamp_case": "matched",
    "camera": "perspective",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 6.168,
+   "abs_err": 0.032,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 6.2,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "blur",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -5119,7 +5197,7 @@
    "true_value": 6.2,
    "lamp": "green",
    "lamp_case": "matched",
-   "camera": "blur",
+   "camera": "dark",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -5127,8 +5205,44 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.139,
-   "abs_err": 0.061,
+   "reading": 6.232,
+   "abs_err": 0.032,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 6.2,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "bright",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 6.194,
+   "abs_err": 0.006,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 6.2,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "noise",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 6.206,
+   "abs_err": 0.006,
    "lamps_seen": [
     "green",
     "green",
@@ -5141,7 +5255,7 @@
    "true_value": 6.2,
    "lamp": "green",
    "lamp_case": "matched",
-   "camera": "dark",
+   "camera": "jpeg q25",
    "expect": "NORMAL",
    "verdict": "NORMAL",
    "confidence": 0.99,
@@ -5151,65 +5265,6 @@
    "type_ok": true,
    "reading": 6.21,
    "abs_err": 0.01,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 6.2,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "bright",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 6.216,
-   "abs_err": 0.016,
-   "lamps_seen": [
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 6.2,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "noise",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 6.226,
-   "abs_err": 0.026,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 6.2,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "jpeg q25",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 6.195,
-   "abs_err": 0.005,
    "lamps_seen": [
     "green",
     "green",
@@ -5230,8 +5285,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.185,
-   "abs_err": 0.015,
+   "reading": 6.175,
+   "abs_err": 0.025,
    "lamps_seen": [
     "green",
     "green",
@@ -5252,8 +5307,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.22,
-   "abs_err": 0.02,
+   "reading": 6.199,
+   "abs_err": 0.001,
    "lamps_seen": [
     "red",
     "red",
@@ -5274,8 +5329,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.22,
-   "abs_err": 0.02,
+   "reading": 6.202,
+   "abs_err": 0.002,
    "lamps_seen": []
   },
   {
@@ -5291,8 +5346,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.021,
-   "abs_err": 0.021,
+   "reading": 6.933,
+   "abs_err": 0.067,
    "lamps_seen": [
     "green",
     "green",
@@ -5313,32 +5368,32 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.036,
+   "reading": 6.937,
+   "abs_err": 0.063,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.0,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "low-res 640px",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 6.964,
    "abs_err": 0.036,
    "lamps_seen": [
     "green",
     "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.0,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "low-res 640px",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.041,
-   "abs_err": 0.041,
-   "lamps_seen": [
-    "green",
-    "green",
     "green",
     "green"
    ]
@@ -5356,8 +5411,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.045,
-   "abs_err": 0.045,
+   "reading": 6.898,
+   "abs_err": 0.102,
    "lamps_seen": [
     "green",
     "green",
@@ -5378,8 +5433,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.982,
-   "abs_err": 0.018,
+   "reading": 6.903,
+   "abs_err": 0.097,
    "lamps_seen": [
     "green",
     "green",
@@ -5400,8 +5455,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.973,
-   "abs_err": 0.027,
+   "reading": 6.952,
+   "abs_err": 0.048,
    "lamps_seen": [
     "green",
     "green",
@@ -5422,8 +5477,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.035,
-   "abs_err": 0.035,
+   "reading": 6.964,
+   "abs_err": 0.036,
    "lamps_seen": []
   },
   {
@@ -5439,10 +5494,9 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.015,
-   "abs_err": 0.015,
+   "reading": 6.929,
+   "abs_err": 0.071,
    "lamps_seen": [
-    "green",
     "green"
    ]
   },
@@ -5459,8 +5513,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 6.995,
-   "abs_err": 0.005,
+   "reading": 6.921,
+   "abs_err": 0.079,
    "lamps_seen": [
     "green",
     "green",
@@ -5481,8 +5535,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.007,
-   "abs_err": 0.007,
+   "reading": 6.94,
+   "abs_err": 0.06,
    "lamps_seen": [
     "green",
     "green",
@@ -5503,10 +5557,9 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.018,
-   "abs_err": 0.018,
+   "reading": 6.936,
+   "abs_err": 0.064,
    "lamps_seen": [
-    "green",
     "green",
     "green"
    ]
@@ -5524,8 +5577,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.025,
-   "abs_err": 0.025,
+   "reading": 6.936,
+   "abs_err": 0.064,
    "lamps_seen": [
     "red",
     "red",
@@ -5546,8 +5599,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.026,
-   "abs_err": 0.026,
+   "reading": 6.938,
+   "abs_err": 0.062,
    "lamps_seen": []
   },
   {
@@ -5563,8 +5616,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.805,
-   "abs_err": 0.005,
+   "reading": 7.651,
+   "abs_err": 0.149,
    "lamps_seen": [
     "green",
     "green",
@@ -5585,8 +5638,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.815,
-   "abs_err": 0.015,
+   "reading": 7.663,
+   "abs_err": 0.137,
    "lamps_seen": [
     "green",
     "green",
@@ -5606,324 +5659,7 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 7.822,
-   "abs_err": 0.022,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "tilted 8deg",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.833,
-   "abs_err": 0.033,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "perspective",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.715,
-   "abs_err": 0.085,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "blur",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.762,
-   "abs_err": 0.038,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "dark",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.818,
-   "abs_err": 0.018,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "bright",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.788,
-   "abs_err": 0.012,
-   "lamps_seen": [
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "noise",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.793,
-   "abs_err": 0.007,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "jpeg q25",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.79,
-   "abs_err": 0.01,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "glare",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.799,
-   "abs_err": 0.001,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "red",
-   "lamp_case": "conflict",
-   "camera": "clean",
-   "expect": "ABNORMAL",
-   "verdict": "ABNORMAL",
-   "confidence": 0.5,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.8,
-   "abs_err": 0.0,
-   "lamps_seen": [
-    "red",
-    "red",
-    "red",
-    "red"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 7.8,
-   "lamp": "off",
-   "lamp_case": "off",
-   "camera": "clean",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 7.806,
-   "abs_err": 0.006,
-   "lamps_seen": []
-  },
-  {
-   "panel": "magnate",
-   "true_value": 8.6,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "clean",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 8.618,
-   "abs_err": 0.018,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 8.6,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "far (50% size)",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 8.618,
-   "abs_err": 0.018,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 8.6,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "low-res 640px",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 8.637,
-   "abs_err": 0.037,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 8.6,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "tilted 8deg",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 8.616,
-   "abs_err": 0.016,
-   "lamps_seen": [
-    "green",
-    "green",
-    "green",
-    "green"
-   ]
-  },
-  {
-   "panel": "magnate",
-   "true_value": 8.6,
-   "lamp": "green",
-   "lamp_case": "matched",
-   "camera": "perspective",
-   "expect": "NORMAL",
-   "verdict": "NORMAL",
-   "confidence": 0.99,
-   "correct": true,
-   "dial_found": true,
-   "gauge_type": "magnate",
-   "type_ok": true,
-   "reading": 8.546,
+   "reading": 7.746,
    "abs_err": 0.054,
    "lamps_seen": [
     "green",
@@ -5934,6 +5670,321 @@
   },
   {
    "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "tilted 8deg",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.626,
+   "abs_err": 0.174,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.622,
+   "abs_err": 0.178,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "blur",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.616,
+   "abs_err": 0.184,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "dark",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.69,
+   "abs_err": 0.11,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "bright",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.643,
+   "abs_err": 0.157,
+   "lamps_seen": [
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "noise",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.668,
+   "abs_err": 0.132,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "jpeg q25",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.657,
+   "abs_err": 0.143,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "glare",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.663,
+   "abs_err": 0.137,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "red",
+   "lamp_case": "conflict",
+   "camera": "clean",
+   "expect": "ABNORMAL",
+   "verdict": "ABNORMAL",
+   "confidence": 0.5,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.652,
+   "abs_err": 0.148,
+   "lamps_seen": [
+    "red",
+    "red",
+    "red",
+    "red"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 7.8,
+   "lamp": "off",
+   "lamp_case": "off",
+   "camera": "clean",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 7.655,
+   "abs_err": 0.145,
+   "lamps_seen": []
+  },
+  {
+   "panel": "magnate",
+   "true_value": 8.6,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "clean",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 8.467,
+   "abs_err": 0.133,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 8.6,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "far (50% size)",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 8.565,
+   "abs_err": 0.035,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 8.6,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "low-res 640px",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 8.554,
+   "abs_err": 0.046,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 8.6,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "tilted 8deg",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 8.416,
+   "abs_err": 0.184,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
+   "true_value": 8.6,
+   "lamp": "green",
+   "lamp_case": "matched",
+   "camera": "perspective",
+   "expect": "NORMAL",
+   "verdict": "NORMAL",
+   "confidence": 0.99,
+   "correct": true,
+   "dial_found": true,
+   "gauge_type": "magnate",
+   "type_ok": true,
+   "reading": 8.43,
+   "abs_err": 0.17,
+   "lamps_seen": [
+    "green",
+    "green",
+    "green",
+    "green"
+   ]
+  },
+  {
+   "panel": "magnate",
    "true_value": 8.6,
    "lamp": "green",
    "lamp_case": "matched",
@@ -5945,8 +5996,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 8.561,
-   "abs_err": 0.039,
+   "reading": 8.495,
+   "abs_err": 0.105,
    "lamps_seen": [
     "green",
     "green",
@@ -5967,8 +6018,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 8.634,
-   "abs_err": 0.034,
+   "reading": 8.493,
+   "abs_err": 0.107,
    "lamps_seen": []
   },
   {
@@ -5984,10 +6035,9 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 8.635,
-   "abs_err": 0.035,
+   "reading": 8.445,
+   "abs_err": 0.155,
    "lamps_seen": [
-    "green",
     "green"
    ]
   },
@@ -6004,8 +6054,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 8.571,
-   "abs_err": 0.029,
+   "reading": 8.47,
+   "abs_err": 0.13,
    "lamps_seen": [
     "green",
     "green",
@@ -6026,8 +6076,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 8.623,
-   "abs_err": 0.023,
+   "reading": 8.476,
+   "abs_err": 0.124,
    "lamps_seen": [
     "green",
     "green",
@@ -6048,8 +6098,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 8.629,
-   "abs_err": 0.029,
+   "reading": 8.465,
+   "abs_err": 0.135,
    "lamps_seen": [
     "green",
     "green",
@@ -6070,8 +6120,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 8.633,
-   "abs_err": 0.033,
+   "reading": 8.466,
+   "abs_err": 0.134,
    "lamps_seen": [
     "red",
     "red",
@@ -6092,8 +6142,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 8.633,
-   "abs_err": 0.033,
+   "reading": 8.466,
+   "abs_err": 0.134,
    "lamps_seen": []
   },
   {
@@ -6109,8 +6159,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.424,
-   "abs_err": 0.024,
+   "reading": 9.313,
+   "abs_err": 0.087,
    "lamps_seen": [
     "green",
     "green",
@@ -6131,8 +6181,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.427,
-   "abs_err": 0.027,
+   "reading": 9.309,
+   "abs_err": 0.091,
    "lamps_seen": [
     "green",
     "green",
@@ -6152,8 +6202,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.444,
-   "abs_err": 0.044,
+   "reading": 9.374,
+   "abs_err": 0.026,
    "lamps_seen": [
     "green",
     "green",
@@ -6174,8 +6224,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.469,
-   "abs_err": 0.069,
+   "reading": 9.263,
+   "abs_err": 0.137,
    "lamps_seen": [
     "green",
     "green",
@@ -6196,8 +6246,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.366,
-   "abs_err": 0.034,
+   "reading": 9.291,
+   "abs_err": 0.109,
    "lamps_seen": [
     "green",
     "green",
@@ -6218,8 +6268,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.387,
-   "abs_err": 0.013,
+   "reading": 9.337,
+   "abs_err": 0.063,
    "lamps_seen": [
     "green",
     "green",
@@ -6240,8 +6290,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.424,
-   "abs_err": 0.024,
+   "reading": 9.328,
+   "abs_err": 0.072,
    "lamps_seen": []
   },
   {
@@ -6257,10 +6307,9 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.411,
-   "abs_err": 0.011,
+   "reading": 9.299,
+   "abs_err": 0.101,
    "lamps_seen": [
-    "green",
     "green"
    ]
   },
@@ -6277,8 +6326,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.378,
-   "abs_err": 0.022,
+   "reading": 9.282,
+   "abs_err": 0.118,
    "lamps_seen": [
     "green",
     "green",
@@ -6299,8 +6348,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.399,
-   "abs_err": 0.001,
+   "reading": 9.307,
+   "abs_err": 0.093,
    "lamps_seen": [
     "green",
     "green",
@@ -6321,10 +6370,9 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.423,
-   "abs_err": 0.023,
+   "reading": 9.304,
+   "abs_err": 0.096,
    "lamps_seen": [
-    "green",
     "green",
     "green",
     "green"
@@ -6343,8 +6391,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.413,
-   "abs_err": 0.013,
+   "reading": 9.313,
+   "abs_err": 0.087,
    "lamps_seen": [
     "red",
     "red",
@@ -6365,8 +6413,8 @@
    "dial_found": true,
    "gauge_type": "magnate",
    "type_ok": true,
-   "reading": 9.416,
-   "abs_err": 0.016,
+   "reading": 9.312,
+   "abs_err": 0.088,
    "lamps_seen": []
   }
  ]

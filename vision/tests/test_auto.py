@@ -23,7 +23,9 @@ def reader():
 
 # ------------------------------------------------------------------ real photos, nothing given
 @needs_model
-@pytest.mark.parametrize("stem,truth,n_lamps", [("alarm_box", 5.01, 1), ("magnate", 4.46, 4)])
+# magnate: the arc ends at 150 psi = 10.55 kg/cm2 (not 10) and the photo is taken from below-left;
+# read by eye on the psi scale the oxygen needle is at ~67-68 psi = ~4.75 kg/cm2
+@pytest.mark.parametrize("stem,truth,n_lamps", [("alarm_box", 5.01, 1), ("magnate", 4.75, 4)])
 def test_real_photo_fully_automatic(reader, stem, truth, n_lamps):
     r = reader.read(cv2.imread(str(REAL / f"{stem}.jpg")))
     m = r["main"]

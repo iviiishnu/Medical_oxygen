@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
 import shutil
 import sys
 from pathlib import Path
@@ -24,6 +25,7 @@ from o2gauge.photo_synth import load_photo_dial                                 
 from o2gauge.synth import GAUGES, AugParams, Layout, augment, render_dial, render_scene     # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
+TILT_P = 0.5                 # share of training dials seen from the side (camera angle up to 40 deg)
 GEOM_ONLY = dict(glare_p=0, blur_p=0, noise_p=0, jpeg_p=0, brightness=0, contrast=0, color_shift=0)
 
 
@@ -45,6 +47,102 @@ class ProceduralSource:
         return self.spec.min_value, self.spec.max_value
 
 
+class RandomGaugeSource:
+    """A brand-new random gauge every call (dialtext_synth: any range / face / font / bezel / needle),
+    so the dial finder learns dials in general, not just the two hospital gauges.
+    Keypoints are geometric: zero = clockwise-first end of the printed scale, max = the other end."""
+    name = "random"
+    range = (0.0, 1.0)
+
+    def __init__(self, rng):
+        self.rng = rng
+
+    def render(self, v):
+        from o2gauge.dialtext_synth import C0, RC, DialRender, _ang_pt
+        rd = DialRender(self.rng)
+        img = np.ascontiguousarray(np.asarray(rd.img)[:, :, ::-1])
+        gt = {"center": [C0, C0], "radius": RC, "tip": list(rd.needle_tip),
+              "zero": list(_ang_pt(rd.start, 0.95 * RC)), "max": list(_ang_pt(rd.start + rd.sweep, 0.95 * RC)),
+              "lamps": [], "min_value": 0.0, "max_value": 1.0, "value": float(np.clip(rd.value_frac, 0, 1))}
+        return img, gt
+
+
+class SynanthropicSource:
+    """Synanthropic 'reading-analog-dial' keypoint set (MIT; 34k rendered dials of many designs on a
+    magenta key, file name = start_kp center end_kp tip in 640 px). The magenta is replaced by a
+    real background (gauge photos from Roboflow-100 'gauge', the panel photos), so the model learns
+    dial faces, needles and start/end marks it has never seen on the two hospital panels."""
+    name = "synanthropic"
+    range = (0.0, 1.0)
+
+    def __init__(self, folder, bg_folders, rng):
+        self.files = sorted(Path(folder).glob("*.jpg"))
+        self.bgs = [p for f in bg_folders for p in sorted(Path(f).glob("*.jpg"))]
+        self.rng = rng
+        if not self.files:
+            raise FileNotFoundError(folder)
+
+    def render(self, v):
+        rng = self.rng
+        for _ in range(10):
+            p = self.files[int(rng.integers(len(self.files)))]
+            nums = [s for s in p.stem.split("_") if "-" in s][:4]
+            if len(nums) == 4:
+                break
+        start, center, end, tip = (tuple(float(t) for t in s.split("-")) for s in nums)
+        img = cv2.imread(str(p))
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        key = cv2.inRange(hsv, (135, 80, 80), (165, 255, 255))           # magenta background
+        key = cv2.morphologyEx(key, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+        fg = 255 - key
+        # scale marks sit just inside the rim (same convention as the random gauges: marks at 0.92-0.95 R)
+        radius = max(math.dist(start, center), math.dist(end, center)) / 0.92
+        if cv2.countNonZero(key) < 0.05 * key.size:                     # no magenta key: keep the render
+            fg[:] = 255
+        a = cv2.GaussianBlur(fg, (5, 5), 0).astype(np.float32)[..., None] / 255.0
+        # magenta spill on the anti-aliased edge: desaturate it
+        bg = cv2.imread(str(self.bgs[int(rng.integers(len(self.bgs)))])) if self.bgs else None
+        if bg is None:
+            bg = np.full_like(img, int(rng.integers(30, 220)))
+        h, w = img.shape[:2]
+        bh, bw = bg.shape[:2]
+        k = max(w / bw, h / bh) * rng.uniform(1.0, 2.0)
+        bg = cv2.resize(bg, (int(bw * k) + 1, int(bh * k) + 1))
+        y0, x0 = int(rng.integers(0, bg.shape[0] - h + 1)), int(rng.integers(0, bg.shape[1] - w + 1))
+        bg = bg[y0:y0 + h, x0:x0 + w]
+        out = (img * a + bg * (1 - a)).astype(np.uint8)
+        gt = {"center": list(center), "radius": radius, "tip": list(tip), "zero": list(start), "max": list(end),
+              "lamps": [], "min_value": 0.0, "max_value": 1.0, "value": 0.0}
+        return out, gt
+
+
+def tilt(img, gt, rng, max_deg=40.0):
+    """Camera looking at the dial from the side: real foreshortening (not random corner jitter)."""
+    h, w = img.shape[:2]
+    c = np.float32(gt["center"])
+    yaw, pitch = np.radians(rng.uniform(-max_deg, max_deg, 2))
+    f = 1.6 * max(h, w)
+    src = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
+    dst = []
+    for x, y in src:
+        X, Y = x - c[0], y - c[1]
+        # rotate the dial plane (yaw about y, pitch about x), pinhole projection back
+        x1, z1 = X * math.cos(yaw), X * math.sin(yaw)
+        y2, z2 = Y * math.cos(pitch) - z1 * math.sin(pitch), Y * math.sin(pitch) + z1 * math.cos(pitch)
+        z = f + z2
+        dst.append([c[0] + f * x1 / z, c[1] + f * y2 / z])
+    Hm = cv2.getPerspectiveTransform(src, np.float32(dst))
+    img = cv2.warpPerspective(img, Hm, (w, h), borderMode=cv2.BORDER_REPLICATE)
+    gt = dict(gt)
+    r = gt["radius"]
+    rim = np.float32([[[c[0] + r * math.cos(t), c[1] + r * math.sin(t)] for t in np.linspace(0, 2 * math.pi, 16, endpoint=False)]])
+    for k in ("center", "tip", "zero", "max"):
+        gt[k] = [float(t) for t in cv2.perspectiveTransform(np.float32([[gt[k]]]), Hm)[0, 0]]
+    rim = cv2.perspectiveTransform(rim, Hm)[0]
+    gt["radius"] = float(np.mean(np.linalg.norm(rim - np.float32(gt["center"]), axis=1)))
+    return img, gt
+
+
 class PhotoSource:
     def __init__(self, stem):
         self.d = load_photo_dial(stem)
@@ -63,6 +161,8 @@ def sample(src, rng, train_aug=True):
     v = float(rng.uniform(lo, hi)) if rng.random() > 0.05 else float(rng.choice([lo, hi]))
     img, gt = src.render(v)
     if train_aug:
+        if rng.random() < TILT_P:
+            img, gt = tilt(img, gt, rng)
         img, gt = augment(img, gt, rng, AugParams(persp=0.015, rot_deg=0, **GEOM_ONLY))
         scale = rng.uniform(1.2, 1.7)
         rot = rng.uniform(-8, 8)
@@ -88,6 +188,11 @@ def main():
     ap.add_argument("--n", type=int, default=6000)
     ap.add_argument("--n-test", type=int, default=400)
     ap.add_argument("--seed", type=int, default=2026)
+    ap.add_argument("--random", type=float, default=0.0, help="fraction of brand-new random (generated) gauges")
+    ap.add_argument("--procedural", type=float, default=0.2, help="fraction of procedural (drawn) gauges")
+    ap.add_argument("--synanthropic", type=float, default=0.0, help="fraction from the Synanthropic keypoint set")
+    ap.add_argument("--syn-dir", default="C:/o2data/keypoint")
+    ap.add_argument("--bg-dirs", default="C:/o2data/bg_gauge_rf")
     a = ap.parse_args()
     out = Path(a.out)
     if out.exists():
@@ -101,6 +206,9 @@ def main():
         sys.exit("no real photos found in samples/real (need name.jpg + .calibration.json + .needle.json)")
     print("real photo sources:", [p.name for p in photos])
     procs = [ProceduralSource(g, rng) for g in GAUGES for _ in range(4)]
+    randoms = RandomGaugeSource(np.random.default_rng(a.seed + 7))
+    syn = SynanthropicSource(a.syn_dir, a.bg_dirs.split(","), np.random.default_rng(a.seed + 11)) \
+        if a.synanthropic > 0 else None
     rows = []
     for split, n in (("train", int(a.n * 0.9)), ("val", a.n - int(a.n * 0.9)), ("test", a.n_test)):
         (out / "images" / split).mkdir(parents=True, exist_ok=True)
@@ -109,9 +217,12 @@ def main():
         for i in range(n):
             if split == "test":
                 src = photos[i % len(photos)]
-            else:                                   # 80 % real-photo dials (split evenly), 20 % procedural
-                src = (photos[int(r.integers(len(photos)))] if r.random() < 0.8
-                       else procs[int(r.integers(len(procs)))])
+            else:      # real-photo dials (split evenly), procedural, brand-new random gauges (--random)
+                u = r.random()
+                src = (photos[int(r.integers(len(photos)))] if u < 1 - a.procedural - a.random - a.synanthropic
+                       else procs[int(r.integers(len(procs)))] if u < 1 - a.random - a.synanthropic
+                       else randoms if u < 1 - a.synanthropic
+                       else syn)
             crop, kpts, rpx, v, gt = sample(src, r, train_aug=True)
             name = f"{split}_{i:05d}_{src.name}"
             cv2.imwrite(str(out / "images" / split / f"{name}.jpg"), crop, [cv2.IMWRITE_JPEG_QUALITY, 95])

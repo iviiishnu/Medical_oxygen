@@ -1,0 +1,11 @@
+{
+  "_comment": "MEDICAL AIR dial (middle) of magnate.jpg. Needle geometry in the photo, pixels.",
+  "hub": [1054.0, 409.0],
+  "tip": [1011.0, 331.0],
+  "tail": [1081.5, 454.0],
+  "width_tip": 4,
+  "width_hub": 8,
+  "width_tail": 9,
+  "hub_radius": 11,
+  "true_value_note": "needle read by eye from the photo, about 3.9 kg/cm2 (about 55 psi on the outer scale)"
+}

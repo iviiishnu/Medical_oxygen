@@ -8,7 +8,7 @@
   "zero_point": [665.0, 439.0],
   "max_point": [782.5, 437.5],
   "min_value": 0.0,
-  "max_value": 10.0,
+  "max_value": 10.55,
   "direction": "cw",
   "needle_color": "dark",
   "needle_r_inner": 0.6,

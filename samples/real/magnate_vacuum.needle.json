@@ -1,0 +1,11 @@
+{
+  "_comment": "VACUUM dial (right) of magnate.jpg, 0-760 mmHg numbered anticlockwise (0 at lower right). Needle geometry in the photo, pixels.",
+  "hub": [1374.5, 404.0],
+  "tip": [1301.0, 375.0],
+  "tail": [1417.5, 424.5],
+  "width_tip": 3,
+  "width_hub": 7,
+  "width_tail": 8,
+  "hub_radius": 10,
+  "true_value_note": "needle read by eye from the photo, about 560-570 mmHg (photo is soft here: +-15 mmHg)"
+}

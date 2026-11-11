@@ -108,9 +108,11 @@ def main():
     ap.add_argument("--quick", action="store_true")
     ap.add_argument("--out", default=str(ROOT / "docs/eval_auto.json"))
     ap.add_argument("--sheet", default=str(ROOT / "out/auto_eval"))
+    ap.add_argument("--model", default=str(ROOT / "vision/models/gauge_pose.onnx"))
+    ap.add_argument("--panel-model", default=None)
     a = ap.parse_args()
     cfg = MonitorConfig.load()
-    reader = AutoReader(KeypointReader(ROOT / "vision/models/gauge_pose.onnx"), cfg)
+    reader = AutoReader(KeypointReader(a.model), cfg, panel_model=KeypointReader(a.panel_model) if a.panel_model else None)
     rng = np.random.default_rng(7)
     Path(a.sheet).mkdir(parents=True, exist_ok=True)
     rows = []
