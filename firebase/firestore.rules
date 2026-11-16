@@ -17,7 +17,21 @@ service cloud.firestore {
     match /devices/{d} {
       allow read: if isStaff() || isDevice(d);
       // the tablet updates its live status; it may not change its own config
-      allow create: if isAdmin();
+      allow create: if isAdmin() || (isStaff()
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.created_by == request.auth.uid
+        && request.resource.data.created_at == request.time
+        && request.resource.data.keys().hasOnly(['name', 'status', 'alarm', 'online', 'trend_falling', 'created_by', 'created_by_name', 'created_at', 'config', 'registration_image'])
+        && request.resource.data.config is map
+        && request.resource.data.config.low_threshold is number
+        && request.resource.data.config.critical_threshold is number
+        && request.resource.data.config.gauges is list
+        && request.resource.data.config.gauges.size() > 0
+        && request.resource.data.config.gauges.size() <= 12
+        && request.resource.data.registration_image is string
+        && request.resource.data.registration_image.size() <= 700000);
       allow update: if isAdmin() ||
         // 'online' is owned by the heartbeat watchdog function, never by the tablet
         (isDevice(d) && onlyChanges(['last_reading', 'status', 'alarm', 'trend_falling', 'last_heartbeat',
@@ -43,7 +57,13 @@ service cloud.firestore {
           && request.resource.data.state == 'ACKED'
           && request.resource.data.acked_by == request.auth.uid
           && request.resource.data.acked_at == request.time
-          && onlyChanges(['state', 'acked_by', 'acked_by_name', 'acked_at']))
+          && request.resource.data.ack_reason is string
+          && request.resource.data.ack_reason.size() > 0
+          && request.resource.data.ack_resolution is string
+          && request.resource.data.ack_resolution.size() > 0
+          && request.resource.data.ack_notes is string
+          && request.resource.data.ack_notes.size() <= 500
+          && onlyChanges(['state', 'acked_by', 'acked_by_name', 'acked_at', 'ack_reason', 'ack_resolution', 'ack_notes']))
         // the tablet resolves its own alert when the condition clears
         || (role() == 'device'
           && resource.data.device_id == request.auth.token.device_id

@@ -95,18 +95,18 @@
 
   <!-- legend -->
   <rect x="55" y="690" width="40" height="26" rx="6" class="built"/>
-  <text x="105" y="709" class="s">Built and tested on the PC (vision model, webcam mode, alert logic, cloud functions, dashboard)</text>
+  <text x="105" y="709" class="s">Built and tested on the PC (vision model, webcam mode, alert logic, PostgreSQL API, dashboard)</text>
   <rect x="55" y="728" width="40" height="26" rx="6" class="planned"/>
   <text x="105" y="747" class="s">Planned: the tablet app at the panel (being redesigned)</text>
 
   <!-- zone: cloud -->
   <rect x="1090" y="105" width="480" height="300" rx="16" fill="#eef2f7" stroke="#cbd5e1"/>
-  <text x="1112" y="134" class="z">2  CLOUD (SECOND LAYER)</text>
+  <text x="1112" y="134" class="z">2  POSTGRESQL BACKEND</text>
   <rect x="1115" y="160" width="430" height="220" rx="12" class="built"/>
-  <text x="1137" y="194" class="t">Firebase</text>
-  <text x="1137" y="222" class="s">• stores live readings, 24 h history, alerts</text>
-  <text x="1137" y="248" class="s">• sends push alerts to on-duty staff</text>
-  <text x="1137" y="274" class="s">• not acknowledged in 2 min → escalate</text>
+  <text x="1137" y="194" class="t">Python API + PostgreSQL</text>
+  <text x="1137" y="222" class="s">• stores users, readings, history, alerts</text>
+  <text x="1137" y="248" class="s">• staff sign in with PostgreSQL accounts</text>
+  <text x="1137" y="274" class="s">• open alerts escalate after 2 min</text>
   <text x="1150" y="296" class="s">to the next staff tier</text>
   <text x="1137" y="322" class="s">• tablet heartbeat missed twice →</text>
   <text x="1150" y="344" class="s">TABLET OFFLINE alert</text>
@@ -119,8 +119,8 @@
   <text x="1112" y="469" class="z">3  STAFF</text>
   <rect x="1115" y="495" width="205" height="160" rx="12" class="planned"/>
   <text x="1135" y="528" class="t">Staff phones</text>
-  <text x="1135" y="555" class="s">full-screen alarm</text>
-  <text x="1135" y="578" class="s">ACKNOWLEDGE button</text>
+  <text x="1135" y="555" class="s">open-app alert polling</text>
+  <text x="1135" y="578" class="s">ACKNOWLEDGE report</text>
   <rect x="1340" y="495" width="205" height="160" rx="12" class="built"/>
   <text x="1360" y="528" class="t">Nursing desk</text>
   <text x="1360" y="555" class="s">web dashboard:</text>
@@ -129,7 +129,7 @@
 
   <path d="M1217,380 L1217,489" class="lr"/>
   <path d="M1442,380 L1442,489" class="ln"/>
-  <text x="1226" y="440" class="lab">push</text>
+  <text x="1226" y="440" class="lab">API polling</text>
   <text x="1451" y="440" class="lab">live</text>
 
   <text x="1115" y="690" class="s">Nurse acknowledges → alert stops escalating</text>

@@ -2,26 +2,26 @@
 
 A camera (planned: an Android tablet) mounted in front of a hospital's main oxygen supply panel reads the analog
 pressure gauge **and** the panel's status lamps with its camera, about once per second. When pressure
-drops, it alarms locally and alerts staff phones and the nursing-station desktop.
+drops, it alarms locally and updates the app and nursing-station dashboard while they are open.
 
 > **This is a monitoring aid on top of the hospital's existing alarm panel, not a replacement for it.**
 > It must never fail silently: if the camera cannot read the gauge, that is itself an alert.
 
-> **Current focus: the vision model on a PC.** The Android app has been taken out of this repo for
-> now while it is redesigned. It is still in the git history (commit `8011e1d` and earlier). The
-> tablet parts of the diagram below are the planned design.
+> The mobile app in `mobile/` uses an Expo development build and streams camera snapshots to the
+> Python model/API. PostgreSQL stores staff accounts and all monitoring data. Alerts are polled while
+> clients are open; no external identity or push service is required. See [mobile setup](mobile/README.md).
 
 ```
- Tablet at the oxygen panel (works with NO internet)                 Firebase (2nd layer)
- ┌───────────────────────────────────────────────────────────┐      ┌──────────────────────────┐
- │ Camera 1 frame/s ─► Stage A (classical CV)  ─┐            │      │ Firestore: live, history,│
- │ (focus+exposure  ─► Stage B (YOLO pose,     ─┼► Fusion ─► │ ───► │ alerts, heartbeats       │
- │  locked)              TFLite keypoints)      │  Alert     │      │ Functions: push, 2-min   │
- │                  ─► Lamp reader (HSV)  ──────┘  engine    │      │ escalation, TABLET_OFFLINE│
- │                     Local alarm (sound+flash) ◄─┘         │      └──────┬───────────┬───────┘
- └───────────────────────────────────────────────────────────┘             ▼           ▼
-                                                              Staff phones (full-   Desktop dashboard
-                                                              screen alarm + ACK)   (live, 24 h chart, log)
+ Mobile camera / desktop dashboard                  Python monitoring API
+ ┌──────────────────────────────┐                  ┌──────────────────────────┐
+ │ PostgreSQL-backed session    │ ───────────────► │ Vision model + REST API   │
+ │ camera JSON / ack report     │                  │ heartbeat + escalation   │
+ └──────────────────────────────┘                  └─────────────┬────────────┘
+                                                                │
+                                      ┌─────────────────────────┴───────────┐
+                                      ▼                                     ▼
+                            PostgreSQL system of record
+                            users, devices, readings, alerts
 ```
 
 ## Results so far
@@ -178,8 +178,9 @@ reader); the webcam follows the main dial at several frames per second. Expect l
 |---|---|
 | `vision/` | Python: Stage A reader, lamp reader, fusion, reference alert engine, synthetic + photo-based data generator, training/eval/export tools, tests |
 | `vision/models/` | `gauge_pose.onnx/.pt` (general keypoint model: finds every dial, reads unknown gauges), `gauge_pose_panel.onnx/.pt` (specialist for the two hospital panels), `digital_det` + `digit_rec` (digital displays), `dialtext_det` + `dialtext_rec` (printed scale numbers), `gauge_pose_fp32/fp16.tflite` (older panel model for a future app) |
-| `firebase/` | Firestore rules + indexes, Cloud Functions (push, escalation, heartbeat watchdog), admin scripts, emulator tests |
-| `dashboard/` | Nursing-station web dashboard (React + Vite + Firebase), with a demo mode |
+| `firebase/` | Retired legacy prototype; not used by builds, runtime, or setup |
+| `dashboard/` | Nursing-station web dashboard (React + Vite + PostgreSQL API), with a demo mode |
+| `mobile/` | Expo Android/iOS app; authenticated API client, camera reader, registration, alerts and reports |
 | `contract/` | Single source of truth shared by all parts: reading JSON schema, default thresholds, alert test scenarios, parity fixtures and Stage B spec (for a future app port) |
 | `samples/real/` | The real panel photos with their calibration and needle geometry (one per Magnate dial) |
 | `samples/demo/` | Ready demo photos for the tester (rebuild: `python vision/tools/make_demo_set.py`) |
@@ -193,8 +194,10 @@ reader); the webcam follows the main dial at several frames per second. Expect l
 |---|---|---|
 | Git | any | cloning |
 | Python | 3.12+ (tested 3.14) | vision code, tests, dataset, training |
-| Node.js | 20+ (tested 24) | Cloud Functions, dashboard, Firebase CLI |
-| JDK | **21** for the Firebase emulators | backend tests |
+| Node.js | 20+ | mobile app and dashboard |
+| PostgreSQL | 16+ | shared application database (local Docker Compose or hosted PostgreSQL) |
+| Docker Desktop | current | optional local PostgreSQL service |
+| JDK | Required by local Android tooling only | native Android builds |
 | GPU (optional) | NVIDIA (CUDA) or AMD RX 6000/7000 (ROCm) | **training only**; running the model never needs one |
 
 ```bash
@@ -250,33 +253,27 @@ Output (one JSON message per frame, schema in `contract/reading.schema.json`):
  "value": 4.98, "unit": "kg/cm2", "confidence": 0.97, "lamp_state": "NORMAL", "method_agree": true, "status": "OK"}
 ```
 
-### 2. Firebase backend
+### 2. PostgreSQL backend and staff login
 
-```bash
-cd firebase
-npm install && (cd functions && npm install)
-npm run test:rules        # needs JDK 21 on PATH
-npm run test:e2e          # alert -> push -> escalation -> acknowledge; tablet offline -> resolved
-npx firebase login
-npx firebase use --add    # your project
-npm run deploy            # rules, indexes, functions
-node scripts/set_role.js --email tablet01@hospital.org --role device --device tab-main-o2-01
-node scripts/set_role.js --email nurse1@hospital.org  --role staff --name "Nurse 1" --order 1
-node scripts/send_test_alert.js --token <FCM token>   # push test to one phone
+Copy `.env.postgres.example` to `.env` at the repository root, set `POSTGRES_PASSWORD`, match it in
+`DATABASE_URL`, and replace `AUTH_SECRET` with a random secret of 32+ characters. Then:
+
+```powershell
+docker compose up -d postgres
+python -m pip install -r vision/requirements-run.txt
+python vision/tools/create_staff_user.py --email admin@hospital.org --role admin --name "Hospital Admin"
 ```
+
+Create additional staff accounts with the same command and `--role staff --order 1`. From `mobile`,
+run `npm install`, then `npm start`. For an installable Android development build, run
+`npm run build:dev:android`. The Python API creates/updates the PostgreSQL schema on first connection.
 
 ### 3. Dashboard
 
-```bash
-cd dashboard
-npm install
-npm run dev               # http://localhost:5173: DEMO mode with simulated data
-cp .env.example .env.local   # fill in your Firebase web config for live data
-npm run build && (cd ../firebase && npx firebase deploy --only hosting)
-```
+Copy `dashboard/.env.example` to `dashboard/.env.local`, set `VITE_BACKEND_URL` to the Python API,
+then run `npm install` and `npm run dev`. Set `VITE_DEMO_MODE=true` to use the local simulator.
 
-Step-by-step setup, including the laptop test and the Firebase console clicks, is in
-**[docs/SETUP.md](docs/SETUP.md)**.
+Step-by-step setup is in **[docs/SETUP.md](docs/SETUP.md)**.
 
 ## Training the keypoint model (Stage B)
 
@@ -379,13 +376,13 @@ python vision/tools/eval_auto.py        # 312-case stress test
 | Cross-check | two independent needle methods + the panel's own lamp; disagreement → UNCERTAIN |
 | Panel lamp | a confirmed LOW lamp raises LOW even if the needle disagrees (tuned toward alerting) |
 | Fail-safe | no valid reading for 30 s, lamp OFF, camera blocked, or battery low → MONITORING_LOST |
-| Local first | the tablet sounds and flashes itself; Firebase is only the second layer |
+| Local first | the panel's existing alarm remains primary; app/dashboard polling provides an additional notification layer |
 | Heartbeat | 2 missed heartbeats → TABLET_OFFLINE to every on-duty phone |
 | Escalation | unacknowledged for 2 min → next tier of staff |
 | Audit | reading every minute + a JPEG snapshot at every alert, stored on the tablet |
 
 **Thresholds come from the hospital.** The defaults (LOW 3.5, CRITICAL 3.0 kg/cm²) are placeholders,
-set per device in Firestore `devices/{id}.config`.
+set for each registered gauge in PostgreSQL through the device registration flow.
 
 ## Tests
 
@@ -395,9 +392,7 @@ set per device in Firestore `devices/{id}.config`.
 | Auto reader stress test | `python vision/tools/eval_auto.py --panel-model vision/models/gauge_pose_panel.onnx` | 312 cases |
 | Camera-angle test (real panels turned up to 35°) | `python vision/tools/eval_angles.py --panel-model vision/models/gauge_pose_panel.onnx` | 20 views |
 | Digital reader (synthetic + real LCD + false alarms) | `python vision/tools/eval_digital.py` | 200 + 26 + 56 photos |
-| Cloud Functions logic | `cd firebase/functions && npm test` | 8 |
-| Firestore rules | `cd firebase && npm run test:rules` | 11 |
-| Functions end-to-end (emulators) | `cd firebase && npm run test:e2e` | 3 |
+| PostgreSQL authentication and persistence | backend smoke checks against a configured PostgreSQL instance | not run here |
 | Dashboard | `cd dashboard && npm test` | 5 |
 
 ## Status
@@ -405,11 +400,11 @@ set per device in Firestore `devices/{id}.config`.
 | Phase | State |
 |---|---|
 | 0: research, Stage A, contract, questions | ✅ done (slide deck pending) |
-| 1: data, calibration, alert engine, Firestore | ✅ done in software; physical test rig and 300 hand-labelled real frames still needed |
+| 1: data, calibration, alert engine, PostgreSQL backend | ✅ core software implemented; physical test rig and 300 hand-labelled real frames still needed |
 | 2: model, lamps, fusion, escalation, dashboard | ✅ done |
 | 2b: automatic reader (no calibration), drop-a-photo tester, live webcam | ✅ done |
 | 2c: any camera angle, many gauge designs, digital displays, scale reading (11 Nov 2026) | ✅ done; training stopped early by low RAM (general model epoch 19/30, display detector 9/18) - can be resumed; real digital-gauge photos needed |
-| 3: tablet/phone app | ⏸️ paused. The app was removed from the repo for a redesign; the vision model is tested on a PC for now |
+| 3: tablet/phone app | 🛠️ Expo development build, responsive UI, live camera snapshots, image upload, PostgreSQL API and in-app alert polling are configured; hardware/network validation remains |
 | 4: hospital pilot and handover | ⏳ not started |
 
 **Open questions for the hospital** are in [docs/phase0_hospital_collection_and_questions.md](docs/phase0_hospital_collection_and_questions.md):

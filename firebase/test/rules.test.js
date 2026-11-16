@@ -62,7 +62,10 @@ test('tablet creates OPEN alerts only for itself', async () => {
 });
 
 test('staff acknowledge with their own uid and server time', async () => {
-  await assertSucceeds(updateDoc(doc(nurse(), 'alerts/a1'), { state: 'ACKED', acked_by: 'nurse', acked_by_name: 'N', acked_at: serverTimestamp() }));
+  await assertSucceeds(updateDoc(doc(nurse(), 'alerts/a1'), {
+    state: 'ACKED', acked_by: 'nurse', acked_by_name: 'N', acked_at: serverTimestamp(),
+    ack_reason: 'Supply interruption', ack_resolution: 'Supply restored', ack_notes: '',
+  }));
 });
 
 test('staff cannot ack as someone else, or rewrite the alert', async () => {

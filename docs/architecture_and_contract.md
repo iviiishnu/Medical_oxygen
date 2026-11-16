@@ -1,23 +1,28 @@
 # Architecture and interface contract
 
 ```
-Tablet (Monitor mode) -------------------------------------------------------------
-  CameraX frame every 1 s (focus + exposure locked)
-     -> GaugeReader            Stage A (classical) + Stage B (keypoint TFLite) + lamp reader
-     -> Fusion                 one JSON reading (contract below)
-     -> AlertEngine            median-5, 3-in-a-row, hysteresis, trend, fail-safe
-     -> LocalAlarm             sound + flash, works with NO internet
-     -> Firestore              latest reading, 1/min history, alerts, heartbeat every 30 s
-Firebase ----------------------------------------------------------------------------
-  Cloud Functions: onAlertCreated -> FCM high-priority to on-duty staff
-                   escalation every minute (unacknowledged -> next person)
-                   heartbeat watchdog (2 missed = TABLET_OFFLINE)
-Staff phones (Staff mode): live status, full-screen alarm, Acknowledge
-Desktop dashboard (web):   live value, 24 h chart, alert log, browser alarm sound
+Mobile camera / dashboard browser
+      │ PostgreSQL-backed signed session + JSON / multipart HTTPS requests
+      ▼
+Python monitoring API + vision model
+      ├── PostgreSQL: staff, registered devices/gauges, current readings,
+      │               one-minute history, alerts, evidence and acknowledgement reports
 ```
 
-The tablet decides on its own. Firebase only fans out alerts and stores history,
-so a Wi-Fi outage never silences the local alarm.
+PostgreSQL is the only database and account store. The backend validates expiring sessions signed
+with `AUTH_SECRET` and is the only app component that connects to PostgreSQL. The mobile app and
+dashboard share the same API and records.
+
+The mobile live reader sends one camera frame per second to `/api/read` with a registered device ID.
+The backend uses the stored gauge include list and thresholds, responds with JSON for ordinary
+frames, stores the latest reading on every frame, and adds one history point per enabled gauge per
+minute. It stores an annotated evidence image only when a new alert is raised. Initial device
+registration photos and acknowledgement reports are stored with their corresponding PostgreSQL
+records.
+
+The backend checks device heartbeats every 10 seconds, raises `TABLET_OFFLINE` after two missed
+30-second heartbeats plus grace, and escalates unacknowledged alerts every two minutes. Clients poll
+PostgreSQL-backed alert state while open. Background push delivery is not configured.
 
 ## Reading message (per frame) - `contract/reading.schema.json`
 
@@ -28,21 +33,23 @@ so a Wi-Fi outage never silences the local alarm.
 ```
 
 * `value` is `null` when no method can read the needle.
-* `lamp_state`: NORMAL | LOW | HIGH | OFF (no lamp lit) | CONFLICT (several lit) | UNKNOWN (no lamps calibrated).
-  OFF/CONFLICT/UNKNOWN were added to the original contract so "can't tell" is never silently mapped to a real state.
-* `status` in the per-frame message is the *frame's* classification. The *alarm* state comes
-  from the AlertEngine (same enum) and is what gets pushed to phones.
+* `lamp_state`: NORMAL | LOW | HIGH | OFF | CONFLICT | UNKNOWN. Unknown or conflicting lamps are
+  not silently mapped to a real state.
+* `status` is the individual frame classification; an alert transition is stored separately in
+  PostgreSQL with the acknowledging user's reason and resolution.
 
 ## Shared files (single source of truth)
 
 | File | Used by |
 |---|---|
-| `contract/reading.schema.json` | Python pipeline tests, Kotlin, Cloud Functions validation |
-| `contract/monitor_config.default.json` | thresholds + timings for every component |
-| `contract/alert_scenarios.json` | the SAME test vectors run by the Python and Kotlin alert engines |
-| `contract/stage_b_spec.md` | TFLite input/output layout and post-processing (Phase 3) |
+| `contract/reading.schema.json` | Python pipeline and integrations |
+| `contract/monitor_config.default.json` | default thresholds and timings |
+| `contract/alert_scenarios.json` | alert engine test vectors |
+| `contract/stage_b_spec.md` | TFLite input/output layout and post-processing |
+| `vision/o2gauge/postgres_schema.sql` | PostgreSQL tables and indexes (initialized by the API) |
 
 ## Geometry convention
+
 Dial angle = degrees clockwise from 12 o'clock, image y axis down. Value is linear between the
-tapped 0 mark and max mark, clockwise. Needle angles within 4° beyond either end are clamped
-and still valid; deeper into the bottom gap they are flagged out-of-range (confidence halved).
+tapped 0 mark and max mark, clockwise. Needle angles within 4° beyond either end are clamped and
+still valid; deeper into the bottom gap they are flagged out-of-range (confidence halved).

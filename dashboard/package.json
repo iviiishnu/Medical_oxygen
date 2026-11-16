@@ -10,7 +10,6 @@
     "test": "node --test --experimental-strip-types \"src/*.test.ts\""
   },
   "dependencies": {
-    "firebase": "^13.2.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },

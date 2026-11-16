@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>O2 Monitor - Phone Pairing Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #1e222b;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #8ab4f8;
+        }
+        .header p {
+            font-size: 13px;
+            color: #9aa0a6;
+            margin-top: 6px;
+        }
+        .grid {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 900px;
+            width: 100%;
+        }
+        .card {
+            background: #ffffff;
+            color: #202124;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            padding: 24px;
+            flex: 1;
+            min-width: 320px;
+            max-width: 400px;
+            text-align: center;
+        }
+        .card h2 {
+            font-size: 18px;
+            margin-top: 0;
+            color: #1a73e8;
+        }
+        .url {
+            background: #f1f3f4;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            font-weight: bold;
+            color: #202124;
+            margin: 12px 0;
+            word-break: break-all;
+        }
+        img.qr {
+            width: 240px;
+            height: 240px;
+            border-radius: 8px;
+            border: 1px solid #dadce0;
+            margin: 10px 0;
+        }
+        .step {
+            font-size: 12px;
+            color: #5f6368;
+            line-height: 1.5;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        .step strong {
+            color: #202124;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📱 O2 Monitor Phone Pairing Hub</h1>
+        <p>Scan with your phone to launch the app and connect to the local server</p>
+    </div>
+
+    <div class="grid">
+        <!-- Card 1: Launch App via Expo Go -->
+        <div class="card">
+            <h2>1. Launch App in Expo Go</h2>
+            <div class="url">exp://192.168.1.7:8082</div>
+            <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=exp%3A//192.168.1.7%3A8082" alt="Expo Go QR Code" />
+            <div class="step">
+                <strong>Instructions:</strong><br>
+                1. Open the <strong>Expo Go</strong> app on your Android phone or iPhone.<br>
+                2. Tap <strong>"Scan QR Code"</strong> (or use iPhone Camera).<br>
+                3. The app loads instantly over your Wi-Fi!
+            </div>
+        </div>
+
+        <!-- Card 2: Connect Server API -->
+        <div class="card">
+            <h2>2. Connect Server API</h2>
+            <div class="url">http://192.168.1.7:8000</div>
+            <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=http%3A//192.168.1.7%3A8000" alt="Vision Server QR Code" />
+            <div class="step">
+                <strong>Instructions:</strong><br>
+                Inside the running app, tap <strong>"📷 Connect via QR Scanner"</strong> to link the app to this Vision server.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -6,4 +6,5 @@ jsonschema>=4.20
 pytest>=8.0
 onnxruntime>=1.20          # runs gauge_pose.onnx (Stage B) on the PC
 flask>=3.0                 # drop-a-photo tester (vision/tools/tester_app.py)
+psycopg[binary,pool]>=3.2  # PostgreSQL persistence for devices, readings, alerts and staff
 ultralytics==8.4.173       # training / .pt inference (pulls in torch; see README for GPU builds)

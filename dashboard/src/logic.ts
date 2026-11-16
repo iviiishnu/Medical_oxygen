@@ -33,7 +33,7 @@ export interface Alert {
 
 export interface Point { t: number; v: number | null; status: string }
 
-export const OFFLINE_AFTER_MS = 65_000;   // 2 missed 30 s heartbeats + grace (same as Cloud Functions)
+export const OFFLINE_AFTER_MS = 65_000;   // 2 missed 30 s heartbeats + grace (same as API watchdog)
 
 /** What the desk should show for a device, given the time now. Never "OK" for a silent tablet. */
 export function effectiveStatus(d: Device, nowMs: number): Status {

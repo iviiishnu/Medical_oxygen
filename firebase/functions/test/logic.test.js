@@ -48,10 +48,13 @@ test('offline after two missed heartbeats (+grace)', () => {
   assert.equal(L.isOffline({ last_heartbeat: new Date(now - 100_000).toISOString() }, now), true);
 });
 
-test('FCM message is data-only, high priority, all strings', () => {
+test('FCM message displays an alert notification and includes data for routing', () => {
   const m = L.buildAlertMessage('x1', { type: 'LOW', value: 3.2, device_id: 'tab', gauge_id: 'oxygen_main', created_at: 5 }, ['t'], 0);
   assert.equal(m.android.priority, 'high');
-  assert.equal(m.notification, undefined);
+  assert.deepEqual(m.notification, { title: m.data.title, body: m.data.body });
+  assert.equal(m.android.notification.sound, 'default');
+  assert.equal(m.apns.headers['apns-priority'], '10');
+  assert.equal(m.apns.payload.aps.sound, 'default');
   for (const v of Object.values(m.data)) assert.equal(typeof v, 'string');
   assert.match(m.data.title, /LOW/);
   assert.equal(m.data.body, 'oxygen_main: 3.2 kg/cm2');

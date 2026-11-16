@@ -68,8 +68,13 @@ function alertTitle(type) {
  */
 function buildAlertMessage(alertId, alert, tokens, level) {
   const value = alert.value == null ? '' : String(alert.value);
+  const title = alertTitle(alert.type);
+  const body = value ? `${alert.gauge_id || 'oxygen'}: ${value} ${alert.unit || 'kg/cm2'}` : String(alert.reason || 'Check the oxygen monitoring panel.');
   return {
     tokens,
+    // A notification payload is required for Android/iOS to show a system notification
+    // while the app is backgrounded or terminated. Keep data for foreground routing too.
+    notification: { title, body },
     data: {
       kind: 'ALERT',
       alert_id: alertId,
@@ -78,13 +83,20 @@ function buildAlertMessage(alertId, alert, tokens, level) {
       gauge_id: String(alert.gauge_id || ''),
       value,
       unit: String(alert.unit || 'kg/cm2'),
-      title: alertTitle(alert.type),
-      body: value ? `${alert.gauge_id || 'oxygen'}: ${value} ${alert.unit || 'kg/cm2'}` : String(alert.reason || ''),
+      title,
+      body,
       level: String(level),
       severity: String(SEVERITY[alert.type] || 3),
       created_at: String(toMillis(alert.created_at) || ''),
     },
-    android: { priority: 'high', ttl: 10 * 60 * 1000 },
+    android: {
+      priority: 'high', ttl: 10 * 60 * 1000,
+      notification: { sound: 'default', priority: 'high', visibility: 'public' },
+    },
+    apns: {
+      headers: { 'apns-priority': '10' },
+      payload: { aps: { alert: { title, body }, sound: 'default', 'content-available': 1 } },
+    },
   };
 }
 

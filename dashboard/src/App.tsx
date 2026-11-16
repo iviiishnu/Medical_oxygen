@@ -106,6 +106,15 @@ export function App({ src }: { src: DataSource }) {
   if (!authed) return <Login src={src} onDone={() => setAuthed(true)} />;
   const open = alerts.filter(a => a.state === 'OPEN');
 
+  const acknowledgeWithReport = (alertId: string) => {
+    const reason = window.prompt('Brief reason for this alert:', 'Reading crossed its configured threshold');
+    if (!reason?.trim()) return;
+    const resolution = window.prompt('How was it resolved?', 'Checked the panel and restored the supply');
+    if (!resolution?.trim()) return;
+    src.acknowledge(alertId, { reason: reason.trim(), resolution: resolution.trim() })
+      .catch(e => setAckErr(String(e.message)));
+  };
+
   return (
     <div className={`app ${ringing ? 'ringing' : ''}`}>
       <header className="top">
@@ -124,7 +133,7 @@ export function App({ src }: { src: DataSource }) {
               <StatusBadge s={a.type} />
               <span>{a.deviceId}{a.value != null && ` · ${a.value.toFixed(2)} ${a.unit.replace('cm2', 'cm²')}`} · {ago(a.createdMs, now)}
                 {a.escalationLevel > 0 && ` · escalated (level ${a.escalationLevel})`}</span>
-              <button onClick={() => src.acknowledge(a.id).catch(e => setAckErr(String(e.message)))}>Acknowledge</button>
+              <button onClick={() => acknowledgeWithReport(a.id)}>Acknowledge</button>
             </div>
           ))}
           {ackErr && <div className="error">{ackErr}</div>}

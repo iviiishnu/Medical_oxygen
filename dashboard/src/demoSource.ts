@@ -1,4 +1,4 @@
-// DEMO mode: a simulated tablet so the dashboard can be shown without Firebase.
+// DEMO mode: a simulated tablet so the dashboard can be shown without a backend connection.
 // Steady ~5.4 kg/cm2 with a slow leak + recovery every 12 minutes; everything stays in the browser.
 import type { Alert, Device, Point } from './logic.ts';
 import type { DataSource } from './source.ts';
@@ -83,6 +83,7 @@ export function demoSource(): DataSource {
     signedIn: () => true,
     userName: () => user,
     async signIn() {},
+    async restoreSession() { return true; },
     onDevices(cb) { subsD.add(cb); step(); return () => subsD.delete(cb); },
     onAlerts(cb) { subsA.add(cb); cb([...alerts]); return () => subsA.delete(cb); },
     onHistory(_id, cb) { subsH.add(cb); cb([...history]); return () => subsH.delete(cb); },

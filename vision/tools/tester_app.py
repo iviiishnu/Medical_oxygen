@@ -14,6 +14,8 @@ from __future__ import annotations
 
 import argparse
 import base64
+import json
+import os
 import sys
 import threading
 import time
@@ -24,14 +26,33 @@ import numpy as np
 from flask import Flask, jsonify, request
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from o2gauge.auto import AutoReader, draw                 # noqa: E402
+from o2gauge.auto import AutoReader, decide, draw          # noqa: E402
+from o2gauge.config import MonitorConfig                    # noqa: E402
+from o2gauge import postgres_store                            # noqa: E402
+from o2gauge.postgres_api import api as postgres_api, verify_identity  # noqa: E402
 from o2gauge.stage_b import KeypointReader                 # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024
+app.register_blueprint(postgres_api)
 _reader: AutoReader | None = None
 _lock = threading.Lock()
+_jobs_stop = threading.Event()
+
+
+def _scheduled_jobs() -> None:
+    escalation_after = max(30, int(os.getenv("ALERT_ESCALATION_AFTER_S", "120")))
+    heartbeat_s = max(5, int(os.getenv("DEVICE_HEARTBEAT_S", "30")))
+    while not _jobs_stop.wait(10):
+        try:
+            events = postgres_store.run_scheduled_jobs(
+                escalation_after_s=escalation_after, heartbeat_s=heartbeat_s,
+                missed_heartbeats=2, grace_s=5,
+            )
+            # Alert state and escalation are persisted for clients polling PostgreSQL.
+        except Exception as exc:
+            print(f"PostgreSQL alert scheduler error: {exc}")
 
 
 def reader() -> AutoReader:
@@ -45,6 +66,26 @@ def reader() -> AutoReader:
 
 @app.post("/api/read")
 def api_read():
+    device_id = request.form.get("device_id", "").strip()
+    identity = None
+    if device_id:
+        try:
+            identity = verify_identity(request.headers.get("Authorization", "").removeprefix("Bearer ").strip())
+            if identity.get("role") not in ("staff", "admin"):
+                return jsonify(error="This account does not have staff access."), 403
+            gauge_rows = postgres_store.get_device_gauges(identity, device_id)
+            gauge_config = {g["number"]: {
+                "number": g["number"], "low_threshold": g["low_threshold"],
+                "critical_threshold": g["critical_threshold"], "ignored": g["ignored"],
+            } for g in gauge_rows}
+        except PermissionError as exc:
+            return jsonify(error=str(exc)), 401
+        except LookupError as exc:
+            return jsonify(error=str(exc)), 404
+        except postgres_store.StoreUnavailable as exc:
+            return jsonify(error=str(exc)), 503
+    else:
+        gauge_config = None
     f = request.files.get("image")
     if f is None:
         return jsonify(error="send the photo as multipart field 'image'"), 400
@@ -56,18 +97,50 @@ def api_read():
         max_value = float(mx) if mx and mx.lower() != "auto" else None
     except ValueError:
         return jsonify(error=f"max must be a number or 'auto', got {mx!r}"), 400
+    if gauge_config is None:
+        try:
+            posted_gauges = json.loads(request.form.get("gauges", "[]"))
+            if not isinstance(posted_gauges, list) or len(posted_gauges) > 12:
+                raise ValueError("gauges must be a list with at most 12 entries")
+            gauge_config = {int(g["number"]): g for g in posted_gauges if isinstance(g, dict) and "number" in g}
+        except (ValueError, TypeError, KeyError, json.JSONDecodeError) as exc:
+            return jsonify(error=f"invalid gauge configuration: {exc}"), 400
+    include_image = request.form.get("include_image", "never")
+    if include_image not in ("never", "always", "on_alert"):
+        return jsonify(error="include_image must be never, always, or on_alert"), 400
     t0 = time.perf_counter()
     with _lock:
         r = reader().read(img, max_value)
-        ann = draw(img, r)
+        if gauge_config:
+            selected = []
+            for g in r["readings"]:
+                saved = gauge_config.get(g.number)
+                if saved is None or saved.get("ignored"):
+                    continue
+                if saved and g.value is not None and g.status != "UNCERTAIN":
+                    low = float(saved.get("low_threshold", reader().cfg.low_threshold))
+                    critical = float(saved.get("critical_threshold", reader().cfg.critical_threshold))
+                    if critical >= low:
+                        return jsonify(error=f"gauge {g.number}: Critical threshold must be below Low"), 400
+                    g.low_limit = low
+                    g.critical_threshold = critical
+                    g.status = "CRITICAL" if g.value < critical else "LOW" if g.value < low else "OK"
+                selected.append(g)
+            r["readings"] = selected
+            r["main"] = selected[0] if selected else None
+            main_config = reader().cfg
+            if r["main"] is not None and r["main"].low_limit is not None:
+                main_config = MonitorConfig.from_dict({
+                    **main_config.to_dict(), "low_threshold": r["main"].low_limit,
+                })
+            r["verdict"] = decide(r["main"], r["lamps"], main_config)
     ms = (time.perf_counter() - t0) * 1000
-    h, w = ann.shape[:2]
-    if w > 1400:
-        ann = cv2.resize(ann, (1400, int(h * 1400 / w)), interpolation=cv2.INTER_AREA)
     v, m = r["verdict"], r["main"]
-    return jsonify(
+    alert = v.verdict == "ABNORMAL" or any(g.status in ("LOW", "CRITICAL") for g in r["readings"])
+    payload = dict(
         file=f.filename,
-        verdict=v.verdict,
+        verdict="ABNORMAL" if alert else v.verdict,
+        alert=alert,
         confidence_pct=round(v.confidence * 100),
         reasons=v.reasons,
         reading=None if m is None or m.value is None else round(m.value, 2),
@@ -77,20 +150,44 @@ def api_read():
         model=None if m is None else m.stage_b,
         gauge_type=None if m is None else m.gauge_type,
         scale=None if m is None else m.scale,
-        low_limit=reader().cfg.low_threshold,
+        low_limit=(m.low_limit if m is not None and m.low_limit is not None else reader().cfg.low_threshold),
         main_gauge=None if m is None else m.number,
         gas=None if m is None else m.gas,
         gauges=[{"number": g.number, "gas": g.gas, "reading": None if g.value is None else round(g.value, 3),
                  "unit": g.unit, "scale": g.scale, "scale_source": g.scale_source, "secondary": g.secondary,
                  "confidence_pct": round(g.confidence * 100), "status": g.status, "main": g is m, "kind": g.kind,
-                 "numbers_read": [] if g.text is None else [b.text for b in g.text.boxes if b.num is not None]}
+                 "numbers_read": [] if g.text is None else [b.text for b in g.text.boxes if b.num is not None],
+                 "low_threshold": g.low_limit, "critical_threshold": getattr(g, "critical_threshold", None),
+                 "ignored": False}
                 for g in sorted(r["readings"], key=lambda g: g.number)],
         other_dials=[{"reading": g.value, "type": g.gauge_type, "gas": g.gas, "unit": g.unit}
                      for g in r["readings"][1:]],
         lamps=[{"color": l.color, "strength": l.strength} for l in r["lamps"]],
         ms=round(ms),
-        image="data:image/jpeg;base64," + base64.b64encode(cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 85])[1]).decode(),
     )
+    if include_image == "always" or (include_image == "on_alert" and alert):
+        ann = draw(img, r)
+        h, w = ann.shape[:2]
+        if w > 1400:
+            ann = cv2.resize(ann, (1400, int(h * 1400 / w)), interpolation=cv2.INTER_AREA)
+        payload["image"] = "data:image/jpeg;base64," + base64.b64encode(cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 75])[1]).decode()
+    if device_id and identity:
+        try:
+            events = postgres_store.persist_reading(identity, device_id, payload)
+        except LookupError as exc:
+            return jsonify(error=str(exc)), 404
+        except (ValueError, postgres_store.StoreUnavailable) as exc:
+            return jsonify(error=str(exc)), 503
+        if events:
+            payload["alert_id"] = next((event["id"] for event in events if event.get("state") == "OPEN"), None)
+    return jsonify(payload)
+
+
+@app.get("/api/health")
+def api_health():
+    """Lightweight endpoint for checking that a mobile client can reach this server."""
+    return jsonify(ok=True, service="o2-vision", postgres_configured=postgres_store.configured(),
+                   postgres_ready=postgres_store.healthy())
 
 
 @app.get("/")
@@ -158,7 +255,7 @@ async function send(files){
   for(const f of files.filter(f=>f.type.startsWith('image/'))){
     const card=document.createElement('div');card.className='res';card.innerHTML='<div class="spin">Reading '+esc(f.name)+' …</div>';
     out.prepend(card);
-    const fd=new FormData();fd.append('image',f);fd.append('max',document.getElementById('max').value);
+    const fd=new FormData();fd.append('image',f);fd.append('max',document.getElementById('max').value);fd.append('include_image','always');
     try{const r=await fetch('/api/read',{method:'POST',body:fd});const j=await r.json();
       if(!r.ok)throw new Error(j.error||r.status);card.innerHTML=render(j,f.name)}
     catch(e){card.innerHTML='<div class="spin">'+esc(f.name)+': '+esc(e.message)+'</div>'}
@@ -192,6 +289,10 @@ def main():
     ap.add_argument("--port", type=int, default=8000)
     a = ap.parse_args()
     reader()                                     # load the model before the first request
+    if postgres_store.configured():
+        threading.Thread(target=_scheduled_jobs, daemon=True, name="postgres-alert-jobs").start()
+    else:
+        print("PostgreSQL is not configured; monitoring data will not be persisted.")
     print(f"Gauge tester ready: http://{a.host}:{a.port}")
     app.run(host=a.host, port=a.port, threaded=True)
 

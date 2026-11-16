@@ -17,6 +17,19 @@ android/build/
 android/app/build/
 android/local.properties
 android/app/google-services.json
+mobile/google-services.json
+mobile/GoogleService-Info.plist
+mobile/.expo/
+mobile/.env
+mobile/.env.*
+mobile/dist/
+mobile/web-build/
+mobile/coverage/
+mobile/*.log
+# Expo Continuous Native Generation recreates these partial native folders during EAS builds.
+mobile/android/
+mobile/ios/
 dashboard/dist/
 dashboard/.env.local
 service-account*.json
+.env

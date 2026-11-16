@@ -1,8 +1,8 @@
 """Monitor configuration. Defaults live in contract/monitor_config.default.json so
-Python, Kotlin, Cloud Functions and the dashboard all read the same numbers.
+Python, the mobile app and the dashboard all read the same numbers.
 
 !! LOW / CRITICAL thresholds are PLACEHOLDERS until Babu sir / the biomedical
-!! engineer confirms them. They are configurable (Firestore devices/{id}.config).
+!! engineer confirms them. They are configurable per registered gauge in PostgreSQL.
 """
 from __future__ import annotations
 
