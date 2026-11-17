@@ -20,11 +20,11 @@ it would require a separate service and is intentionally absent from this Postgr
 
 ## Start locally
 
-At the repository root, configure `.env` from `.env.postgres.example`, start the database, and install
-backend dependencies:
+Install and start PostgreSQL as a local Windows service (no Docker required). Create the `o2_monitor`
+role and database, then configure the root `.env` from `.env.postgres.example` with the local
+`DATABASE_URL` and a private `AUTH_SECRET`. Install backend dependencies:
 
 ```powershell
-docker compose up -d postgres
 python -m pip install -r vision/requirements-run.txt
 python vision/tools/create_staff_user.py --email nurse@hospital.org --role staff --name "Nurse 1" --order 1
 ```

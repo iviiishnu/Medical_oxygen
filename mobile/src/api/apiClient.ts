@@ -135,10 +135,10 @@ export class ApiClient {
   public async checkConnection(timeoutMs = 5000): Promise<boolean> {
     try {
       const response = await this.client.get<{ ok: boolean; service?: string; postgres_ready?: boolean }>('/api/health', { timeout: timeoutMs });
-      if (response.data?.service === 'o2-vision' && response.data.postgres_ready === false) {
-        throw new Error('The model server is reachable, but PostgreSQL is not ready. Set DATABASE_URL on the backend host and restart it.');
-      }
-      return response.data?.ok === true && response.data.service === 'o2-vision' && response.data.postgres_ready !== false;
+      // Vision reachability is independent of PostgreSQL readiness. Image analysis for
+      // panel registration does not need a database; device readings report persistence
+      // errors separately when the API cannot save them.
+      return response.data?.ok === true && response.data.service === 'o2-vision';
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {

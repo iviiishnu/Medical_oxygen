@@ -163,10 +163,14 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
   };
 
   const chooseImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.85 });
-    if (!result.canceled && result.assets[0]?.uri) {
-      setRunning(false);
-      await submit(result.assets[0].uri);
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.85 });
+      if (!result.canceled && result.assets[0]?.uri) {
+        setRunning(false);
+        await submit(result.assets[0].uri);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not open the image picker.');
     }
   };
 
@@ -226,10 +230,10 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
           <TouchableOpacity style={[styles.primaryButton, running && styles.stopButton]} onPress={() => { setPreview(null); alertLatched.current = false; setRunning(v => !v); }} disabled={!permission?.granted || !selectedDevice}>
             <Text style={styles.primaryText}>{running ? 'Stop live reading' : 'Start live reading'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryButton} onPress={captureOnce} disabled={!permission?.granted || loading || !selectedDevice}>
+          <TouchableOpacity style={styles.secondaryButton} onPress={captureOnce} disabled={!permission?.granted || loading}>
             <Text style={styles.secondaryText}>Read photo</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryButton} onPress={chooseImage} disabled={!selectedDevice}>
+          <TouchableOpacity style={styles.secondaryButton} onPress={chooseImage} disabled={loading}>
             <Text style={styles.secondaryText}>Upload image</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.flipButton} onPress={() => setFacing(v => v === 'back' ? 'front' : 'back')}><Text style={styles.secondaryText}>Flip camera</Text></TouchableOpacity>
@@ -246,7 +250,7 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
             {!!reading.gauges?.length && reading.gauges.length > 1 && reading.gauges.map(g => <Text key={g.number} style={styles.meta}>Gauge {g.number}{g.gas ? ` · ${g.gas}` : ''}: {g.reading == null ? 'No reading' : `${g.reading.toFixed(2)} ${g.unit}`} · {g.status}</Text>)}
             {!!reading.lamps?.length && <Text style={styles.meta}>Panel lamps: {reading.lamps.map(l => `${l.color} ${Math.round(l.strength * 100)}%`).join(' · ')}</Text>}
           </>
-        ) : <Text style={styles.subtitle}>{selectedDevice ? 'Start live reading, take a photo, or upload an image to see the model result.' : 'Select a registered panel before starting the live reader.'}</Text>}
+        ) : <Text style={styles.subtitle}>{selectedDevice ? 'Start live reading, take a photo, or upload an image to see the model result.' : 'Upload an image or take a photo for model analysis. Select a registered panel to save readings or start live reading.'}</Text>}
       </View>
       <Text style={styles.note}>The vision server must be running and reachable from this device. Set its computer’s local network address in Settings.</Text>
     </ScrollView>

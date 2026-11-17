@@ -3,20 +3,36 @@
 The application uses PostgreSQL as its only database and account store. The Python API is the only
 component that connects to PostgreSQL; phones, tablets, and the dashboard use the API over HTTP(S).
 
-## Local setup
+## Local setup (native PostgreSQL, no Docker)
 
-1. Install Docker Desktop, Python 3.12+, and Node.js 20+.
-2. Copy `.env.postgres.example` to repository-root `.env`. Set a strong `POSTGRES_PASSWORD`, use the
-   same password in `DATABASE_URL`, and replace `AUTH_SECRET` with a random value at least 32
-   characters long. `.env` is ignored by Git.
-3. Start PostgreSQL and install backend dependencies:
+1. Install PostgreSQL for Windows, Python 3.12+, and Node.js 20+. Start the PostgreSQL Windows
+   service (for example, `Start-Service postgresql-x64-18` from an elevated PowerShell). Verify it
+   listens locally with `pg_isready -h 127.0.0.1 -p 5432` or `psql --version` and a connection test.
+2. Connect as the PostgreSQL administrator using `psql -U postgres -d postgres`. Create the app
+   role and database, then set the app role password:
+
+```sql
+CREATE ROLE o2_monitor LOGIN;
+CREATE DATABASE o2_monitor OWNER o2_monitor;
+\password o2_monitor
+\q
+```
+
+   If the role or database already exists, skip its `CREATE` statement. Use `ALTER ROLE o2_monitor
+   LOGIN;` if you need to restore the role's login permission. The `\password` command prompts
+   securely for a password. Use that password in `DATABASE_URL`.
+3. Copy `.env.postgres.example` to repository-root `.env`. Set `DATABASE_URL` to your local
+   PostgreSQL connection, for example `postgresql://o2_monitor:<URL-ENCODED-PASSWORD>@127.0.0.1:5432/o2_monitor`,
+   and replace `AUTH_SECRET` with a random value at least 32 characters long. `.env` is ignored by Git.
+   `POSTGRES_PASSWORD` is only used by the optional Compose setup and is not needed for native
+   PostgreSQL.
+4. Install backend dependencies:
 
 ```powershell
-docker compose up -d postgres
 python -m pip install -r vision/requirements-run.txt
 ```
 
-4. Create the first administrator account. The command asks for the password twice and stores only a
+5. Create the first administrator account. The command asks for the password twice and stores only a
    scrypt password hash in PostgreSQL:
 
 ```powershell
@@ -26,14 +42,13 @@ python vision/tools/create_staff_user.py --email admin@hospital.org --role admin
 Create staff accounts with `--role staff --order 1`. Use `--off-duty` for accounts excluded from
 on-call escalation. Reset an account by running the command again for the same email.
 
-5. In `mobile`, run `npm install` and `npm start`. This starts the vision/API server and Expo. Sign in
+6. In `mobile`, run `npm install` and `npm start`. This starts the vision/API server and Expo. Sign in
    with the PostgreSQL staff account. For an installable development APK, run
    `npm run build:dev:android`; use `npm run start:dev` when launching it.
-6. For the dashboard, copy `dashboard/.env.example` to `dashboard/.env.local`, set
+7. For the dashboard, copy `dashboard/.env.example` to `dashboard/.env.local`, set
    `VITE_BACKEND_URL` to the Python API address, then run `npm install` and `npm run dev`.
 
-The Compose database binds to `127.0.0.1:5432`. Devices connect to the backend over Wi-Fi and never
-connect directly to PostgreSQL. For an EAS development build, set the public, reachable API URL as
+Devices connect to the backend over Wi-Fi and never connect directly to PostgreSQL. For an EAS\ndevelopment build, set the public, reachable API URL as
 the Expo development environment's `O2_BACKEND_URL`. Do not put `DATABASE_URL` or `AUTH_SECRET` in
 the mobile/EAS environment. A cloud-built app cannot reach a database bound to a developer PC's
 `127.0.0.1`; the backend needs to run on a host reachable by the device.
