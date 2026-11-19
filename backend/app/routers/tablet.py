@@ -11,7 +11,8 @@ Rules (from portal-guide and steering/rules.md):
   - Auto-create the device in tablet_devices when device_id is new
   - Update last_seen_at on every accepted message
   - Store the message timestamp (from the tablet), not the arrival time
-  - Do NOT compute thresholds; do NOT create alerts (next step)
+  - Call process_alert_state after storing (duplicates and test messages
+    are already filtered before this point)
 """
 
 from __future__ import annotations
@@ -25,6 +26,7 @@ from pydantic import ValidationError
 
 from app.db.database import get_pool
 from app.integration.adapter import normalize
+from app.integration.alerts import process_alert_state
 
 router = APIRouter(prefix="/api", tags=["tablet"])
 
@@ -93,8 +95,16 @@ async def ingest_tablet_reading(request: Request):
             raw_json,
         )
 
-        # ── Store gauge readings ──────────────────────────────────────────
+        # ── Store gauge readings (skip VACUUM / mmHg) ────────────────────
         for gauge in msg.gauges:
+            # Rule: never store vacuum gauges — they pollute the readings
+            # table and confuse the UI. Skip by gas name (case-insensitive)
+            # and by unit as a belt-and-braces guard.
+            gas_upper  = (gauge.gas  or "").upper()
+            unit_lower = (gauge.unit or "").lower()
+            if gas_upper == "VACUUM" or unit_lower == "mmhg":
+                continue
+
             await conn.execute(
                 """
                 INSERT INTO gauge_readings
@@ -134,5 +144,9 @@ async def ingest_tablet_reading(request: Request):
             msg.alert_status or "UNKNOWN",
             msg.device_id,
         )
+
+        # ── Alert state machine ───────────────────────────────────────────
+        # Duplicates and test messages never reach this point.
+        await process_alert_state(conn, msg, message_id)
 
     return {"status": "ok", "message_id": message_id}

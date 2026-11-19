@@ -6,9 +6,10 @@ functions that routers can use to protect endpoints.
 
 Dependencies exported
 ---------------------
-get_current_user   — decodes JWT, returns UserRecord; raises 401 on failure
-require_role(role) — factory that returns a dep raising 403 if role != required
-require_any_role   — accepts DOCTOR or NURSE; raises 401 if unauthenticated
+get_current_user    — decodes JWT, returns user dict; raises 401 on failure
+require_role(role)  — factory that returns a dep raising 403 if role != required
+require_any_role    — accepts any role; raises 401 if unauthenticated
+require_write_role  — rejects VIEWER; ADMINISTRATOR and MONITORING_STAFF pass
 """
 
 from __future__ import annotations
@@ -57,15 +58,13 @@ def decode_token(token: str) -> dict:
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
 
 
-# ── Shared user record type (plain dict, from asyncpg row) ────────────────────
-# Fields: id, name, username, role, ward_id, ward_name
-
 async def _fetch_user_by_id(user_id: int) -> Optional[dict]:
     pool = get_pool()
     async with pool.acquire() as conn:
         row = await conn.fetchrow(
             """
             SELECT u.id, u.name, u.username, u.role, u.ward_id,
+                   u.email, u.is_active,
                    w.name AS ward_name
             FROM   users u
             LEFT   JOIN wards w ON w.id = u.ward_id
@@ -76,7 +75,20 @@ async def _fetch_user_by_id(user_id: int) -> Optional[dict]:
     return dict(row) if row else None
 
 
-# ── Core dependency: decode token → user dict ─────────────────────────────────
+# ── Write-role guard (rejects VIEWER) ────────────────────────────────────────
+def require_write_role():
+    """Raises 403 for VIEWER; ADMINISTRATOR and MONITORING_STAFF pass through."""
+    async def _dep(user: dict = Depends(get_current_user)) -> dict:
+        if user["role"] == "VIEWER":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Viewer role cannot perform this action",
+            )
+        return user
+    return _dep
+
+
+# ── Core dependency: decode token → user dict ────────────────────────────────
 async def get_current_user(
     token: Optional[str] = Depends(oauth2_scheme),
 ) -> dict:
@@ -103,14 +115,7 @@ async def get_current_user(
 
 # ── Role guard factory ────────────────────────────────────────────────────────
 def require_role(role: str):
-    """
-    Returns a FastAPI dependency that raises 403 if the current user's role
-    does not match `role`.
-
-    Usage:
-        @router.get("/...", dependencies=[Depends(require_role("DOCTOR"))])
-        async def my_endpoint(user=Depends(get_current_user)): ...
-    """
+    """Returns a dependency that raises 403 if the user's role != role."""
     async def _dep(user: dict = Depends(get_current_user)) -> dict:
         if user["role"] != role:
             raise HTTPException(
@@ -123,29 +128,13 @@ def require_role(role: str):
 
 # ── Any-role dependency (just ensures authenticated) ─────────────────────────
 async def require_any_role(user: dict = Depends(get_current_user)) -> dict:
-    """Passes through as long as the JWT is valid (DOCTOR or NURSE)."""
+    """Passes through as long as the JWT is valid (any role)."""
     return user
-
-
-# ── Ward-scoped guard helper ──────────────────────────────────────────────────
-def assert_ward_access(user: dict, ward_id: int) -> None:
-    """
-    Raises 403 if a NURSE tries to access a ward that isn't theirs.
-    DOCTOR has unrestricted access.
-    """
-    if user["role"] == "NURSE" and user["ward_id"] != ward_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Nurses can only access their own ward",
-        )
 
 
 # ── WebSocket token helper (no Depends — called manually) ────────────────────
 async def get_ws_user(token: str) -> Optional[dict]:
-    """
-    Validate a token from a WebSocket query param.
-    Returns user dict or None (caller decides whether to close).
-    """
+    """Validate a token from a WebSocket query param. Returns user or None."""
     try:
         payload = decode_token(token)
         user_id = payload.get("sub")

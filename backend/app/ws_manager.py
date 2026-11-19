@@ -27,6 +27,12 @@ class ConnectionManager:
         self, ws: WebSocket, user_id: int, role: str, ward_id: Optional[int]
     ) -> None:
         await ws.accept()
+        await self.connect_accepted(ws, user_id, role, ward_id)
+
+    async def connect_accepted(
+        self, ws: WebSocket, user_id: int, role: str, ward_id: Optional[int]
+    ) -> None:
+        """Register an already-accepted WebSocket connection."""
         conn = Connection(ws, user_id, role, ward_id)
         self._active.append(conn)
         print(
@@ -40,50 +46,20 @@ class ConnectionManager:
 
     async def broadcast(self, payload: dict) -> None:
         """
-        Send JSON to all connected clients filtered by role + ward.
+        Send JSON to all connected clients.
 
-        Rules:
-        - DOCTOR receives everything (all wards).
-        - NURSE receives only events for devices in their own ward.
-
-        Device-scoped events (new_reading, alert_*) have "device_id".
-        We look up ward_id from the devices table if needed.
-        If payload has no device_id → send to everyone (system-wide event).
+        {"type": "reading"} and {"type": "alert"} messages go to every
+        connected user; role-based filtering is no longer applied so the
+        new single-role portal always receives every event.
         """
         message = json.dumps(payload, default=str)
-        device_id = payload.get("device_id")
-        ward_id_cache: Optional[int] = None
-
-        # If device_id is present, fetch its ward_id once
-        if device_id:
-            from app.db.database import get_pool
-            pool = get_pool()
-            async with pool.acquire() as conn:
-                ward_id_cache = await conn.fetchval(
-                    "SELECT ward_id FROM devices WHERE device_id = $1", device_id
-                )
 
         dead: list[WebSocket] = []
         for conn in self._active:
-            # Decide if this connection should receive this event
-            should_send = False
-
-            if conn.role == "DOCTOR":
-                # Doctors receive all events
-                should_send = True
-            elif conn.role == "NURSE":
-                if device_id and ward_id_cache is not None:
-                    # Nurse receives only if device is in their ward
-                    should_send = (ward_id_cache == conn.ward_id)
-                else:
-                    # No device_id → system-wide event, send to everyone
-                    should_send = True
-
-            if should_send:
-                try:
-                    await conn.ws.send_text(message)
-                except Exception:
-                    dead.append(conn.ws)
+            try:
+                await conn.ws.send_text(message)
+            except Exception:
+                dead.append(conn.ws)
 
         for ws in dead:
             self.disconnect(ws)

@@ -105,21 +105,27 @@ async def _seed() -> None:
 
         # ── Users ────────────────────────────────────────────────────────────
         seed_users = [
-            # (name,            username,       password,      role,     ward_id)
-            ("Dr. Sharma",     "dr.sharma",    "Doctor@123",  "DOCTOR", None),
-            ("Priya",          "nurse.priya",  "Nurse@123",   "NURSE",  icu_id),
-            ("Anita",          "nurse.anita",  "Nurse@123",   "NURSE",  gen_id),
+            # (name,         username,       password,     role,                ward_id, email)
+            ("Dr. Sharma",  "dr.sharma",   "Doctor@123", "ADMINISTRATOR",    None,    "dr.sharma@hospital.gov"),
+            ("Priya",       "nurse.priya", "Nurse@123",  "MONITORING_STAFF", icu_id,  "priya@hospital.gov"),
+            ("Anita",       "nurse.anita", "Nurse@123",  "MONITORING_STAFF", gen_id,  "anita@hospital.gov"),
         ]
-        for name, username, password, role, ward_id in seed_users:
+        for name, username, password, role, ward_id, email in seed_users:
             existing = await conn.fetchval(
                 "SELECT id FROM users WHERE username = $1", username
             )
             if not existing:
                 await conn.execute(
                     """
-                    INSERT INTO users (name, username, password_hash, role, ward_id)
-                    VALUES ($1, $2, $3, $4, $5)
+                    INSERT INTO users (name, username, password_hash, role, ward_id, email)
+                    VALUES ($1, $2, $3, $4, $5, $6)
                     """,
-                    name, username, hash_password(password), role, ward_id,
+                    name, username, hash_password(password), role, ward_id, email,
                 )
                 print(f"   👤  Seeded user: {username} ({role})")
+            else:
+                # Backfill email for existing seed users
+                await conn.execute(
+                    "UPDATE users SET email = $1 WHERE username = $2 AND email IS NULL",
+                    email, username,
+                )

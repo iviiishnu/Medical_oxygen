@@ -21,22 +21,33 @@ async def websocket_endpoint(
     ws: WebSocket,
     token: Optional[str] = Query(None, description="JWT access token"),
 ):
+    # Must accept the HTTP upgrade before we can send any close frame.
+    await ws.accept()
+
     # Validate token
     if not token:
+        print("WS closed reason=Missing token")
         await ws.close(code=1008, reason="Missing token")
         return
 
     user = await get_ws_user(token)
     if not user:
+        print("WS closed reason=Invalid token")
         await ws.close(code=1008, reason="Invalid token")
         return
 
-    # Connect with user context
-    await manager.connect(ws, user["id"], user["role"], user.get("ward_id"))
+    print(f"WS connected user={user['username']} role={user['role']} id={user['id']}")
+
+    # Register connection (accept already called above, skip double-accept in manager)
+    await manager.connect_accepted(ws, user["id"], user["role"], user.get("ward_id"))
 
     try:
         # Keep alive — we only push, never read
         while True:
             await ws.receive_text()
-    except WebSocketDisconnect:
+    except WebSocketDisconnect as exc:
+        print(f"WS closed reason=WebSocketDisconnect code={exc.code}")
+        manager.disconnect(ws)
+    except Exception as exc:
+        print(f"WS closed reason=Exception: {exc}")
         manager.disconnect(ws)

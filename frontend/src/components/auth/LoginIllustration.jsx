@@ -37,9 +37,7 @@ export function LoginIllustration() {
           </svg>
         </div>
         <div className="leading-none">
-          <span className="text-white font-bold text-xl tracking-tight">MEDI</span>
-          <span className="text-[#4FC3F7] font-bold text-xl tracking-tight">GAS</span>
-          <p className="text-white/50 text-[11px] mt-0.5 font-medium">Monitor</p>
+          <span className="text-white font-bold text-xl tracking-tight">Oxygen Flow Check</span>
         </div>
       </div>
 

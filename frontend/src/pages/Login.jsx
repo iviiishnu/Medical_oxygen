@@ -1,7 +1,7 @@
 /**
  * pages/Login.jsx
  * ===============
- * Full-screen split-panel login page. Doctor portal only.
+ * Full-screen split-panel login page.
  * Left: illustration + branding  |  Right: login card
  */
 import { useEffect } from 'react';
@@ -14,16 +14,15 @@ export default function Login() {
   const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Already logged in → go straight to doctor portal
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      navigate('/doctor', { replace: true });
+      navigate('/', { replace: true });
     }
   }, [isAuthenticated, loading, navigate]);
 
   async function handleLogin(credentials) {
     await login(credentials);  // throws on failure
-    navigate('/doctor', { replace: true });
+    navigate('/', { replace: true });
   }
 
   return (

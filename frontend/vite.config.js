@@ -5,14 +5,16 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/auth':     'http://127.0.0.1:3001',
-      '/readings': 'http://127.0.0.1:3001',
-      '/devices':  'http://127.0.0.1:3001',
-      '/alerts':   'http://127.0.0.1:3001',
-      '/wards':    'http://127.0.0.1:3001',
-      '/handover': 'http://127.0.0.1:3001',
+      '/auth':     'http://127.0.0.1:8000',
+      '/api':      'http://127.0.0.1:8000',
+      '/alerts':   'http://127.0.0.1:8000',
+      '/devices':  'http://127.0.0.1:8000',
+      '/readings': 'http://127.0.0.1:8000',
+      '/wards':    'http://127.0.0.1:8000',
+      '/handover': 'http://127.0.0.1:8000',
+      '/stats':    'http://127.0.0.1:8000',
       '/ws': {
-        target: 'ws://127.0.0.1:3001',
+        target: 'ws://127.0.0.1:8000',
         ws: true,
       },
     },

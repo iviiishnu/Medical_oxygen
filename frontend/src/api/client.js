@@ -62,11 +62,12 @@ export const api = {
   resolveAlert:      (id) => request(`/alerts/${id}/resolve`,     { method: 'POST', body: '{}' }),
 
   // WebSocket URL builder (includes token)
+  // Route through the Vite proxy (/ws → ws://127.0.0.1:8000/ws)
+  // so the same origin/port works in every environment.
   wsUrl: () => {
     const token = getToken();
-    // Connect directly to backend on port 3001 (bypass Vite proxy)
-    return token
-      ? `ws://localhost:3001/ws?token=${encodeURIComponent(token)}`
-      : `ws://localhost:3001/ws`;
+    const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const base  = `${proto}//${window.location.host}/ws`;
+    return token ? `${base}?token=${encodeURIComponent(token)}` : base;
   },
 };

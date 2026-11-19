@@ -2,7 +2,7 @@
 Medical Gas Monitoring — FastAPI backend v2
 ===========================================
 Startup: connects to PostgreSQL, applies schema + seed, starts HTTP + WebSocket,
-and launches auto-escalation background task.
+and launches the offline/UNREADABLE watchdog background task.
 """
 
 import asyncio
@@ -11,34 +11,31 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.database import init_db, close_db
-from app.routers import readings, devices, alerts, ws, auth, wards, handover
+from app.routers import ws, auth
 from app.routers import tablet
-from app.alert_engine.engine import check_auto_escalation
+from app.routers import portal
+from app.routers import users as users_router
+from app.routers import incidents as incidents_router
+from app.routers import analytics as analytics_router
+from app.integration.watchdog import watchdog_loop
 
 
-# ── Background task: auto-escalation every 30 seconds ─────────────────────────
-_escalation_task: asyncio.Task | None = None
-
-
-async def _escalation_loop():
-    """Background loop: check for stale alerts every 30s."""
-    while True:
-        await asyncio.sleep(30)
-        try:
-            await check_auto_escalation()
-        except Exception as e:
-            print(f"⚠️  Auto-escalation error: {e}")
+# ── Background tasks ──────────────────────────────────────────────────────────
+_watchdog_task: asyncio.Task | None = None
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global _escalation_task
+    global _watchdog_task
     await init_db()
-    _escalation_task = asyncio.create_task(_escalation_loop())
-    print("🚀  Auto-escalation background task started.")
+    # Apply idempotent incident schema
+    from app.routers.incidents import ensure_schema as ensure_incidents_schema
+    await ensure_incidents_schema()
+    _watchdog_task = asyncio.create_task(watchdog_loop())
+    print("🔍  Offline/UNREADABLE watchdog started (interval: 15 s).")
     yield
-    if _escalation_task:
-        _escalation_task.cancel()
+    if _watchdog_task:
+        _watchdog_task.cancel()
     await close_db()
 
 
@@ -57,15 +54,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register all routers
+# Register routers
 app.include_router(auth.router)
-app.include_router(wards.router)
-app.include_router(handover.router)
-app.include_router(readings.router)
-app.include_router(devices.router)
-app.include_router(alerts.router)
 app.include_router(ws.router)
-app.include_router(tablet.router)   # POST /api/readings — tablet ingestion
+app.include_router(tablet.router)             # POST /api/readings — tablet ingestion
+app.include_router(portal.router)             # Portal API — summary, devices, alerts, activity
+app.include_router(users_router.router)       # User management — admin only
+app.include_router(incidents_router.router)   # Incident management
+app.include_router(analytics_router.router)   # Analytics & CSV exports
 
 
 @app.get("/", tags=["health"])
@@ -75,9 +71,12 @@ async def health():
         "service": "medical-gas-monitor-v2",
         "features": [
             "JWT auth",
-            "role-based access (DOCTOR/NURSE)",
-            "ward-scoped data",
-            "auto-escalation",
-            "audit trail",
+            "role-based access (ADMINISTRATOR/MONITORING_STAFF/VIEWER)",
+            "tablet ingestion (POST /api/readings)",
+            "offline watchdog (90 s TABLET_OFFLINE, 120 s UNREADABLE)",
+            "portal API (summary, devices, alerts, activity)",
+            "WebSocket push (readings + alert changes)",
+            "incident management",
+            "analytics & CSV exports",
         ],
     }

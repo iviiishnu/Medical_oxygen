@@ -1,8 +1,8 @@
 /**
  * LoginForm.jsx
  * =============
- * Simple login card: username + password inputs, remember-me, submit button, error banner, demo credentials.
- * Doctor portal only (no role selector).
+ * Simple login card: username + password inputs, remember-me, submit button, error banner.
+ * No role selector — the backend returns the stored role.
  */
 import { useState, useEffect } from 'react';
 import { User, Lock, Eye, EyeOff, LogIn, Loader2, AlertCircle } from 'lucide-react';
@@ -42,8 +42,7 @@ export function LoginForm({ onLogin }) {
 
     try {
       setLoading(true);
-      await onLogin({ username: username.trim(), password, role: 'DOCTOR' });
-      // Save / clear remembered username
+      await onLogin({ username: username.trim(), password });
       try {
         if (remember) localStorage.setItem(REMEMBER_KEY, username.trim());
         else          localStorage.removeItem(REMEMBER_KEY);
@@ -68,7 +67,7 @@ export function LoginForm({ onLogin }) {
     >
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold" style={{ color: '#1E2A4A' }}>Medical Gas Monitor</h2>
+        <h2 className="text-2xl font-bold" style={{ color: '#1E2A4A' }}>Oxygen Flow Check</h2>
         <p className="text-sm mt-1" style={{ color: '#8A94A6' }}>Sign in to continue</p>
       </div>
 

@@ -259,3 +259,131 @@ CREATE INDEX IF NOT EXISTS idx_gauge_readings_device_ts
 
 CREATE INDEX IF NOT EXISTS idx_gauge_readings_message
     ON gauge_readings (message_id);
+
+-- =============================================================
+-- Tablet alert tracking — Schema v5
+-- New table: tablet_alerts
+-- Idempotent column addition to tablet_devices.
+-- =============================================================
+
+-- ── latest_message_at on tablet_devices ──────────────────────────────────
+-- Tracks the timestamp of the newest (by message timestamp) message stored
+-- for a device.  Used to suppress alert updates for late-arriving messages.
+ALTER TABLE tablet_devices
+    ADD COLUMN IF NOT EXISTS latest_message_at TIMESTAMPTZ;
+
+-- ── Tablet alerts ─────────────────────────────────────────────────────────
+-- One open row per device while a PANEL_CRITICAL condition is active.
+-- cleared_at is NULL while the alert is open.
+CREATE TABLE IF NOT EXISTS tablet_alerts (
+    id               SERIAL       PRIMARY KEY,
+    device_id        VARCHAR(50)  NOT NULL REFERENCES tablet_devices(device_id),
+    alert_type       TEXT         NOT NULL DEFAULT 'PANEL_CRITICAL',
+    severity         TEXT,                            -- worst gauge status seen
+    started_at       TIMESTAMPTZ  NOT NULL,           -- message timestamp that opened the alert
+    cleared_at       TIMESTAMPTZ,                     -- message timestamp of the first NORMAL, NULL = open
+    worst_status     TEXT,                            -- worst gauge status seen
+    reasons          JSONB,                           -- reasons[] from the opening/worst message
+    confidence_pct   INTEGER,
+    start_message_id INTEGER      REFERENCES tablet_messages(id) ON DELETE SET NULL,
+    acknowledged_at  TIMESTAMPTZ,
+    acknowledged_by  TEXT,
+    resolved_at      TIMESTAMPTZ,
+    resolved_by      TEXT,
+    resolution_note  TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_tablet_alerts_device_open
+    ON tablet_alerts (device_id, cleared_at)
+    WHERE cleared_at IS NULL;
+
+CREATE INDEX IF NOT EXISTS idx_tablet_alerts_device_ts
+    ON tablet_alerts (device_id, started_at DESC);
+
+-- =============================================================
+-- Portal API — Schema v6
+-- Idempotent column additions to tablet_alerts and
+-- tablet_devices for watchdog and portal router support.
+-- =============================================================
+
+-- acknowledged_by / resolved_by on tablet_alerts may be text (username);
+-- add note columns used by portal acknowledge/resolve actions.
+ALTER TABLE tablet_alerts
+    ADD COLUMN IF NOT EXISTS acknowledge_note TEXT,
+    ADD COLUMN IF NOT EXISTS resolve_note      TEXT;
+
+-- activity_log: lightweight append-only event log for GET /api/activity
+CREATE TABLE IF NOT EXISTS activity_log (
+    id          SERIAL       PRIMARY KEY,
+    event_type  VARCHAR(40)  NOT NULL,   -- alert_opened, alert_cleared, alert_acknowledged,
+                                         -- alert_resolved, device_offline, device_online
+    device_id   VARCHAR(50),
+    alert_id    INTEGER,
+    actor       VARCHAR(100),            -- username or 'watchdog'
+    detail      TEXT,
+    created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_activity_log_created
+    ON activity_log (created_at DESC);
+
+
+-- =============================================================
+-- Users v2 — Schema v7 (Settings page)
+-- New roles: ADMINISTRATOR / MONITORING_STAFF / VIEWER.
+-- DOCTOR → ADMINISTRATOR, NURSE → MONITORING_STAFF (data migration).
+-- New columns: email, is_active.
+-- Idempotent: safe on every startup.
+-- =============================================================
+
+DO $$
+BEGIN
+    -- Widen role column (was VARCHAR(10), too small for the new values)
+    ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(20);
+
+    -- Drop ALL existing role CHECK constraints on users:
+    --   • old "users_role_check" (contains DOCTOR/NURSE)
+    --   • any "users_role_v7_check" from a previous partial run
+    DECLARE
+        v_cname TEXT;
+    BEGIN
+        FOR v_cname IN
+            SELECT conname
+            FROM   pg_constraint
+            WHERE  conrelid = 'users'::regclass
+              AND  contype  = 'c'
+              AND  (pg_get_constraintdef(oid) ILIKE '%DOCTOR%'
+                    OR conname = 'users_role_v7_check')
+        LOOP
+            EXECUTE format('ALTER TABLE users DROP CONSTRAINT %I', v_cname);
+        END LOOP;
+    END;
+
+    -- Migrate existing data BEFORE adding the new constraint:
+    --   DOCTOR       → ADMINISTRATOR
+    --   NURSE        → MONITORING_STAFF
+    --   anything else → VIEWER (catch-all for unknown / NULL-safe)
+    UPDATE users SET role = 'ADMINISTRATOR'     WHERE role = 'DOCTOR';
+    UPDATE users SET role = 'MONITORING_STAFF'  WHERE role = 'NURSE';
+    UPDATE users SET role = 'VIEWER'
+        WHERE role NOT IN ('ADMINISTRATOR', 'MONITORING_STAFF', 'VIEWER')
+           OR role IS NULL;
+
+    -- Now safe to add the new constraint
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conrelid = 'users'::regclass
+          AND contype  = 'c'
+          AND conname  = 'users_role_v7_check'
+    ) THEN
+        ALTER TABLE users
+            ADD CONSTRAINT users_role_v7_check
+            CHECK (role IN ('ADMINISTRATOR','MONITORING_STAFF','VIEWER'));
+    END IF;
+END $$;
+
+-- New columns
+ALTER TABLE users ADD COLUMN IF NOT EXISTS email      VARCHAR(200);
+ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
+
+CREATE INDEX IF NOT EXISTS idx_users_role ON users (role);
