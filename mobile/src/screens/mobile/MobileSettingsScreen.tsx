@@ -18,6 +18,7 @@ import { defaultApiClient } from '../../api/apiClient';
 import type { RegisteredGauge } from '../../types/monitoring';
 import { colors as baseColors, type ThemePalette } from '../../theme/colors';
 import { useThemeColors } from '../../theme/ThemeContext';
+import { SoundManager } from '../../utils/sound';
 
 interface Props {
   source: DataSource;
@@ -130,7 +131,7 @@ export const MobileSettingsScreen: React.FC<Props> = ({
         name: g.gas?.trim() || `Gauge ${index + 1}`,
         unit: g.unit?.trim() || 'Unit not recognized',
         kind: g.kind || 'analog',
-        scale: g.scale,
+        scale: typeof g.scale === 'number' ? g.scale : Number(g.scale) || 0,
         reading: g.reading,
         confidencePct: g.confidence_pct,
         ignored: false,
@@ -204,8 +205,9 @@ export const MobileSettingsScreen: React.FC<Props> = ({
       {/* Account Info */}
       <View style={styles.card}>
         <Text style={styles.sectionHeader}>Staff Account</Text>
-        <Text style={styles.emailText}>Signed in as: {source.userName() || 'Demo User'}</Text>
-        <Text style={styles.metaText}>Source Provider: {source.mode.toUpperCase()}</Text>
+        <Text style={styles.emailText}>{source.getProfile()?.displayName || source.userName() || 'Staff'}</Text>
+        <Text style={styles.metaText}>{source.getProfile()?.email || 'Demo account'} · {source.getProfile()?.role ?? 'staff'} · {source.getProfile()?.onDuty === false ? 'Off duty' : 'On duty'}</Text>
+        <Text style={styles.metaText}>Data source: {source.mode === 'postgres' ? 'PostgreSQL backend' : 'Local demo'}</Text>
 
         <TouchableOpacity style={styles.signOutBtn} onPress={onSignOut}>
           <Text style={styles.signOutBtnText}>Sign Out</Text>
@@ -260,7 +262,7 @@ export const MobileSettingsScreen: React.FC<Props> = ({
           </View>
           <Switch
             value={darkMode}
-            onValueChange={async enabled => {
+            onValueChange={async (enabled: boolean) => {
               await StorageService.saveSettings({ darkMode: enabled });
               onToggleDarkMode(enabled);
             }}
@@ -270,7 +272,7 @@ export const MobileSettingsScreen: React.FC<Props> = ({
         </View>
       </View>
 
-      <View style={styles.card} onLayout={event => setRegistrationOffset(event.nativeEvent.layout.y)}>
+      <View style={styles.card} onLayout={(event: any) => setRegistrationOffset(event.nativeEvent.layout.y)}>
         <Text style={styles.sectionHeader}>Register a monitoring panel</Text>
         <Text style={styles.metaText}>Upload a clear panel photo. The vision model identifies gauge names, types, units, scales, and current readings; enter the Low and Critical thresholds for each one.</Text>
         <TextInput style={styles.input} value={registrationName} onChangeText={setRegistrationName} placeholder="Panel name (e.g. Ward 3 oxygen panel)" placeholderTextColor={colors.muted} />
@@ -287,11 +289,11 @@ export const MobileSettingsScreen: React.FC<Props> = ({
             <Text style={styles.metaText}>Unit: {gauge.unit} · Scale: {Number.isFinite(gauge.scale) ? `0–${gauge.scale}` : 'not recognized'} · Current: {gauge.reading == null ? 'not read' : `${gauge.reading} ${gauge.unit}`} · Confidence: {gauge.confidencePct}%</Text>
             <View style={styles.ignoreRow}>
               <Text style={styles.metaText}>{gauge.ignored ? 'Excluded from live reading' : 'Include in live reading'}</Text>
-              <Switch value={!!gauge.ignored} onValueChange={ignored => setDetectedGauges(current => current.map((item, i) => i === index ? { ...item, ignored } : item))} />
+              <Switch value={!!gauge.ignored} onValueChange={(ignored: boolean) => setDetectedGauges(current => current.map((item, i) => i === index ? { ...item, ignored } : item))} />
             </View>
             {!gauge.ignored && <View style={styles.thresholdRow}>
-              <TextInput style={[styles.input, styles.thresholdInput]} value={gauge.lowText} onChangeText={v => updateGauge(index, 'lowText', v)} keyboardType="decimal-pad" placeholder="Low threshold" placeholderTextColor={colors.muted} />
-              <TextInput style={[styles.input, styles.thresholdInput]} value={gauge.criticalText} onChangeText={v => updateGauge(index, 'criticalText', v)} keyboardType="decimal-pad" placeholder="Critical threshold" placeholderTextColor={colors.muted} />
+              <TextInput style={[styles.input, styles.thresholdInput]} value={gauge.lowText} onChangeText={(v: string) => updateGauge(index, 'lowText', v)} keyboardType="decimal-pad" placeholder="Low threshold" placeholderTextColor={colors.muted} />
+              <TextInput style={[styles.input, styles.thresholdInput]} value={gauge.criticalText} onChangeText={(v: string) => updateGauge(index, 'criticalText', v)} keyboardType="decimal-pad" placeholder="Critical threshold" placeholderTextColor={colors.muted} />
             </View>}
           </View>
         ))}
@@ -303,6 +305,10 @@ export const MobileSettingsScreen: React.FC<Props> = ({
 
       <View style={styles.card}>
         <Text style={styles.sectionHeader}>Alert delivery</Text>
+        <View style={styles.switchRow}>
+          <View style={styles.switchLabelWrap}><Text style={styles.switchTitle}>Alert sound and vibration</Text><Text style={styles.switchSubtitle}>Play for active alerts while the app is open</Text></View>
+          <Switch value={settings.soundEnabled} onValueChange={async (enabled: boolean) => { setSettings(current => ({ ...current, soundEnabled: enabled })); await StorageService.saveSettings({ soundEnabled: enabled }); SoundManager.setEnabled(enabled); }} trackColor={{ false: colors.grid, true: colors.seriesLight }} thumbColor={settings.soundEnabled ? colors.series : colors.muted} />
+        </View>
         <Text style={styles.metaText}>Alerts are read from PostgreSQL while the app is open. Background push notifications are not configured.</Text>
       </View>
     </ScrollView>

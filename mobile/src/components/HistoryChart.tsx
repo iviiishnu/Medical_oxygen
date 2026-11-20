@@ -10,8 +10,10 @@ interface Props {
   points: Point[];
   low: number;
   critical: number;
+  high?: number | null;
   unit: string;
   nowMs: number;
+  rangeMs?: number;
   height?: number;
 }
 
@@ -22,8 +24,10 @@ export const HistoryChart: React.FC<Props> = ({
   points,
   low,
   critical,
+  high,
   unit,
   nowMs,
+  rangeMs = SPAN,
   height = 220,
 }) => {
   const colors = useThemeColors(baseColors);
@@ -31,14 +35,14 @@ export const HistoryChart: React.FC<Props> = ({
   const [chartWidth, setChartWidth] = useState<number>(340);
   const [hoverPoint, setHoverPoint] = useState<Point | null>(null);
 
-  const t0 = nowMs - SPAN;
+  const t0 = nowMs - rangeMs;
   const data = useMemo(
-    () => decimate(points.filter(p => p.t >= t0), 300),
-    [points, t0]
+    () => decimate(points.filter(p => p.t >= t0 && p.t <= nowMs), 300),
+    [points, t0, nowMs]
   );
 
   const vals = data.filter(p => p.v != null).map(p => p.v as number);
-  const vMax = Math.max(low + 1, ...vals, 0) * 1.08;
+  const vMax = Math.max(low + 1, high ?? 0, ...vals, 0) * 1.08;
   const yTicks = niceTicks(0, vMax, 4);
   const yTop = yTicks[yTicks.length - 1] >= vMax ? yTicks[yTicks.length - 1] : vMax;
 
@@ -46,13 +50,13 @@ export const HistoryChart: React.FC<Props> = ({
   const H = height;
 
   const x = (t: number) =>
-    MARGIN.left + ((t - t0) / SPAN) * (W - MARGIN.left - MARGIN.right);
+    MARGIN.left + ((t - t0) / rangeMs) * (W - MARGIN.left - MARGIN.right);
 
   const y = (v: number) =>
     MARGIN.top + (1 - v / (yTop || 1)) * (H - MARGIN.top - MARGIN.bottom);
 
   const segs = segments(data, 3 * 60_000);
-  const hours = Array.from({ length: 5 }, (_, i) => t0 + i * 6 * 3600_000);
+  const hours = Array.from({ length: 5 }, (_, i) => t0 + i * rangeMs / 4);
 
   const handleLayout = (e: LayoutChangeEvent) => {
     setChartWidth(e.nativeEvent.layout.width);
@@ -89,7 +93,7 @@ export const HistoryChart: React.FC<Props> = ({
           width={W}
           height={H}
           accessible={true}
-          accessibilityLabel={`Telemetry history over the last 24 hours, ${unit}`}
+          accessibilityLabel={`Telemetry history over the selected time range, ${unit}`}
         >
 
         {/* Y-axis gridlines and labels (mirrors dashboard .gridline and .tick) */}
@@ -182,6 +186,11 @@ export const HistoryChart: React.FC<Props> = ({
           </SvgText>
         </G>
 
+        {high != null && <G key="ref-high">
+          <Line x1={MARGIN.left} x2={W - MARGIN.right} y1={y(high)} y2={y(high)} stroke={colors.critical} strokeWidth={1.5} strokeDasharray="4 4" />
+          <SvgText x={W - MARGIN.right + 4} y={y(high) + 3} fontSize={10} fontWeight="600" fill={colors.critical}>HIGH {high}</SvgText>
+        </G>}
+
         {/* Data series lines (mirrors dashboard .series) */}
         {segs.map((s, i) => (
           <Polyline
@@ -230,7 +239,7 @@ export const HistoryChart: React.FC<Props> = ({
 
       {!vals.length && (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No readings recorded in the last 24 hours</Text>
+          <Text style={styles.emptyText}>No readings recorded in this time range</Text>
         </View>
       )}
     </View>

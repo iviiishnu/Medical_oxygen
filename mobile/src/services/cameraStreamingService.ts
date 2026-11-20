@@ -1,3 +1,5 @@
+declare const require: any;
+
 import { ApiClient, defaultApiClient, VisionReadResponse } from '../api/apiClient';
 import { CameraStreamConfig, CameraStreamStatus } from '../types/monitoring';
 

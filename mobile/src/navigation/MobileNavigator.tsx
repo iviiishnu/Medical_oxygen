@@ -1,53 +1,91 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import type { MobileTabParamList, MobileStackParamList } from '../types/navigation';
+import Svg, { Path, Rect, Circle } from 'react-native-svg';
 import type { DataSource } from '../api/dataSource';
 import { MobileDashboardScreen } from '../screens/mobile/MobileDashboardScreen';
-import { MobileDeviceDetailScreen } from '../screens/mobile/MobileDeviceDetailScreen';
 import { MobileAlertsScreen } from '../screens/mobile/MobileAlertsScreen';
+import { AnalyticsScreen } from '../screens/mobile/AnalyticsScreen';
+import { MoreScreen } from '../screens/mobile/MoreScreen';
+import { MobileDeviceDetailScreen } from '../screens/mobile/MobileDeviceDetailScreen';
 import { MobileCameraScreen } from '../screens/mobile/MobileCameraScreen';
 import { MobileSettingsScreen } from '../screens/mobile/MobileSettingsScreen';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { IncidentsScreen } from '../screens/mobile/IncidentsScreen';
 import { colors } from '../theme/colors';
 import { useThemeColors } from '../theme/ThemeContext';
 
-const Tab = createBottomTabNavigator<MobileTabParamList>();
-const Stack = createNativeStackNavigator<MobileStackParamList>();
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 interface Props {
   source: DataSource;
   onSignOut: () => void;
   onToggleDemoMode: (enabled: boolean) => void;
-  darkMode: boolean;
-  onToggleDarkMode: (enabled: boolean) => void;
+  darkMode?: boolean;
+  onToggleDarkMode?: (enabled: boolean) => void;
 }
 
-function MonitorStack({ source }: { source: DataSource }) {
-  const palette = useThemeColors(colors);
+function HomeStackNavigator({ source, onSignOut }: { source: DataSource; onSignOut: () => void }) {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: palette.surface },
-        headerTintColor: palette.series,
-        headerTitleStyle: { fontWeight: '700', color: palette.ink },
-      }}
-    >
-      <Stack.Screen
-        name="MainTabs"
-        options={{ headerShown: false }}
-      >
-        {() => <MobileDashboardScreen source={source} />}
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="HomeScreen">
+        {() => <MobileDashboardScreen source={source} onSignOut={onSignOut} />}
       </Stack.Screen>
-
-      <Stack.Screen
-        name="DeviceDetail"
-        options={({ route }) => ({
-          title: route.params.deviceName || 'Supply Panel Detail',
-        })}
-      >
+      <Stack.Screen name="DeviceDetail">
         {() => <MobileDeviceDetailScreen source={source} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
+}
+
+function LiveMonitoringScreen({ source }: { source: DataSource }) {
+  const navigation = useNavigation<any>();
+  return <MobileCameraScreen source={source} onRegisterDevice={() => navigation.navigate('MoreTab', { screen: 'SettingsScreen', params: { focusRegistration: true } })} />;
+}
+
+function MoreStackNavigator({
+  source,
+  onSignOut,
+  onToggleDemoMode,
+  darkMode,
+  onToggleDarkMode,
+}: {
+  source: DataSource;
+  onSignOut: () => void;
+  onToggleDemoMode: (enabled: boolean) => void;
+  darkMode?: boolean;
+  onToggleDarkMode?: (enabled: boolean) => void;
+}) {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MoreMain">
+        {() => (
+          <MoreScreen
+            source={source}
+            onSignOut={onSignOut}
+            onToggleDemoMode={onToggleDemoMode}
+          />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="Incidents">
+        {({ route, navigation }: any) => <IncidentsScreen source={source} initialAlertId={route?.params?.alertId} onInitialAlertHandled={() => navigation.setParams({ alertId: undefined })} />}
+      </Stack.Screen>
+      <Stack.Screen name="CameraStream">
+        {({ navigation }: any) => <MobileCameraScreen source={source} onRegisterDevice={() => navigation.navigate('SettingsScreen', { focusRegistration: true })} />}
+      </Stack.Screen>
+      <Stack.Screen name="SettingsScreen">
+        {({ route, navigation }: any) => (
+          <MobileSettingsScreen
+            source={source}
+            onSignOut={onSignOut}
+            onToggleDemoMode={onToggleDemoMode}
+            darkMode={!!darkMode}
+            onToggleDarkMode={onToggleDarkMode || (() => {})}
+            focusRegistration={route?.params?.focusRegistration}
+            onRegistrationFocused={() => navigation.setParams({ focusRegistration: undefined })}
+          />
+        )}
       </Stack.Screen>
     </Stack.Navigator>
   );
@@ -60,70 +98,134 @@ export const MobileNavigator: React.FC<Props> = ({
   darkMode,
   onToggleDarkMode,
 }) => {
-  const insets = useSafeAreaInsets();
   const palette = useThemeColors(colors);
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={{
+        headerShown: false,
         tabBarActiveTintColor: palette.series,
         tabBarInactiveTintColor: palette.ink2,
         tabBarStyle: {
           backgroundColor: palette.surface,
           borderTopColor: palette.grid,
-          height: 56 + Math.max(insets.bottom, 6),
-          paddingBottom: Math.max(insets.bottom, 6),
+          height: 60,
+          paddingBottom: 8,
           paddingTop: 6,
         },
         tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: '600',
+          fontSize: 10,
+          fontWeight: '700',
         },
-        headerStyle: { backgroundColor: palette.surface },
-        headerTitleStyle: { fontWeight: '800', color: palette.ink },
-        tabBarIcon: ({ color }) => {
-          let icon = '📊';
-          if (route.name === 'MonitorTab') icon = '📊';
-          else if (route.name === 'AlertsTab') icon = '🔔';
-          else if (route.name === 'CameraTab') icon = '📷';
-          else if (route.name === 'SettingsTab') icon = '⚙️';
-          return <Text style={{ fontSize: 18, color }}>{icon}</Text>;
-        },
-      })}
+      }}
     >
+      {/* 1. Home Tab */}
       <Tab.Screen
-        name="MonitorTab"
-        options={{ title: 'Monitor', headerShown: false }}
+        name="HomeTab"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
+            <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+              <Path
+                d="M3 9.5L12 3L21 9.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9.5Z"
+                stroke={color}
+                strokeWidth={focused ? 2.4 : 1.8}
+                fill={focused ? palette.seriesLight : 'none'}
+              />
+              <Path d="M9 21V12H15V21" stroke={color} strokeWidth={focused ? 2.4 : 1.8} />
+            </Svg>
+          ),
+        }}
       >
-        {() => <MonitorStack source={source} />}
+        {() => <HomeStackNavigator source={source} onSignOut={onSignOut} />}
       </Tab.Screen>
 
+      {/* 2. Devices Tab */}
+      <Tab.Screen
+        name="DevicesTab"
+        options={{
+          title: 'Monitor',
+          tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
+            <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+              <Rect
+                x="2"
+                y="3"
+                width="20"
+                height="14"
+                rx="2"
+                stroke={color}
+                strokeWidth={focused ? 2.4 : 1.8}
+              />
+              <Path
+                d="M8 21H16M12 17V21"
+                stroke={color}
+                strokeWidth={focused ? 2.4 : 1.8}
+                strokeLinecap="round"
+              />
+            </Svg>
+          ),
+        }}
+      >
+        {() => <LiveMonitoringScreen source={source} />}
+      </Tab.Screen>
+
+      {/* 3. Alerts Tab */}
       <Tab.Screen
         name="AlertsTab"
-        options={{ title: 'Alerts' }}
+        options={{
+          title: 'Alerts',
+          tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
+            <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+              <Path
+                d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"
+                stroke={color}
+                strokeWidth={focused ? 2.4 : 1.8}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill={focused ? palette.seriesLight : 'none'}
+              />
+            </Svg>
+          ),
+        }}
       >
         {() => <MobileAlertsScreen source={source} />}
       </Tab.Screen>
 
+      {/* 4. History Tab */}
       <Tab.Screen
-        name="CameraTab"
-        options={{ title: 'Live Stream' }}
+        name="AnalyticsTab"
+        options={{
+          title: 'History',
+          tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
+            <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+              <Path d="M18 20V10M12 20V4M6 20V14" stroke={color} strokeWidth={focused ? 2.6 : 2} strokeLinecap="round" />
+            </Svg>
+          ),
+        }}
       >
-        {({ navigation }) => <MobileCameraScreen source={source} onRegisterDevice={() => navigation.navigate('SettingsTab', { focusRegistration: true })} />}
+        {() => <AnalyticsScreen source={source} />}
       </Tab.Screen>
 
+      {/* 5. More Tab */}
       <Tab.Screen
-        name="SettingsTab"
-        options={{ title: 'Settings' }}
+        name="MoreTab"
+        options={{
+          title: 'More',
+          tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
+            <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+              <Circle cx="5" cy="12" r="1.8" fill={color} />
+              <Circle cx="12" cy="12" r="1.8" fill={color} />
+              <Circle cx="19" cy="12" r="1.8" fill={color} />
+            </Svg>
+          ),
+        }}
       >
-        {({ route, navigation }) => (
-          <MobileSettingsScreen
+        {() => (
+          <MoreStackNavigator
             source={source}
             onSignOut={onSignOut}
             onToggleDemoMode={onToggleDemoMode}
             darkMode={darkMode}
             onToggleDarkMode={onToggleDarkMode}
-            focusRegistration={route.params?.focusRegistration}
-            onRegistrationFocused={() => navigation.setParams({ focusRegistration: undefined })}
           />
         )}
       </Tab.Screen>

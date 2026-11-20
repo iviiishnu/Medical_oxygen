@@ -176,10 +176,42 @@ def alerts() -> Any:
     return jsonify(store.list_alerts(g.identity))
 
 
+@api.get("/api/v1/alerts/<alert_id>")
+@_authenticated
+def alert_details(alert_id: str) -> Any:
+    return jsonify(store.get_alert_details(g.identity, alert_id))
+
+
+@api.route("/api/v1/incidents", methods=["GET", "POST"])
+@_authenticated
+def incidents() -> Any:
+    if request.method == "GET":
+        return jsonify(store.list_incidents(g.identity))
+    body = request.get_json(silent=True) or {}
+    if not isinstance(body, dict):
+        return jsonify(error="Send incident fields as a JSON object."), 400
+    incident_id = store.create_incident(g.identity, body)
+    return jsonify(ok=True, id=incident_id), 201
+
+
+@api.post("/api/v1/incidents/<incident_id>/updates")
+@_authenticated
+def update_incident(incident_id: str) -> Any:
+    body = request.get_json(silent=True) or {}
+    if not isinstance(body, dict):
+        return jsonify(error="Send the update as a JSON object."), 400
+    store.update_incident(g.identity, incident_id, body)
+    return jsonify(ok=True)
+
+
 @api.get("/api/v1/devices/<device_id>/readings")
 @_authenticated
 def readings(device_id: str) -> Any:
-    return jsonify(store.get_history(g.identity, device_id))
+    try:
+        hours = int(request.args.get("hours", "24"))
+    except ValueError as exc:
+        raise ValueError("hours must be a whole number from 1 to 720.") from exc
+    return jsonify(store.get_history(g.identity, device_id, hours))
 
 
 @api.post("/api/v1/alerts/<alert_id>/acknowledge")

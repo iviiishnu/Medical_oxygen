@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import re
+import math
 import threading
 import uuid
 from contextlib import contextmanager
@@ -105,6 +106,26 @@ def _millis(value: datetime | None) -> int | None:
     return int(value.timestamp() * 1000) if value else None
 
 
+def _numeric_scale(value: Any) -> float:
+    """Model scale labels can contain units/provenance; persist only a numeric scale limit."""
+    if isinstance(value, bool):
+        return 0.0
+    if isinstance(value, (int, float)):
+        number = float(value)
+        return number if math.isfinite(number) and number >= 0 else 0.0
+    if isinstance(value, str):
+        match = re.search(r"(-?\d+(?:\.\d+)?)\s*[-–—]\s*(-?\d+(?:\.\d+)?)", value)
+        if match:
+            number = float(match.group(2))
+            return number if math.isfinite(number) and number >= 0 else 0.0
+        try:
+            number = float(value.strip())
+        except ValueError:
+            return 0.0
+        return number if math.isfinite(number) and number >= 0 else 0.0
+    return 0.0
+
+
 def ensure_staff(conn: Any, claims: dict[str, Any]) -> None:
     uid = str(claims.get("uid") or claims.get("sub") or "")
     email = str(claims.get("email") or "")
@@ -124,7 +145,9 @@ def _device(row: dict[str, Any], gauges: list[dict[str, Any]]) -> dict[str, Any]
         "status": row["status"], "alarm": row["alarm"], "trendFalling": row["trend_falling"],
         "lastHeartbeatMs": _millis(row["last_heartbeat"]), "online": row["online"],
         "battery": row["battery"], "lowThreshold": row["low_threshold"],
-        "criticalThreshold": row["critical_threshold"], "gauges": gauges,
+        "criticalThreshold": row["critical_threshold"],
+        "highThreshold": next((g.get("highThreshold") for g in gauges if not g.get("ignored")), None),
+        "gauges": gauges,
     }
 
 
@@ -139,6 +162,7 @@ def list_devices(claims: dict[str, Any]) -> list[dict[str, Any]]:
             "number": g["number"], "name": g["name"], "unit": g["unit"], "kind": g["kind"],
             "scale": g["scale"], "reading": g["reading"], "confidencePct": g["confidence_pct"],
             "lowThreshold": g["low_threshold"], "criticalThreshold": g["critical_threshold"],
+            "highThreshold": g["high_threshold"],
             "ignored": g["ignored"],
         })
     return [_device(d, by_device.get(d["id"], [])) for d in devices]
@@ -158,12 +182,14 @@ def register_device(claims: dict[str, Any], registration: dict[str, Any]) -> Non
     try:
         invalid_thresholds = any(
             g.get("lowThreshold") is None or g.get("criticalThreshold") is None or
-            float(g["criticalThreshold"]) >= float(g["lowThreshold"]) for g in included
+            float(g["criticalThreshold"]) >= float(g["lowThreshold"]) or
+            (g.get("highThreshold") is not None and float(g["highThreshold"]) <= float(g["lowThreshold"]))
+            for g in included
         )
     except (TypeError, ValueError):
         invalid_thresholds = True
     if not included or invalid_thresholds:
-        raise ValueError("Each included gauge needs a Critical threshold below its Low threshold.")
+        raise ValueError("Each included gauge needs Critical below Low; an optional High threshold must be above Low.")
     if not isinstance(image, str) or len(image) > 750_000:
         raise ValueError("Registration image is missing or exceeds the 500 KB limit.")
     main = included[0]
@@ -181,11 +207,11 @@ def register_device(claims: dict[str, Any], registration: dict[str, Any]) -> Non
         for g in gauges:
             conn.execute(
                 """INSERT INTO device_gauges(device_id,number,name,unit,kind,scale,reading,confidence_pct,
-                   low_threshold,critical_threshold,ignored) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                   low_threshold,critical_threshold,high_threshold,ignored) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (device_id, int(g["number"]), str(g.get("name") or f"Gauge {g['number']}"),
-                 str(g.get("unit") or "unknown"), str(g.get("kind") or "analog"), float(g.get("scale") or 0),
+                 str(g.get("unit") or "unknown"), str(g.get("kind") or "analog"), _numeric_scale(g.get("scale")),
                  g.get("reading"), int(g.get("confidencePct") or 0), g.get("lowThreshold"),
-                 g.get("criticalThreshold"), bool(g.get("ignored"))),
+                 g.get("criticalThreshold"), g.get("highThreshold"), bool(g.get("ignored"))),
             )
 
 
@@ -193,7 +219,7 @@ def get_device_gauges(claims: dict[str, Any], device_id: str) -> list[dict[str, 
     with connection() as conn:
         ensure_staff(conn, claims)
         rows = conn.execute(
-            "SELECT number,name,unit,kind,scale,low_threshold,critical_threshold,ignored FROM device_gauges WHERE device_id=%s ORDER BY number",
+            "SELECT number,name,unit,kind,scale,low_threshold,critical_threshold,high_threshold,ignored FROM device_gauges WHERE device_id=%s ORDER BY number",
             (device_id,),
         ).fetchall()
         if not rows:
@@ -204,6 +230,7 @@ def get_device_gauges(claims: dict[str, Any], device_id: str) -> list[dict[str, 
         "number": r["number"], "name": r["name"], "unit": r["unit"], "kind": r["kind"],
         "scale": r["scale"], "low_threshold": r["low_threshold"],
         "critical_threshold": r["critical_threshold"], "ignored": r["ignored"],
+        "high_threshold": r["high_threshold"],
     } for r in rows]
 
 
@@ -223,14 +250,143 @@ def list_alerts(claims: dict[str, Any]) -> list[dict[str, Any]]:
     } for r in rows]
 
 
-def get_history(claims: dict[str, Any], device_id: str) -> list[dict[str, Any]]:
+def get_alert_details(claims: dict[str, Any], alert_id: str) -> dict[str, Any]:
+    with connection() as conn:
+        ensure_staff(conn, claims)
+        row = conn.execute(
+            """SELECT a.*, d.name AS device_name FROM alerts a JOIN devices d ON d.id=a.device_id WHERE a.id=%s""",
+            (alert_id,),
+        ).fetchone()
+        if not row:
+            raise LookupError("Alert not found.")
+        gauge = conn.execute(
+            """SELECT number,low_threshold,critical_threshold,high_threshold FROM device_gauges
+               WHERE device_id=%s AND ignored=FALSE ORDER BY number LIMIT 1""", (row["device_id"],),
+        ).fetchone()
+        history = conn.execute(
+            """SELECT captured_at,value,status FROM readings WHERE device_id=%s
+               AND gauge_number=COALESCE(%s, (SELECT number FROM device_gauges WHERE device_id=%s AND ignored=FALSE ORDER BY number LIMIT 1))
+               ORDER BY captured_at DESC LIMIT 50""", (row["device_id"], gauge["number"] if gauge else None, row["device_id"]),
+        ).fetchall()
+    return {
+        "id": row["id"], "type": row["type"], "state": row["state"], "deviceId": row["device_id"],
+        "deviceName": row["device_name"], "value": row["value"], "unit": row["unit"],
+        "createdMs": _millis(row["created_at"]), "ackedBy": row["acked_by_name"],
+        "ackedMs": _millis(row["acked_at"]), "resolvedMs": _millis(row["resolved_at"]),
+        "escalationLevel": row["escalation_level"], "ackReason": row["ack_reason"],
+        "ackResolution": row["ack_resolution"], "ackNotes": row["ack_notes"],
+        "reason": row["reason"], "evidenceImage": row["evidence_image"],
+        "lowThreshold": gauge["low_threshold"] if gauge else None,
+        "criticalThreshold": gauge["critical_threshold"] if gauge else None,
+        "highThreshold": gauge["high_threshold"] if gauge else None,
+        "recentReadings": [{"t": _millis(p["captured_at"]), "v": p["value"], "status": p["status"]} for p in reversed(history)],
+    }
+
+
+def list_incidents(claims: dict[str, Any]) -> list[dict[str, Any]]:
     with connection() as conn:
         ensure_staff(conn, claims)
         rows = conn.execute(
-            """SELECT r.captured_at,r.value,r.status FROM readings r WHERE r.device_id=%s
-               AND r.gauge_number=(SELECT number FROM device_gauges WHERE device_id=%s AND ignored=FALSE ORDER BY number LIMIT 1)
-               AND r.captured_at>=NOW()-INTERVAL '24 hours'
-               ORDER BY r.captured_at ASC LIMIT 3000""", (device_id, device_id),
+            """SELECT i.*, COALESCE(s.display_name, s.email, 'Staff') AS creator_name
+               FROM incidents i LEFT JOIN staff s ON s.uid=i.created_by
+               ORDER BY i.updated_at DESC LIMIT 300"""
+        ).fetchall()
+        ids = [r["id"] for r in rows]
+        updates = conn.execute(
+            """SELECT u.*, COALESCE(s.display_name, s.email, 'Staff') AS author_name
+               FROM incident_updates u LEFT JOIN staff s ON s.uid=u.author
+               WHERE u.incident_id = ANY(%s) ORDER BY u.created_at ASC""", (ids,),
+        ).fetchall() if ids else []
+    updates_by_id: dict[str, list[dict[str, Any]]] = {}
+    for u in updates:
+        updates_by_id.setdefault(u["incident_id"], []).append({
+            "id": u["id"], "note": u["note"], "actionTaken": u["action_taken"],
+            "status": u["status"], "author": u["author_name"], "createdMs": _millis(u["created_at"]),
+        })
+    return [{
+        "id": r["id"], "title": r["title"], "deviceId": r["device_id"], "alertId": r["alert_id"],
+        "description": r["description"], "possibleCause": r["possible_cause"],
+        "actionTaken": r["action_taken"], "assignedTo": r["assigned_to"], "status": r["status"],
+        "createdBy": r["creator_name"], "createdMs": _millis(r["created_at"]),
+        "updatedMs": _millis(r["updated_at"]), "updates": updates_by_id.get(r["id"], []),
+    } for r in rows]
+
+
+def create_incident(claims: dict[str, Any], incident: dict[str, Any]) -> str:
+    title = str(incident.get("title") or "").strip()
+    description = str(incident.get("description") or "").strip()
+    device_id = str(incident.get("deviceId") or "").strip() or None
+    alert_id = str(incident.get("alertId") or "").strip() or None
+    possible_cause = str(incident.get("possibleCause") or "").strip() or None
+    action_taken = str(incident.get("actionTaken") or "").strip() or None
+    assigned_to = str(incident.get("assignedTo") or "").strip() or None
+    if not title or len(title) > 160 or not description or len(description) > 5000:
+        raise ValueError("Enter an incident title (up to 160 characters) and description (up to 5000 characters).")
+    uid = str(claims.get("uid") or claims.get("sub") or "")
+    incident_id = str(uuid.uuid4())
+    with connection() as conn:
+        ensure_staff(conn, claims)
+        if device_id and not conn.execute("SELECT 1 FROM devices WHERE id=%s", (device_id,)).fetchone():
+            raise LookupError("The selected device is not registered.")
+        if alert_id:
+            alert = conn.execute("SELECT device_id FROM alerts WHERE id=%s", (alert_id,)).fetchone()
+            if not alert:
+                raise LookupError("The selected alert was not found.")
+            if device_id and alert["device_id"] != device_id:
+                raise ValueError("The selected alert does not belong to this device.")
+            device_id = device_id or alert["device_id"]
+        conn.execute(
+            """INSERT INTO incidents(id,title,device_id,alert_id,description,possible_cause,action_taken,assigned_to,created_by)
+               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+            (incident_id, title, device_id, alert_id, description, possible_cause, action_taken, assigned_to, uid),
+        )
+        conn.execute(
+            "INSERT INTO incident_updates(id,incident_id,author,note,action_taken,status) VALUES (%s,%s,%s,%s,%s,'OPEN')",
+            (str(uuid.uuid4()), incident_id, uid, "Incident created", action_taken),
+        )
+    return incident_id
+
+
+def update_incident(claims: dict[str, Any], incident_id: str, change: dict[str, Any]) -> None:
+    note = str(change.get("note") or "").strip()
+    action_taken = str(change.get("actionTaken") or "").strip() or None
+    status = str(change.get("status") or "").strip().upper() or None
+    if not note or len(note) > 2000:
+        raise ValueError("Add an update note (up to 2000 characters).")
+    if status and status not in ("OPEN", "IN_PROGRESS", "CLOSED"):
+        raise ValueError("Choose Open, In progress, or Closed.")
+    uid = str(claims.get("uid") or claims.get("sub") or "")
+    with connection() as conn:
+        ensure_staff(conn, claims)
+        row = conn.execute("SELECT status FROM incidents WHERE id=%s FOR UPDATE", (incident_id,)).fetchone()
+        if not row:
+            raise LookupError("Incident not found.")
+        next_status = status or row["status"]
+        conn.execute(
+            """UPDATE incidents SET status=%s,action_taken=COALESCE(%s,action_taken),updated_at=NOW(),
+               closed_at=CASE WHEN %s='CLOSED' THEN COALESCE(closed_at,NOW()) ELSE NULL END WHERE id=%s""",
+            (next_status, action_taken, next_status, incident_id),
+        )
+        conn.execute(
+            "INSERT INTO incident_updates(id,incident_id,author,note,action_taken,status) VALUES (%s,%s,%s,%s,%s,%s)",
+            (str(uuid.uuid4()), incident_id, uid, note, action_taken, status),
+        )
+
+
+def get_history(claims: dict[str, Any], device_id: str, hours: int = 24) -> list[dict[str, Any]]:
+    hours = max(1, min(720, int(hours)))
+    bucket_minutes = 1 if hours <= 24 else 5 if hours <= 168 else 30
+    with connection() as conn:
+        ensure_staff(conn, claims)
+        rows = conn.execute(
+            """WITH ranked AS (
+                 SELECT r.captured_at,r.value,r.status,
+                        ROW_NUMBER() OVER (PARTITION BY floor(extract(epoch FROM r.captured_at)/(%s*60)) ORDER BY r.captured_at DESC) AS rn
+                 FROM readings r WHERE r.device_id=%s
+                   AND r.gauge_number=(SELECT number FROM device_gauges WHERE device_id=%s AND ignored=FALSE ORDER BY number LIMIT 1)
+                   AND r.captured_at>=NOW()-make_interval(hours => %s)
+               ) SELECT captured_at,value,status FROM ranked WHERE rn=1 ORDER BY captured_at ASC LIMIT 5000""",
+            (bucket_minutes, device_id, device_id, hours),
         ).fetchall()
     return [{"t": _millis(r["captured_at"]), "v": r["value"], "status": r["status"]} for r in rows]
 
@@ -258,7 +414,7 @@ def persist_reading(claims: dict[str, Any], device_id: str, payload: dict[str, A
     gauges = payload.get("gauges") if isinstance(payload.get("gauges"), list) else []
     alert = bool(payload.get("alert"))
     statuses = [str(g.get("status", "")) for g in gauges if isinstance(g, dict) and not g.get("ignored")]
-    alarm = "CRITICAL" if "CRITICAL" in statuses else "LOW" if "LOW" in statuses else "UNCERTAIN" if payload.get("verdict") == "CAN'T TELL" else "OK"
+    alarm = "CRITICAL" if "CRITICAL" in statuses else "HIGH" if "HIGH" in statuses else "LOW" if "LOW" in statuses else "UNCERTAIN" if payload.get("verdict") == "CAN'T TELL" else "OK"
     now = datetime.now(timezone.utc)
     events: list[dict[str, Any]] = []
     clean_payload = {k: v for k, v in payload.items() if k != "image"}
@@ -270,7 +426,7 @@ def persist_reading(claims: dict[str, Any], device_id: str, payload: dict[str, A
         conn.execute(
             """UPDATE devices SET status=%s,alarm=%s,online=TRUE,trend_falling=%s,last_heartbeat=%s,
                last_reading=%s,updated_at=NOW() WHERE id=%s""",
-            (alarm if not alert else ("CRITICAL" if alarm == "CRITICAL" else "LOW" if alarm == "LOW" else "UNCERTAIN"),
+            (alarm if not alert else ("CRITICAL" if alarm == "CRITICAL" else "HIGH" if alarm == "HIGH" else "LOW" if alarm == "LOW" else "UNCERTAIN"),
              alarm if alert else "OK", bool(payload.get("trend_falling")), now,
              _json({"reading": payload.get("reading"), "unit": payload.get("unit"), "confidence_pct": payload.get("confidence_pct"), "gauges": gauges}), device_id),
         )
@@ -292,7 +448,7 @@ def persist_reading(claims: dict[str, Any], device_id: str, payload: dict[str, A
                 )
         open_alert = conn.execute("SELECT id FROM alerts WHERE device_id=%s AND type<>'TABLET_OFFLINE' AND state IN ('OPEN','ACKED') ORDER BY created_at DESC LIMIT 1", (device_id,)).fetchone()
         if alert and not open_alert:
-            kind = "CRITICAL" if "CRITICAL" in statuses else "LOW" if "LOW" in statuses else "UNCERTAIN"
+            kind = "CRITICAL" if "CRITICAL" in statuses else "HIGH" if "HIGH" in statuses else "LOW" if "LOW" in statuses else "UNCERTAIN"
             alert_id = str(uuid.uuid4())
             conn.execute(
                 """INSERT INTO alerts(id,device_id,type,value,unit,reason,evidence_image)
@@ -313,7 +469,7 @@ def persist_reading(claims: dict[str, Any], device_id: str, payload: dict[str, A
 
 
 def run_scheduled_jobs(escalation_after_s: int = 120, heartbeat_s: int = 30,
-                       missed_heartbeats: int = 2, grace_s: int = 5) -> list[dict[str, Any]]:
+                       missed_heartbeats: int = 2, grace_s: int = 30) -> list[dict[str, Any]]:
     notifications: list[dict[str, Any]] = []
     with connection() as conn:
         stale = conn.execute(

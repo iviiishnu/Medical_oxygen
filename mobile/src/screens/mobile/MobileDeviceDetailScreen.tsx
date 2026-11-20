@@ -93,6 +93,7 @@ export const MobileDeviceDetailScreen: React.FC<Props> = ({ source }) => {
         <ThresholdIndicator
           lowThreshold={device.lowThreshold}
           criticalThreshold={device.criticalThreshold}
+          highThreshold={device.highThreshold}
           unit={device.unit}
         />
       </View>
@@ -136,6 +137,7 @@ export const MobileDeviceDetailScreen: React.FC<Props> = ({ source }) => {
             points={filteredHistory}
             low={device.lowThreshold}
             critical={device.criticalThreshold}
+                    high={device.highThreshold}
             unit={device.unit}
             nowMs={now}
             height={isLandscape ? 180 : 260}

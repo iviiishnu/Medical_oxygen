@@ -6,6 +6,7 @@
 export type Status =
   | 'OK'
   | 'LOW'
+  | 'HIGH'
   | 'CRITICAL'
   | 'UNCERTAIN'
   | 'MONITORING_LOST'
@@ -25,6 +26,7 @@ export interface Device {
   battery: number | null;
   lowThreshold: number;
   criticalThreshold: number;
+  highThreshold?: number | null;
   gauges?: RegisteredGauge[];
 }
 
@@ -45,10 +47,63 @@ export interface Alert {
   ackNotes?: string | null;
 }
 
+export interface AlertDetails extends Alert {
+  deviceName: string;
+  reason: string | null;
+  evidenceImage: string | null;
+  lowThreshold: number | null;
+  criticalThreshold: number | null;
+  highThreshold: number | null;
+  recentReadings: Point[];
+}
+
 export interface AlertAckReport {
   reason: string;
   resolution: string;
   notes?: string;
+}
+
+export type IncidentStatus = 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
+
+export interface IncidentUpdate {
+  id: string;
+  note: string;
+  actionTaken: string | null;
+  status: IncidentStatus | null;
+  author: string;
+  createdMs: number;
+}
+
+export interface Incident {
+  id: string;
+  title: string;
+  deviceId: string | null;
+  alertId: string | null;
+  description: string;
+  possibleCause: string | null;
+  actionTaken: string | null;
+  assignedTo: string | null;
+  status: IncidentStatus;
+  createdBy: string;
+  createdMs: number;
+  updatedMs: number;
+  updates: IncidentUpdate[];
+}
+
+export interface IncidentCreate {
+  title: string;
+  deviceId?: string;
+  alertId?: string;
+  description: string;
+  possibleCause?: string;
+  actionTaken?: string;
+  assignedTo?: string;
+}
+
+export interface IncidentChange {
+  status?: IncidentStatus;
+  note: string;
+  actionTaken?: string;
 }
 
 export interface RegisteredGauge {
@@ -61,6 +116,7 @@ export interface RegisteredGauge {
   confidencePct: number;
   lowThreshold?: number;
   criticalThreshold?: number;
+  highThreshold?: number;
   ignored?: boolean;
 }
 
@@ -98,6 +154,7 @@ export interface CameraStreamStatus {
 export interface UserProfile {
   uid: string;
   email: string;
+  displayName: string;
   role: 'staff' | 'admin' | 'device';
   onDuty: boolean;
 }

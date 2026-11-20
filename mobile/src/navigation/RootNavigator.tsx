@@ -12,6 +12,7 @@ import { notificationService } from '../services/notificationService';
 import { ThemeProvider } from '../theme/ThemeContext';
 import { colors } from '../theme/colors';
 import { StatusBar } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export const RootNavigator: React.FC = () => {
   const { isTablet } = useResponsive();
@@ -64,6 +65,7 @@ export const RootNavigator: React.FC = () => {
   };
 
   return (
+    <SafeAreaProvider>
     <ThemeProvider value={darkMode ? colors.dark : colors}>
     <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
     <NavigationContainer theme={{
@@ -83,6 +85,7 @@ export const RootNavigator: React.FC = () => {
         heavy: { fontFamily: 'System', fontWeight: '800' },
       },
     }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: darkMode ? colors.dark.page : colors.page }} edges={['top', 'bottom']}>
       {!isAuthenticated ? (
         <MobileLoginScreen
           source={source}
@@ -106,8 +109,10 @@ export const RootNavigator: React.FC = () => {
           onToggleDarkMode={setDarkMode}
         />
       )}
+      </SafeAreaView>
     </NavigationContainer>
     </ThemeProvider>
+    </SafeAreaProvider>
   );
 };
 

@@ -13,6 +13,18 @@ import { useMonitoring } from '../../hooks/useMonitoring';
 
 interface Props { source: DataSource; onRegisterDevice: () => void; }
 
+function readingHelp(reasons: string[]): string {
+  const friendly: Record<string, string> = {
+    frame_too_dark: 'The photo is too dark. Add steady light and avoid shadows.',
+    frame_blown_out: 'The photo is washed out. Turn away from direct light or glare.',
+    frame_uniform_camera_blocked: 'The camera view looks blocked. Clean the lens and uncover it.',
+    no_needle_peak: 'The needle is unclear. Move closer and keep the camera steady.',
+    dial_outside_frame: 'Keep the whole gauge face inside the camera frame.',
+  };
+  const useful = reasons.map(reason => friendly[reason] ?? reason).join(' · ');
+  return `${useful}. Keep the gauge sharp and avoid reflections.`;
+}
+
 export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }) => {
   const colors = useThemeColors(baseColors);
   const styles = createStyles(colors);
@@ -23,6 +35,7 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
   const discoveryTask = useRef<Promise<string> | null>(null);
   const connectionReady = useRef(false);
   const alertLatched = useRef(false);
+  const liveReadFailed = useRef(false);
   const [permission, requestPermission] = useCameraPermissions();
   const [running, setRunning] = useState(false);
   const [facing, setFacing] = useState<'back' | 'front'>('back');
@@ -55,7 +68,6 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
         connectionReady.current = true;
         setServerAddress(url);
         setConnectionStatus('connected');
-        setError('');
         return url;
       } catch (e) {
         connectionReady.current = false;
@@ -95,7 +107,7 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
     const check = () => { if (active) void refreshConnection().catch(() => {}); };
     check();
     const timer = setInterval(check, 15000);
-    const appStateListener = AppState.addEventListener('change', state => {
+    const appStateListener = AppState.addEventListener('change', (state: any) => {
       if (state === 'active') check();
     });
     return () => {
@@ -111,16 +123,21 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
     let timer: ReturnType<typeof setTimeout>;
     const capture = async () => {
       if (!active) return;
+      const cycleStartedAt = Date.now();
       if (!busy.current && camera.current) {
         busy.current = true;
         try {
-          const photo = await camera.current.takePictureAsync({ quality: 0.6, skipProcessing: true });
+          const photo = await camera.current.takePictureAsync({ quality: 0.55, skipProcessing: true });
           if (photo?.uri) await submit(photo.uri, false, true);
         } catch (e) {
           if (active) setError(e instanceof Error ? e.message : 'Camera capture failed');
         } finally { busy.current = false; }
       }
-      if (active) timer = setTimeout(capture, 1000);
+      // Cap capture frequency to one frame per second. Slow inference naturally
+      // spaces frames further apart; never abandon a request while the server works.
+      if (active && !liveReadFailed.current) {
+        timer = setTimeout(capture, Math.max(0, 1000 - (Date.now() - cycleStartedAt)));
+      }
     };
     timer = setTimeout(capture, 300);
     return () => { active = false; clearTimeout(timer); };
@@ -129,7 +146,10 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
   useEffect(() => { if (!isFocused) setRunning(false); }, [isFocused]);
 
   const submit = async (uri: string, showPreview = true, live = false) => {
-    setLoading(true); setError('');
+    // Live frames are processed in the background; keep the visible reading stable
+    // until the user requests a photo read or a threshold alert needs attention.
+    if (!live) setLoading(true);
+    if (!live) setError('');
     if (showPreview) setPreview(uri);
     try {
       if (!connectionReady.current) await autoConnect();
@@ -138,28 +158,41 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
         ignored: !!gauge.ignored,
         low_threshold: gauge.lowThreshold,
         critical_threshold: gauge.criticalThreshold,
+        high_threshold: gauge.highThreshold,
       }));
+      // Demo panels live only in AsyncStorage. Send their gauge settings for analysis,
+      // but don't present their local IDs as PostgreSQL records to the authenticated API.
+      const backendDeviceId = source.mode === 'postgres' ? selectedDeviceId : undefined;
       const result = await defaultApiClient.uploadFrame(
         { uri, type: 'image/jpeg', name: `${selectedDevice?.id ?? 'panel'}-reading.jpg` },
         undefined,
-        { includeImage: live ? (alertLatched.current ? 'never' : 'on_alert') : 'always', deviceId: selectedDeviceId, gauges: gaugeConfig },
+        { includeImage: live ? (alertLatched.current ? 'never' : 'on_alert') : 'always', deviceId: backendDeviceId, gauges: gaugeConfig, timeoutMs: live ? 30000 : undefined },
       );
-      setReading(result);
       if (live) {
         if (result.alert) {
+          setReading(result);
           if (!alertLatched.current) setAlertEvidence(result.image ?? uri);
           alertLatched.current = true;
         } else {
           alertLatched.current = false;
         }
-      } else if (result.image) setPreview(result.image);
+      } else {
+        setReading(result);
+        if (result.image) setPreview(result.image);
+      }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not reach the vision model');
+      const message = e instanceof Error ? e.message : 'Could not reach the vision model';
+      setError(message);
+      // Keep the first live failure visible and stop retries until the user restarts.
+      if (live) {
+        liveReadFailed.current = true;
+        setRunning(false);
+      }
       if (e instanceof Error && e.message.startsWith('Cannot reach')) {
         connectionReady.current = false;
         void autoConnect().catch(() => {});
       }
-    } finally { setLoading(false); }
+    } finally { if (!live) setLoading(false); }
   };
 
   const chooseImage = async () => {
@@ -180,7 +213,14 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
     try {
       const photo = await camera.current.takePictureAsync({ quality: 0.85 });
       if (photo?.uri) await submit(photo.uri);
-    } catch (e) { setError(e instanceof Error ? e.message : 'Photo capture failed'); }
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Photo capture failed';
+      setError(message);
+      if (running) {
+        liveReadFailed.current = true;
+        setRunning(false);
+      }
+    }
     finally { busy.current = false; }
   };
 
@@ -212,10 +252,10 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
         <TouchableOpacity style={styles.registerButton} onPress={onRegisterDevice}>
           <Text style={styles.registerButtonText}>＋ Register a new panel</Text>
         </TouchableOpacity>
-        {selectedDevice && <Text style={styles.meta}>Selected: {selectedDevice.name}{selectedDevice.gauges?.length ? ` · ${selectedDevice.gauges.filter(g => !g.ignored).length} gauge(s) included` : ''}</Text>}
+        {selectedDevice && <Text style={styles.meta}>Selected: {selectedDevice.name}{selectedDevice.gauges?.length ? ` · ${selectedDevice.gauges.filter(g => !g.ignored).length} gauge(s) included` : ''}{source.mode === 'demo' ? ' · demo analysis only; readings are not saved' : ''}</Text>}
         {permission?.granted ? (
           <View style={[styles.cameraFrame, isLandscape && styles.cameraLandscape]}>
-            {isFocused && <CameraView ref={camera} style={StyleSheet.absoluteFill} facing={facing} mode="picture" />}
+            {isFocused && <CameraView ref={camera} style={StyleSheet.absoluteFill} facing={facing} mode="picture" autofocus="on" />}
             {preview && !running && <Image source={{ uri: preview }} style={styles.preview} resizeMode="contain" />}
             <View style={styles.livePill}><View style={[styles.dot, running && styles.dotLive]} /><Text style={styles.liveText}>{running ? 'LIVE · model reading' : 'CAMERA READY'}</Text></View>
           </View>
@@ -227,13 +267,18 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
           </View>
         )}
         <View style={styles.actions}>
-          <TouchableOpacity style={[styles.primaryButton, running && styles.stopButton]} onPress={() => { setPreview(null); alertLatched.current = false; setRunning(v => !v); }} disabled={!permission?.granted || !selectedDevice}>
+          <TouchableOpacity style={[styles.primaryButton, running && styles.stopButton]} onPress={() => {
+            setPreview(null);
+            alertLatched.current = false;
+            if (running) setRunning(false);
+            else { liveReadFailed.current = false; setError(''); setRunning(true); }
+          }} disabled={!permission?.granted || !selectedDevice}>
             <Text style={styles.primaryText}>{running ? 'Stop live reading' : 'Start live reading'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryButton} onPress={captureOnce} disabled={!permission?.granted || loading}>
+          <TouchableOpacity style={styles.secondaryButton} onPress={captureOnce} disabled={!permission?.granted || loading || running}>
             <Text style={styles.secondaryText}>Read photo</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.secondaryButton} onPress={chooseImage} disabled={loading}>
+          <TouchableOpacity style={styles.secondaryButton} onPress={chooseImage} disabled={loading || running}>
             <Text style={styles.secondaryText}>Upload image</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.flipButton} onPress={() => setFacing(v => v === 'back' ? 'front' : 'back')}><Text style={styles.secondaryText}>Flip camera</Text></TouchableOpacity>
@@ -241,16 +286,17 @@ export const MobileCameraScreen: React.FC<Props> = ({ source, onRegisterDevice }
       </View>
 
       <View style={styles.card}>
-        <View style={styles.resultHead}><Text style={styles.sectionTitle}>Latest reading</Text>{loading && <ActivityIndicator color={colors.series} />}</View>
-        {error ? <Text style={styles.error}>{error}</Text> : reading ? (
+        <View style={styles.resultHead}><Text style={styles.sectionTitle}>Latest reading</Text>{loading && !running && <ActivityIndicator color={colors.series} />}</View>
+        {error ? <View style={styles.errorNotice}><Text style={styles.error}>{error}</Text><TouchableOpacity onPress={() => setError('')}><Text style={styles.errorDismiss}>Dismiss</Text></TouchableOpacity></View> : reading ? (
           <>
             <View style={styles.resultRow}><Text style={styles.reading}>{reading.reading == null ? '—' : reading.reading.toFixed(2)}</Text><Text style={styles.unit}>{reading.unit ?? ''}</Text><Text style={[styles.verdict, reading.verdict === 'NORMAL' ? styles.normal : reading.verdict === 'ABNORMAL' ? styles.abnormal : styles.uncertain]}>{reading.verdict}</Text></View>
             {alertEvidence && <View><Text style={styles.alertEvidenceLabel}>Image captured for the latest alert</Text><Image source={{ uri: alertEvidence }} style={styles.alertEvidence} resizeMode="contain" /></View>}
             <Text style={styles.meta}>{reading.gauge_type ?? 'Gauge'}{reading.gas ? ` · ${reading.gas}` : ''} · {reading.confidence_pct}% confidence · {reading.ms} ms</Text>
+            {!!reading.reasons?.length && reading.verdict === "CAN'T TELL" && <Text style={styles.readHelp}>{readingHelp(reading.reasons)}</Text>}
             {!!reading.gauges?.length && reading.gauges.length > 1 && reading.gauges.map(g => <Text key={g.number} style={styles.meta}>Gauge {g.number}{g.gas ? ` · ${g.gas}` : ''}: {g.reading == null ? 'No reading' : `${g.reading.toFixed(2)} ${g.unit}`} · {g.status}</Text>)}
             {!!reading.lamps?.length && <Text style={styles.meta}>Panel lamps: {reading.lamps.map(l => `${l.color} ${Math.round(l.strength * 100)}%`).join(' · ')}</Text>}
           </>
-        ) : <Text style={styles.subtitle}>{selectedDevice ? 'Start live reading, take a photo, or upload an image to see the model result.' : 'Upload an image or take a photo for model analysis. Select a registered panel to save readings or start live reading.'}</Text>}
+        ) : <Text style={styles.subtitle}>{selectedDevice ? 'Start live reading, take a photo, or upload an image to see the model result.' : 'Upload an image or take a photo for model analysis. Select a registered panel to save readings or start live reading. Keep the whole gauge in frame, steady the camera, and use even light without glare.'}</Text>}
       </View>
       <Text style={styles.note}>The vision server must be running and reachable from this device. Set its computer’s local network address in Settings.</Text>
     </ScrollView>
@@ -273,9 +319,9 @@ const createStyles = (colors: ThemePalette) => StyleSheet.create({
   registerButtonText: { color: colors.series, fontWeight: '700', fontSize: 13 },
   cameraFrame: { height: 360, minHeight: 230, backgroundColor: '#111', borderRadius: 8, overflow: 'hidden', position: 'relative' }, cameraLandscape: { height: 230 }, preview: { ...StyleSheet.absoluteFill, width: '100%', height: '100%' },
   alertEvidence: { width: '100%', height: 210, borderRadius: 8, backgroundColor: '#111', marginTop: 8 },
-  alertEvidenceLabel: { color: colors.critical, fontSize: 12, fontWeight: '700', marginTop: 8 },
+  alertEvidenceLabel: { color: colors.critical, fontSize: 12, fontWeight: '700', marginTop: 8 }, readHelp: { color: colors.warning, fontSize: 13, lineHeight: 19 },
   livePill: { position: 'absolute', top: 12, left: 12, flexDirection: 'row', alignItems: 'center', gap: 7, borderRadius: 20, backgroundColor: 'rgba(11,11,11,0.75)', paddingHorizontal: 12, paddingVertical: 7 }, dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#898781' }, dotLive: { backgroundColor: '#0ca30c' }, liveText: { color: '#fff', fontSize: 11, fontWeight: '700' },
   permissionBox: { minHeight: 230, justifyContent: 'center', alignItems: 'center', gap: 10, backgroundColor: colors.page, borderRadius: 8, padding: 22 }, permissionTitle: { fontSize: 18, fontWeight: '700', color: colors.ink },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, primaryButton: { backgroundColor: colors.ink, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 11, alignItems: 'center' }, stopButton: { backgroundColor: colors.critical }, primaryText: { color: colors.surface, fontWeight: '700', fontSize: 13 }, secondaryButton: { borderWidth: 1, borderColor: colors.border, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 11, backgroundColor: colors.surface }, secondaryText: { color: colors.ink, fontWeight: '600', fontSize: 13 }, flipButton: { paddingHorizontal: 8, justifyContent: 'center' },
-  resultHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }, sectionTitle: { fontSize: 17, fontWeight: '700', color: colors.ink }, resultRow: { flexDirection: 'row', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }, reading: { fontSize: 48, lineHeight: 56, fontWeight: '700', color: colors.ink, fontVariant: ['tabular-nums'] }, unit: { fontSize: 16, color: colors.ink2 }, verdict: { marginLeft: 'auto', overflow: 'hidden', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 5, color: '#fff', fontWeight: '700', fontSize: 12 }, normal: { backgroundColor: colors.good }, abnormal: { backgroundColor: colors.critical }, uncertain: { backgroundColor: colors.serious }, meta: { color: colors.ink2, fontSize: 13, marginTop: 3 }, error: { color: colors.critical, lineHeight: 20 }, note: { color: colors.muted, fontSize: 12, lineHeight: 18 },
+  resultHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }, sectionTitle: { fontSize: 17, fontWeight: '700', color: colors.ink }, resultRow: { flexDirection: 'row', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }, reading: { fontSize: 48, lineHeight: 56, fontWeight: '700', color: colors.ink, fontVariant: ['tabular-nums'] }, unit: { fontSize: 16, color: colors.ink2 }, verdict: { marginLeft: 'auto', overflow: 'hidden', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 5, color: '#fff', fontWeight: '700', fontSize: 12 }, normal: { backgroundColor: colors.good }, abnormal: { backgroundColor: colors.critical }, uncertain: { backgroundColor: colors.serious }, meta: { color: colors.ink2, fontSize: 13, marginTop: 3 }, errorNotice: { gap: 8, alignItems: 'flex-start' }, error: { color: colors.critical, lineHeight: 20 }, errorDismiss: { color: colors.series, fontWeight: '700', paddingVertical: 4 }, note: { color: colors.muted, fontSize: 12, lineHeight: 18 },
 });

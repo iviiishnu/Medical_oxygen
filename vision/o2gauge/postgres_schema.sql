@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS device_gauges (
   confidence_pct INTEGER NOT NULL DEFAULT 0,
   low_threshold DOUBLE PRECISION,
   critical_threshold DOUBLE PRECISION,
+  high_threshold DOUBLE PRECISION,
   ignored BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (device_id, number)
 );
@@ -79,8 +80,38 @@ CREATE TABLE IF NOT EXISTS alerts (
 );
 CREATE INDEX IF NOT EXISTS alerts_created_idx ON alerts(created_at DESC);
 CREATE INDEX IF NOT EXISTS alerts_state_idx ON alerts(state, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS incidents (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  device_id TEXT REFERENCES devices(id) ON DELETE SET NULL,
+  alert_id TEXT REFERENCES alerts(id) ON DELETE SET NULL,
+  description TEXT NOT NULL,
+  possible_cause TEXT,
+  action_taken TEXT,
+  assigned_to TEXT,
+  status TEXT NOT NULL DEFAULT 'OPEN' CHECK (status IN ('OPEN','IN_PROGRESS','CLOSED')),
+  created_by TEXT REFERENCES staff(uid),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  closed_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS incidents_status_time_idx ON incidents(status, updated_at DESC);
+
+CREATE TABLE IF NOT EXISTS incident_updates (
+  id TEXT PRIMARY KEY,
+  incident_id TEXT NOT NULL REFERENCES incidents(id) ON DELETE CASCADE,
+  author TEXT REFERENCES staff(uid),
+  note TEXT NOT NULL,
+  action_taken TEXT,
+  status TEXT CHECK (status IS NULL OR status IN ('OPEN','IN_PROGRESS','CLOSED')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS incident_updates_time_idx ON incident_updates(incident_id, created_at ASC);
+
 ALTER TABLE alerts ADD COLUMN IF NOT EXISTS last_notified_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
 ALTER TABLE staff ADD COLUMN IF NOT EXISTS display_name TEXT NOT NULL DEFAULT '';
 ALTER TABLE staff ADD COLUMN IF NOT EXISTS password_hash TEXT;
 ALTER TABLE staff ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE;
 ALTER TABLE staff DROP COLUMN IF EXISTS fcm_tokens;
+ALTER TABLE device_gauges ADD COLUMN IF NOT EXISTS high_threshold DOUBLE PRECISION;

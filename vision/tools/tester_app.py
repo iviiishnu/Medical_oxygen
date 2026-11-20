@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import math
 import os
 import sys
 import threading
@@ -27,7 +28,6 @@ from flask import Flask, jsonify, request
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from o2gauge.auto import AutoReader, decide, draw          # noqa: E402
-from o2gauge.config import MonitorConfig                    # noqa: E402
 from o2gauge import postgres_store                            # noqa: E402
 from o2gauge.postgres_api import api as postgres_api, verify_identity  # noqa: E402
 from o2gauge.stage_b import KeypointReader                 # noqa: E402
@@ -48,7 +48,7 @@ def _scheduled_jobs() -> None:
         try:
             events = postgres_store.run_scheduled_jobs(
                 escalation_after_s=escalation_after, heartbeat_s=heartbeat_s,
-                missed_heartbeats=2, grace_s=5,
+                missed_heartbeats=2, grace_s=30,
             )
             # Alert state and escalation are persisted for clients polling PostgreSQL.
         except Exception as exc:
@@ -64,6 +64,40 @@ def reader() -> AutoReader:
     return _reader
 
 
+def _prepare_inference_image(img: np.ndarray) -> np.ndarray:
+    """Bound mobile inference cost and gently lift underexposed frames for detection."""
+    h, w = img.shape[:2]
+    longest = max(h, w)
+    if longest > 1440:
+        scale = 1440.0 / longest
+        img = cv2.resize(img, (round(w * scale), round(h * scale)), interpolation=cv2.INTER_AREA)
+    # Leave normal images untouched. Normalize luminance only on dim frames and retain
+    # the original photo separately for preview/evidence.
+    if float(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).mean()) < 90:
+        lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+        light, a, b = cv2.split(lab)
+        if float(light.mean()) < 55:
+            lut = np.array([min(255, round(255 * (i / 255.0) ** 0.75)) for i in range(256)], dtype=np.uint8)
+            light = cv2.LUT(light, lut)
+        light = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(light)
+        img = cv2.cvtColor(cv2.merge((light, a, b)), cv2.COLOR_LAB2BGR)
+    return img
+
+
+def _configured_threshold(gauge: dict, key: str, default: float | None, number: int) -> float | None:
+    """Use the model defaults for legacy/unconfigured gauges; reject invalid values as 400s."""
+    raw = gauge.get(key)
+    if raw is None or raw == "":
+        return float(default) if default is not None else None
+    try:
+        value = float(raw)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"gauge {number}: {key} must be a number") from exc
+    if not math.isfinite(value):
+        raise ValueError(f"gauge {number}: {key} must be a finite number")
+    return value
+
+
 @app.post("/api/read")
 def api_read():
     device_id = request.form.get("device_id", "").strip()
@@ -76,7 +110,7 @@ def api_read():
             gauge_rows = postgres_store.get_device_gauges(identity, device_id)
             gauge_config = {g["number"]: {
                 "number": g["number"], "low_threshold": g["low_threshold"],
-                "critical_threshold": g["critical_threshold"], "ignored": g["ignored"],
+                "critical_threshold": g["critical_threshold"], "high_threshold": g["high_threshold"], "ignored": g["ignored"],
             } for g in gauge_rows}
         except PermissionError as exc:
             return jsonify(error=str(exc)), 401
@@ -108,35 +142,51 @@ def api_read():
     include_image = request.form.get("include_image", "never")
     if include_image not in ("never", "always", "on_alert"):
         return jsonify(error="include_image must be never, always, or on_alert"), 400
+    original_img = img
+    img = _prepare_inference_image(img)
     t0 = time.perf_counter()
     with _lock:
-        r = reader().read(img, max_value)
-        if gauge_config:
-            selected = []
-            for g in r["readings"]:
-                saved = gauge_config.get(g.number)
-                if saved is None or saved.get("ignored"):
-                    continue
-                if saved and g.value is not None and g.status != "UNCERTAIN":
-                    low = float(saved.get("low_threshold", reader().cfg.low_threshold))
-                    critical = float(saved.get("critical_threshold", reader().cfg.critical_threshold))
-                    if critical >= low:
-                        return jsonify(error=f"gauge {g.number}: Critical threshold must be below Low"), 400
-                    g.low_limit = low
-                    g.critical_threshold = critical
-                    g.status = "CRITICAL" if g.value < critical else "LOW" if g.value < low else "OK"
-                selected.append(g)
-            r["readings"] = selected
-            r["main"] = selected[0] if selected else None
-            main_config = reader().cfg
-            if r["main"] is not None and r["main"].low_limit is not None:
-                main_config = MonitorConfig.from_dict({
-                    **main_config.to_dict(), "low_threshold": r["main"].low_limit,
-                })
-            r["verdict"] = decide(r["main"], r["lamps"], main_config)
+        try:
+            model_reader = reader()
+            r = model_reader.read(img, max_value)
+            if gauge_config:
+                selected = []
+                for g in r["readings"]:
+                    saved = gauge_config.get(g.number)
+                    if saved is None or saved.get("ignored"):
+                        continue
+                    if g.value is not None and g.status != "UNCERTAIN":
+                        try:
+                            low = _configured_threshold(saved, "low_threshold", model_reader.cfg.low_threshold, g.number)
+                            critical = _configured_threshold(saved, "critical_threshold", model_reader.cfg.critical_threshold, g.number)
+                            high = _configured_threshold(saved, "high_threshold", None, g.number)
+                        except ValueError as exc:
+                            return jsonify(error=str(exc)), 400
+                        assert low is not None and critical is not None
+                        if critical >= low or (high is not None and high <= low):
+                            return jsonify(error=f"gauge {g.number}: Critical must be below Low and High above Low"), 400
+                        g.low_limit = low
+                        g.critical_threshold = critical
+                        g.status = "CRITICAL" if g.value < critical else "LOW" if g.value < low else "HIGH" if high is not None and g.value > high else "OK"
+                    selected.append(g)
+                r["readings"] = selected
+                high_readings = [g for g in selected if g.status == "HIGH"]
+                if high_readings:
+                    r["verdict"].reasons.extend(
+                        f"{g.label} reading {g.value:g} {g.unit} exceeds the configured high threshold"
+                        for g in high_readings
+                    )
+                r["main"] = selected[0] if selected else None
+                # decide() uses the selected gauge's low_limit directly. Rebuilding the
+                # global config with that value can fail validation when the configured
+                # Low threshold equals its unrelated default Critical threshold (3.0).
+                r["verdict"] = decide(r["main"], r["lamps"], model_reader.cfg)
+        except Exception as exc:
+            app.logger.exception("Vision model failed while analyzing an uploaded frame")
+            return jsonify(error=f"Vision model failed ({type(exc).__name__}): {exc}. See the model-server terminal for the full traceback."), 500
     ms = (time.perf_counter() - t0) * 1000
     v, m = r["verdict"], r["main"]
-    alert = v.verdict == "ABNORMAL" or any(g.status in ("LOW", "CRITICAL") for g in r["readings"])
+    alert = v.verdict == "ABNORMAL" or any(g.status in ("LOW", "CRITICAL", "HIGH") for g in r["readings"])
     payload = dict(
         file=f.filename,
         verdict="ABNORMAL" if alert else v.verdict,
@@ -158,6 +208,7 @@ def api_read():
                  "confidence_pct": round(g.confidence * 100), "status": g.status, "main": g is m, "kind": g.kind,
                  "numbers_read": [] if g.text is None else [b.text for b in g.text.boxes if b.num is not None],
                  "low_threshold": g.low_limit, "critical_threshold": getattr(g, "critical_threshold", None),
+                 "high_threshold": (gauge_config.get(g.number) or {}).get("high_threshold"),
                  "ignored": False}
                 for g in sorted(r["readings"], key=lambda g: g.number)],
         other_dials=[{"reading": g.value, "type": g.gauge_type, "gas": g.gas, "unit": g.unit}
@@ -166,11 +217,11 @@ def api_read():
         ms=round(ms),
     )
     if include_image == "always" or (include_image == "on_alert" and alert):
-        ann = draw(img, r)
-        h, w = ann.shape[:2]
+        evidence = original_img
+        h, w = evidence.shape[:2]
         if w > 1400:
-            ann = cv2.resize(ann, (1400, int(h * 1400 / w)), interpolation=cv2.INTER_AREA)
-        payload["image"] = "data:image/jpeg;base64," + base64.b64encode(cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 75])[1]).decode()
+            evidence = cv2.resize(evidence, (1400, int(h * 1400 / w)), interpolation=cv2.INTER_AREA)
+        payload["image"] = "data:image/jpeg;base64," + base64.b64encode(cv2.imencode(".jpg", evidence, [cv2.IMWRITE_JPEG_QUALITY, 75])[1]).decode()
     if device_id and identity:
         try:
             events = postgres_store.persist_reading(identity, device_id, payload)
@@ -186,7 +237,7 @@ def api_read():
 @app.get("/api/health")
 def api_health():
     """Lightweight endpoint for checking that a mobile client can reach this server."""
-    return jsonify(ok=True, service="o2-vision", postgres_configured=postgres_store.configured(),
+    return jsonify(ok=True, service="o2-vision", api_version=2, postgres_configured=postgres_store.configured(),
                    postgres_ready=postgres_store.healthy())
 
 

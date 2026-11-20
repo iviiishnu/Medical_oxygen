@@ -5,7 +5,7 @@
 
 import type { Alert, Device, Point, Status } from '../types/monitoring';
 
-export const OFFLINE_AFTER_MS = 65_000; // 2 missed 30 s heartbeats + grace period
+export const OFFLINE_AFTER_MS = 90_000;
 
 /**
  * Calculates the effective display status for a device based on time elapsed.
@@ -16,13 +16,14 @@ export function effectiveStatus(d: Device, nowMs: number): Status {
     return 'TABLET_OFFLINE';
   }
   const s = d.status as Status;
-  return (['OK', 'LOW', 'CRITICAL', 'UNCERTAIN', 'MONITORING_LOST'] as string[]).includes(s)
+  return (['OK', 'LOW', 'HIGH', 'CRITICAL', 'UNCERTAIN', 'MONITORING_LOST'] as string[]).includes(s)
     ? s
     : 'UNKNOWN';
 }
 
 export const SEVERITY: Record<string, number> = {
   CRITICAL: 5,
+  HIGH: 4,
   LOW: 4,
   MONITORING_LOST: 4,
   TABLET_OFFLINE: 4,
@@ -45,6 +46,7 @@ export function label(s: string): string {
     ({
       OK: 'Normal',
       LOW: 'Low level',
+      HIGH: 'High level',
       CRITICAL: 'Critical',
       UNCERTAIN: 'Reading uncertain',
       MONITORING_LOST: 'Monitoring lost',

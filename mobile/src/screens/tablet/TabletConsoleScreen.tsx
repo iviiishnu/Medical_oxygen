@@ -29,9 +29,11 @@ interface Props {
   onRegisterDevice: () => void;
   showDrawerButton: boolean;
   onOpenDrawer: () => void;
+  initialDeviceId?: string;
+  onInitialDeviceFocused?: () => void;
 }
 
-export const TabletConsoleScreen: React.FC<Props> = ({ source, onSignOut, onRegisterDevice, showDrawerButton, onOpenDrawer }) => {
+export const TabletConsoleScreen: React.FC<Props> = ({ source, onSignOut, onRegisterDevice, showDrawerButton, onOpenDrawer, initialDeviceId, onInitialDeviceFocused }) => {
   const colors = useThemeColors(baseColors);
   const styles = createStyles(colors);
   const { isLandscape, screenWidth } = useResponsive();
@@ -48,6 +50,12 @@ export const TabletConsoleScreen: React.FC<Props> = ({ source, onSignOut, onRegi
   } = useMonitoring(source);
 
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!initialDeviceId) return;
+    setSelectedDeviceId(initialDeviceId);
+    onInitialDeviceFocused?.();
+  }, [initialDeviceId, onInitialDeviceFocused]);
 
   const activeDevice: Device | null = React.useMemo(() => {
     if (!devices.length) return null;
@@ -140,6 +148,7 @@ export const TabletConsoleScreen: React.FC<Props> = ({ source, onSignOut, onRegi
                   <ThresholdIndicator
                     lowThreshold={d.lowThreshold}
                     criticalThreshold={d.criticalThreshold}
+                    highThreshold={d.highThreshold}
                     unit={d.unit}
                   />
                 </TouchableOpacity>
@@ -167,8 +176,7 @@ export const TabletConsoleScreen: React.FC<Props> = ({ source, onSignOut, onRegi
                   <View>
                     <Text style={styles.panelCardTitle}>{activeDevice.name} — 24-Hour Trend</Text>
                     <Text style={styles.panelCardSubtitle}>
-                      {activeDevice.id} · Thresholds: LOW {activeDevice.lowThreshold} / CRIT{' '}
-                      {activeDevice.criticalThreshold} {activeDevice.unit.replace('cm2', 'cm²')}
+                      {activeDevice.id} · Thresholds: LOW {activeDevice.lowThreshold} / CRIT {activeDevice.criticalThreshold}{activeDevice.highThreshold != null ? ` / HIGH ${activeDevice.highThreshold}` : ''} {activeDevice.unit.replace('cm2', 'cm²')}
                     </Text>
                   </View>
                   <View style={styles.toggleGroup}>
@@ -206,6 +214,7 @@ export const TabletConsoleScreen: React.FC<Props> = ({ source, onSignOut, onRegi
                     points={filteredHistory}
                     low={activeDevice.lowThreshold}
                     critical={activeDevice.criticalThreshold}
+                    high={activeDevice.highThreshold}
                     unit={activeDevice.unit}
                     nowMs={now}
                     height={260}

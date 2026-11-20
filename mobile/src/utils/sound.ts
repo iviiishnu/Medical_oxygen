@@ -6,18 +6,24 @@ import { Vibration, Platform } from 'react-native';
  */
 
 let isAlarmActive = false;
+let alarmEnabled = true;
 let vibrationTimer: ReturnType<typeof setInterval> | null = null;
 
 // Pattern: 500ms vibrate, 300ms pause, 500ms vibrate, 700ms pause
 const ALARM_VIBRATION_PATTERN = [500, 300, 500, 700];
 
 export const SoundManager = {
+  setEnabled(enabled: boolean): void {
+    alarmEnabled = enabled;
+    if (!enabled) this.stopAlarm();
+  },
+
   isAlarming(): boolean {
     return isAlarmActive;
   },
 
   startAlarm(enabled: boolean = true): void {
-    if (isAlarmActive || !enabled) return;
+    if (isAlarmActive || !enabled || !alarmEnabled) return;
     isAlarmActive = true;
 
     if (Platform.OS === 'android') {

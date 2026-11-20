@@ -33,7 +33,7 @@ async function isVisionServer(baseUrl) {
     const health = await fetch(`${baseUrl}/api/health`, { signal: AbortSignal.timeout(900) });
     if (!health.ok) return false;
     const result = await health.json();
-    return result.ok === true && result.service === 'o2-vision';
+    return result.ok === true && result.service === 'o2-vision' && result.api_version === 2;
   } catch {
     return false;
   }

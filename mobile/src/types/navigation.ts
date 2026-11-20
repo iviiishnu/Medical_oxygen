@@ -3,10 +3,11 @@
  */
 
 export type MobileTabParamList = {
-  MonitorTab: undefined;
+  HomeTab: undefined;
+  DevicesTab: undefined;
+  AnalyticsTab: undefined;
   AlertsTab: undefined;
-  CameraTab: undefined;
-  SettingsTab: { focusRegistration?: boolean } | undefined;
+  MoreTab: undefined;
 };
 
 export type MobileStackParamList = {
@@ -18,10 +19,10 @@ export type MobileStackParamList = {
 };
 
 export type TabletDrawerParamList = {
-  Console: undefined;
-  Devices: undefined;
-  DeviceDetail: { deviceId: string };
+  Console: { deviceId?: string } | undefined;
   Alerts: undefined;
+  History: undefined;
+  Incidents: { alertId?: string } | undefined;
   Camera: undefined;
   Settings: { focusRegistration?: boolean } | undefined;
 };

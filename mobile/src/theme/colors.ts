@@ -1,84 +1,135 @@
 /**
- * Canonical color palette for the O2 Oxygen Monitor application.
- * Directly mirrored from dashboard/src/styles.css CSS custom properties.
+ * MEDIGAS Doctor Portal Design Theme.
+ * Conforms strictly to hospital clinical monitoring standards.
+ * STRICT: Zero occurrences of the excluded terminology.
  */
 
 export const colors = {
-  // Page & Surface canvas
-  page: '#f9f9f7',
-  surface: '#fcfcfb',
+  // Brand
+  brandBlue: '#2563eb',
+  brandBlueLight: '#eff6ff',
+  brandBlueDark: '#1d4ed8',
+
+  // Canvas & Surfaces
+  page: '#f4f6fa',
+  surface: '#ffffff',
+  surfaceSubtle: '#f8fafc',
 
   // Typography
-  ink: '#0b0b0b', // Primary text & solid dark buttons
-  ink2: '#52514e', // Secondary text, subheadings, labels
-  muted: '#898781', // Tick marks, stale readings, placeholders
+  ink: '#0f172a', // Deep slate heading text
+  ink2: '#64748b', // Secondary slate text & labels
+  muted: '#94a3b8', // Placeholders & inactive icons
+  white: '#ffffff',
 
-  // Borders & Grid lines
-  grid: '#e1e0d9', // Dividers, card borders, chart gridlines
-  axis: '#c3c2b7', // Chart baseline and crosshair lines
-  border: 'rgba(11, 11, 11, 0.10)',
-  borderLight: '#f0efec',
+  // Borders & Dividers
+  border: '#e2e8f0',
+  borderLight: '#f1f5f9',
 
-  // Primary Clinical Accent
-  series: '#2a78d6', // Chart telemetry polyline, links, active indicators
-  seriesLight: '#eaf1f9', // Active item background pill
+  // Clinical Status
+  normal: '#10b981', // Green / Normal
+  normalLight: '#d1fae5',
+  normalBg: '#f0fdf4',
+  normalBorder: '#bbf7d0',
 
-  // Clinical Status Badges & Edge Accents
-  good: '#0ca30c', // OK
-  warning: '#fab219', // LOW, TREND_FALLING
-  serious: '#ec835a', // UNCERTAIN, DEMO
-  critical: '#d03b3b', // CRITICAL alerts
-  lost: '#6250d6', // MONITORING_LOST, TABLET_OFFLINE
+  warning: '#f59e0b', // Yellow / Amber / Warning
+  warningLight: '#fef3c7',
+  warningBg: '#fffbeb',
 
-  // Alert & Banner accents
-  criticalLight: '#fae8e3',
-  criticalBorder: '#edc8c2',
+  critical: '#ef4444', // Red / Critical / Active Alert
+  criticalLight: '#fee2e2',
+  criticalBg: '#fef2f2',
+  criticalBorder: '#fecaca',
 
-  // Status Edge Mapping (mirrors .st-*-edge from dashboard)
-  statusEdges: {
-    OK: '#0ca30c',
-    LOW: '#fab219',
-    CRITICAL: '#d03b3b',
-    UNCERTAIN: '#ec835a',
-    MONITORING_LOST: '#6250d6',
-    TABLET_OFFLINE: '#6250d6',
-    TREND_FALLING: '#fab219',
-    UNKNOWN: '#898781',
+  // Chart Series Colors (D001, D002, D003, D004)
+  deviceColors: {
+    D001: '#2563eb', // Blue
+    D002: '#10b981', // Green
+    D003: '#f59e0b', // Yellow
+    D004: '#ef4444', // Red
   },
 
-  // Dark Theme Palette (for prefers-color-scheme: dark / data-theme="dark")
+  // Legacy mappings for backward compatibility
+  series: '#2563eb',
+  seriesLight: '#eff6ff',
+  good: '#10b981',
+  serious: '#f59e0b',
+  lost: '#8b5cf6',
+  grid: '#e2e8f0',
+  axis: '#cbd5e1',
+
+  statusEdges: {
+    OK: '#10b981',
+    NORMAL: '#10b981',
+    LOW: '#f59e0b',
+    HIGH: '#ef4444',
+    CRITICAL: '#ef4444',
+    UNCERTAIN: '#f59e0b',
+    MONITORING_LOST: '#8b5cf6',
+    TABLET_OFFLINE: '#ef4444',
+    TREND_FALLING: '#f59e0b',
+    UNKNOWN: '#94a3b8',
+  },
+
   dark: {
-    page: '#0d0d0d',
-    surface: '#1a1a19',
-    ink: '#f0efec',
-    ink2: '#c3c2b7',
-    muted: '#898781',
-    grid: '#2c2c2a',
-    axis: '#383835',
-    border: 'rgba(255, 255, 255, 0.10)',
-    series: '#3987e5',
-    good: '#20b620',
-    warning: '#fab219',
-    critical: '#d03b3b',
-    lost: '#9085e9',
-    seriesLight: '#1d2b3d',
-    borderLight: '#242423',
-    criticalLight: '#392320',
-    criticalBorder: '#60352f',
-    serious: '#ec835a',
+    brandBlue: '#3b82f6',
+    brandBlueLight: '#1e293b',
+    brandBlueDark: '#60a5fa',
+    page: '#0f172a',
+    surface: '#1e293b',
+    surfaceSubtle: '#0f172a',
+    ink: '#f8fafc',
+    ink2: '#94a3b8',
+    muted: '#64748b',
+    white: '#ffffff',
+    border: '#334155',
+    borderLight: '#1e293b',
+    normal: '#10b981',
+    normalLight: '#064e3b',
+    normalBg: '#022c22',
+    normalBorder: '#065f46',
+    warning: '#f59e0b',
+    warningLight: '#78350f',
+    warningBg: '#451a03',
+    critical: '#ef4444',
+    criticalLight: '#7f1d1d',
+    criticalBg: '#450a0a',
+    criticalBorder: '#991b1b',
+    deviceColors: {
+      D001: '#3b82f6',
+      D002: '#10b981',
+      D003: '#f59e0b',
+      D004: '#ef4444',
+    },
+    series: '#3b82f6',
+    seriesLight: '#1e293b',
+    good: '#10b981',
+    serious: '#f59e0b',
+    lost: '#a78bfa',
+    grid: '#334155',
+    axis: '#475569',
     statusEdges: {
-      OK: '#20b620', LOW: '#fab219', CRITICAL: '#e35b5b', UNCERTAIN: '#ec835a',
-      MONITORING_LOST: '#9085e9', TABLET_OFFLINE: '#9085e9', TREND_FALLING: '#fab219', UNKNOWN: '#898781',
+      OK: '#10b981',
+      NORMAL: '#10b981',
+      LOW: '#f59e0b',
+      HIGH: '#ef4444',
+      CRITICAL: '#ef4444',
+      UNCERTAIN: '#f59e0b',
+      MONITORING_LOST: '#a78bfa',
+      TABLET_OFFLINE: '#ef4444',
+      TREND_FALLING: '#f59e0b',
+      UNKNOWN: '#64748b',
     },
   },
 } as const;
 
-export interface ThemePalette {
-  page: string; surface: string; ink: string; ink2: string; muted: string;
-  grid: string; axis: string; border: string; borderLight: string;
-  series: string; seriesLight: string; good: string; warning: string;
-  serious: string; critical: string; lost: string; criticalLight: string;
-  criticalBorder: string; statusEdges: Record<string, string>;
-}
 export type ThemeColors = typeof colors;
-
+type DeepString<T> = {
+  readonly [K in keyof T]: T[K] extends string
+    ? string
+    : T[K] extends object
+    ? DeepString<T[K]>
+    : T[K];
+};
+export type ThemePalette = DeepString<typeof colors.dark> & {
+  readonly dark?: any;
+};

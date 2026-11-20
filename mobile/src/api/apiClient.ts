@@ -35,8 +35,9 @@ export interface VisionReadResponse {
   unit: string | null;
   reading_confidence_pct: number | null;
   gauge_type: string | null;
-  scale: number | null;
+  scale: number | string | null;
   low_limit: number;
+  reasons?: string[];
   main_gauge: number | null;
   gas: string | null;
   gauges: Array<{
@@ -44,7 +45,7 @@ export interface VisionReadResponse {
     gas: string;
     reading: number | null;
     unit: string;
-    scale: number;
+    scale: number | string | null;
     confidence_pct: number;
     status: string;
     main: boolean;
@@ -52,6 +53,7 @@ export interface VisionReadResponse {
     scale_source?: string;
     low_threshold?: number;
     critical_threshold?: number;
+    high_threshold?: number | null;
     ignored?: boolean;
   }>;
   lamps: Array<{
@@ -102,8 +104,26 @@ export class ApiClient {
   }
 
   public async postApi<T>(path: string, body: unknown): Promise<T> {
-    const response = await this.client.post<T>(path, body);
-    return response.data;
+    try {
+      const response = await this.client.post<T>(path, body);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          const detail = typeof error.response.data?.error === 'string'
+            ? `: ${error.response.data.error}`
+            : '';
+          if (error.response.status === 401) {
+            throw new Error('The monitoring backend rejected this staff session. Sign out and sign in again with your PostgreSQL staff account.');
+          }
+          throw new Error(`Backend returned HTTP ${error.response.status}${detail}`);
+        }
+        if (error.code === 'ECONNABORTED') {
+          throw new Error('The backend took too long to respond. Check the server and try again.');
+        }
+      }
+      throw error;
+    }
   }
 
   /** Uses Expo Go's packager host first; the model server normally runs on that same computer. */
@@ -116,6 +136,7 @@ export class ApiClient {
       'http://10.0.2.2:8000',
     ].filter((url): url is string => Boolean(url)))];
 
+    let outdatedServer: string | null = null;
     for (const url of candidates) {
       this.setBaseUrl(url);
       try {
@@ -124,21 +145,29 @@ export class ApiClient {
         return url;
       } catch (error) {
         if (error instanceof Error && error.message.includes('PostgreSQL is not ready')) throw error;
+        if (error instanceof Error && error.message.includes('is outdated')) outdatedServer = url;
         // Try the saved address or Android emulator host before reporting failure.
       }
     }
 
     this.setBaseUrl(getConfiguredBackendUrl() ?? getExpoComputerUrl() ?? savedUrl ?? 'http://10.0.2.2:8000');
+    if (outdatedServer) {
+      throw new Error(`Found an older model server at ${outdatedServer}. Run “npm run start:dev” to start the current backend automatically, or stop the older Python server and restart it.`);
+    }
     throw new Error(`Could not find the model server. Checked ${candidates.join(', ')}. Keep Expo and the model server running on the same computer, then retry.`);
   }
 
   public async checkConnection(timeoutMs = 5000): Promise<boolean> {
     try {
-      const response = await this.client.get<{ ok: boolean; service?: string; postgres_ready?: boolean }>('/api/health', { timeout: timeoutMs });
+      const response = await this.client.get<{ ok: boolean; service?: string; api_version?: number; postgres_ready?: boolean }>('/api/health', { timeout: timeoutMs });
       // Vision reachability is independent of PostgreSQL readiness. Image analysis for
       // panel registration does not need a database; device readings report persistence
       // errors separately when the API cannot save them.
-      return response.data?.ok === true && response.data.service === 'o2-vision';
+      if (response.data?.ok !== true || response.data.service !== 'o2-vision') return false;
+      if (response.data.api_version !== 2) {
+        throw new Error(`The model server at ${this.baseUrl} is outdated. Stop it and restart with “npm run start:dev” so the app uses the current reading code.`);
+      }
+      return true;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -165,7 +194,7 @@ export class ApiClient {
   public async uploadFrame(
     imageBlob: Blob | { uri: string; type: string; name: string },
     maxScale?: number,
-    options?: { includeImage?: 'never' | 'always' | 'on_alert'; deviceId?: string; gauges?: Array<{ number: number; ignored?: boolean; low_threshold?: number; critical_threshold?: number }> }
+    options?: { includeImage?: 'never' | 'always' | 'on_alert'; deviceId?: string; timeoutMs?: number; gauges?: Array<{ number: number; ignored?: boolean; low_threshold?: number; critical_threshold?: number; high_threshold?: number | null }> }
   ): Promise<VisionReadResponse> {
     const formData = new FormData();
     // @ts-ignore React Native FormData accepts uri object
@@ -179,7 +208,7 @@ export class ApiClient {
 
     try {
       // Leave Content-Type unset so React Native's networking layer adds the multipart boundary.
-      const res = await this.client.post<VisionReadResponse>('/api/read', formData);
+      const res = await this.client.post<VisionReadResponse>('/api/read', formData, options?.timeoutMs ? { timeout: options.timeoutMs } : undefined);
       return res.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -187,13 +216,18 @@ export class ApiClient {
           if (error.response.status === 404) {
             throw new Error(`The server at ${this.baseUrl} does not provide /api/read. Restart with “npm start -- --clear” so the current model server is selected.`);
           }
+          if (error.response.status === 401) {
+            throw new Error('The monitoring backend rejected this staff session. Sign out and sign in again with your PostgreSQL staff account.');
+          }
           const detail = typeof error.response.data?.error === 'string'
             ? `: ${error.response.data.error}`
             : '';
           throw new Error(`Model server returned HTTP ${error.response.status}${detail}`);
         }
         if (error.code === 'ECONNABORTED') {
-          throw new Error('The model took too long to respond. Try again or use a smaller image.');
+          throw new Error(options?.timeoutMs
+            ? `Live reading timed out after ${Math.round(options.timeoutMs / 1000)} seconds. Keep the gauge steady and well lit, then try again.`
+            : 'The model took too long to respond. Try a smaller image or check the server load.');
         }
         throw new Error(`Cannot reach ${this.baseUrl}. Start the server with --host 0.0.0.0, then check the address, Wi-Fi, and computer firewall.`);
       }

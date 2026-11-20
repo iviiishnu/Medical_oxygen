@@ -3,19 +3,17 @@ import type { Point } from '../types/monitoring';
 import type { DataSource } from '../api/dataSource';
 import { decimate } from '../utils/logic';
 
-const SPAN_24H_MS = 24 * 3600_000;
-
-export function useDeviceHistory(source: DataSource, deviceId: string, nowMs: number) {
+export function useDeviceHistory(source: DataSource, deviceId: string, nowMs: number, rangeHours = 24) {
   const [history, setHistory] = useState<Point[]>([]);
   const [viewMode, setViewMode] = useState<'chart' | 'table'>('chart');
 
   useEffect(() => {
     if (!deviceId) return;
-    const unsub = source.onHistory(deviceId, setHistory);
+    const unsub = source.onHistory(deviceId, setHistory, rangeHours);
     return () => unsub();
-  }, [source, deviceId]);
+  }, [source, deviceId, rangeHours]);
 
-  const t0 = nowMs - SPAN_24H_MS;
+  const t0 = nowMs - rangeHours * 3600_000;
 
   const filteredHistory = useMemo(
     () => history.filter(p => p.t >= t0),

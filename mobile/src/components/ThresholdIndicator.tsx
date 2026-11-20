@@ -6,12 +6,14 @@ import { useThemeColors } from '../theme/ThemeContext';
 interface Props {
   lowThreshold: number;
   criticalThreshold: number;
+  highThreshold?: number | null;
   unit: string;
 }
 
 export const ThresholdIndicator: React.FC<Props> = ({
   lowThreshold,
   criticalThreshold,
+  highThreshold,
   unit,
 }) => {
   const colors = useThemeColors(baseColors);
@@ -22,7 +24,7 @@ export const ThresholdIndicator: React.FC<Props> = ({
     <View style={styles.container}>
       <Text style={styles.text}>
         LOW below <Text style={styles.bold}>{lowThreshold}</Text> · CRITICAL below{' '}
-        <Text style={styles.bold}>{criticalThreshold}</Text> {formattedUnit}
+        <Text style={styles.bold}>{criticalThreshold}</Text>{highThreshold != null ? <> · HIGH above <Text style={styles.bold}>{highThreshold}</Text></> : null} {formattedUnit}
       </Text>
     </View>
   );

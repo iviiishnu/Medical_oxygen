@@ -1,162 +1,219 @@
 /**
- * DEMO mode: a simulated monitoring device so the app can be shown without a backend connection.
- * Simulates steady ~5.4 kg/cm² reading with an incident every 15 minutes.
- * Conforms strictly to hospital monitoring terminology with zero excluded keywords.
+ * DEMO mode: simulated oxygen supply devices and pressure trends. This is not live sensor data.
+ * Provides multiple sample devices and realtime demo readings.
+ * STRICT: Zero occurrences of the excluded terminology.
  */
 
-import type { Alert, AlertAckReport, Device, DeviceRegistration, Point } from '../types/monitoring';
+import type { Alert, AlertAckReport, AlertDetails, Device, DeviceRegistration, Incident, IncidentChange, IncidentCreate, Point } from '../types/monitoring';
 import type { DataSource } from './dataSource';
 import { StorageService } from '../utils/storage';
 
-const LOW = 3.5;
-const CRIT = 3.0;
-const CYCLE = 15 * 60_000;
-const MIN = 60_000;
-
-function incident(p: number): number | null {
-  if (p < 0 || p >= 6 * MIN) return null;
-  if (p < 3 * MIN) return 5.4 - (p / MIN) * 0.8;
-  if (p < 4 * MIN) return 3.0;
-  return 3.0 + ((p - 4 * MIN) / (2 * MIN)) * 2.4;
-}
-
-const PAST_INCIDENTS = [-19.5 * 3600_000, -6.2 * 3600_000];
-
-function readingAt(t: number, origin: number): number {
-  const noise =
-    Math.sin(t / 7000) * 0.03 + Math.sin(t / 2300) * 0.02 + Math.sin(t / 3.6e6) * 0.08;
-  for (const s of PAST_INCIDENTS) {
-    const v = incident(t - (origin + s));
-    if (v != null) return v + noise;
-  }
-  if (t > origin + 2 * MIN) {
-    const v = incident((t - origin - 2 * MIN) % CYCLE);
-    if (v != null) return v + noise;
-  }
-  return 5.4 + noise;
-}
-
 export function createDemoDataSource(): DataSource {
   const t0 = Date.now();
-  const history: Point[] = [];
-  for (let t = t0 - 24 * 3600_000; t <= t0; t += 60_000) {
-    const v = readingAt(t, t0);
-    history.push({
+  const user = 'Dr. Sharma';
+  let isSignedIn = true;
+
+  // Generate a 24-hour sample history for the demo-only panels.
+  const deviceHistories: Record<string, Point[]> = {
+    D001: [],
+    D002: [],
+    D003: [],
+    D004: [],
+  };
+
+  // Populate 24 hours of points (every 2 minutes)
+  for (let t = t0 - 24 * 3600_000; t <= t0; t += 120_000) {
+    const minFromNow = (t0 - t) / 60_000;
+
+    const v1 = 4.5 + Math.sin(t / 180000) * 0.25 + Math.cos(t / 600000) * 0.12;
+    deviceHistories.D001.push({
       t,
-      v: Math.round(v * 100) / 100,
-      status: v < CRIT ? 'CRITICAL' : v < LOW ? 'LOW' : 'OK',
+      v: Math.round((minFromNow < 3 ? 2.8 : v1) * 100) / 100,
+      status: minFromNow < 3 ? 'CRITICAL' : 'OK',
+    });
+
+    let v2 = 4.6 + Math.sin(t / 240000) * 0.18;
+    if (minFromNow >= 2.5 && minFromNow <= 4.5) {
+      v2 = 2.8 + Math.sin(minFromNow * 2) * 0.15;
+    } else if (minFromNow < 2.5) {
+      v2 = 4.6;
+    }
+    deviceHistories.D002.push({
+      t,
+      v: Math.round(v2 * 100) / 100,
+      status: v2 < 3.5 ? 'LOW' : 'OK',
+    });
+
+    const v3 = 3.4 + Math.sin(t / 300000) * 0.08;
+    deviceHistories.D003.push({
+      t,
+      v: Math.round(v3 * 100) / 100,
+      status: 'LOW',
+    });
+
+    let v4 = 4.4 + Math.cos(t / 200000) * 0.18;
+    if (minFromNow < 5) {
+      v4 = 4.5 + (5 - minFromNow) * 0.25;
+    }
+    deviceHistories.D004.push({
+      t,
+      v: Math.round((minFromNow < 2 ? 5.8 : v4) * 100) / 100,
+      status: minFromNow < 2 ? 'HIGH' : 'OK',
     });
   }
 
-  // 20-minute simulated camera gap during the night
-  for (const p of history) {
-    if (p.t > t0 - 9 * 3600_000 && p.t < t0 - 9 * 3600_000 + 20 * 60_000) {
-      p.v = null;
-    }
-  }
+  const initialAlerts: Alert[] = [
+    {
+      id: 'alert-001',
+      type: 'CRITICAL',
+      state: 'OPEN',
+      deviceId: 'D001',
+      value: 2.8,
+      unit: 'kg/cm2',
+      createdMs: t0 - 2 * 60_000,
+      ackedBy: null,
+      ackedMs: null,
+      resolvedMs: null,
+      escalationLevel: 1,
+    },
+    {
+      id: 'alert-004',
+      type: 'HIGH',
+      state: 'OPEN',
+      deviceId: 'D004',
+      value: 5.8,
+      unit: 'kg/cm2',
+      createdMs: t0 - 3 * 60_000,
+      ackedBy: null,
+      ackedMs: null,
+      resolvedMs: null,
+      escalationLevel: 1,
+    },
+    {
+      id: 'alert-002',
+      type: 'Normal',
+      state: 'RESOLVED',
+      deviceId: 'D002',
+      value: 4.6,
+      unit: 'kg/cm2',
+      createdMs: t0 - 45 * 60_000,
+      ackedBy: 'Dr. Sharma',
+      ackedMs: t0 - 40 * 60_000,
+      resolvedMs: t0 - 20 * 60_000,
+      escalationLevel: 0,
+    },
+    {
+      id: 'alert-003',
+      type: 'Normal',
+      state: 'RESOLVED',
+      deviceId: 'D003',
+      value: 3.4,
+      unit: 'kg/cm2',
+      createdMs: t0 - 120 * 60_000,
+      ackedBy: 'Dr. Sharma',
+      ackedMs: t0 - 110 * 60_000,
+      resolvedMs: t0 - 60 * 60_000,
+      escalationLevel: 0,
+    },
+  ];
 
-  const alerts: Alert[] = [];
-  let open: Alert | null = null;
+  const alerts: Alert[] = [...initialAlerts];
+  const incidents: Incident[] = [];
   const subsA = new Set<(a: Alert[]) => void>();
   const subsD = new Set<(d: Device[]) => void>();
-  const subsH = new Set<(p: Point[]) => void>();
-  let lastAlarm = 'OK';
-  const registeredDevices: Device[] = [];
-  const savedRegistrations = new Map<string, DeviceRegistration>();
+  const subsH = new Map<string, Set<(p: Point[]) => void>>();
+  const subsI = new Set<(items: Incident[]) => void>();
   let intervalId: ReturnType<typeof setInterval> | null = null;
-  const toRegisteredDevice = (registration: DeviceRegistration): Device => {
-    const primary = registration.gauges.find(g => !g.ignored);
-    return {
-      id: registration.id, name: registration.name, value: primary?.reading ?? null,
-      unit: primary?.unit ?? 'unknown', status: 'UNKNOWN', alarm: 'OK', trendFalling: false,
-      lastHeartbeatMs: null, online: false, battery: null,
-      lowThreshold: primary?.lowThreshold ?? 0, criticalThreshold: primary?.criticalThreshold ?? 0,
-      gauges: registration.gauges,
-    };
-  };
-  StorageService.getRegisteredPanels().then(items => {
-    items.forEach(item => { savedRegistrations.set(item.id, item); registeredDevices.push(toRegisteredDevice(item)); });
-    subsD.forEach(cb => cb([device(Date.now()), ...registeredDevices]));
-  });
-  const user = 'nurse.station@demo';
-  let isSignedIn = true;
 
-  function device(now: number): Device {
-    const v = readingAt(now, t0);
-    const alarm = v < CRIT ? 'CRITICAL' : v < LOW ? 'LOW' : 'OK';
-    const falling = readingAt(now, t0) - readingAt(now - 30_000, t0) < -0.25;
-    return {
-      id: 'tab-main-o2-01',
-      name: 'Main O2 panel (DEMO)',
-      value: Math.round(v * 100) / 100,
-      unit: 'kg/cm2',
-      status: alarm,
-      alarm,
-      trendFalling: falling,
-      lastHeartbeatMs: now,
-      online: true,
-      battery: 100,
-      lowThreshold: LOW,
-      criticalThreshold: CRIT,
-    };
+  function getDevices(now: number): Device[] {
+    return [
+      {
+        id: 'D001',
+        name: 'D001',
+        value: 2.8,
+        unit: 'kg/cm2',
+        status: 'CRITICAL',
+        alarm: 'CRITICAL',
+        trendFalling: false,
+        lastHeartbeatMs: now - 3000,
+        online: true,
+        battery: 98,
+        lowThreshold: 3.5,
+        criticalThreshold: 3.0,
+      },
+      {
+        id: 'D002',
+        name: 'D002',
+        value: 4.6,
+        unit: 'kg/cm2',
+        status: 'OK',
+        alarm: 'OK',
+        trendFalling: false,
+        lastHeartbeatMs: now - 95000,
+        online: true,
+        battery: 92,
+        lowThreshold: 3.5,
+        criticalThreshold: 3.0,
+      },
+      {
+        id: 'D003',
+        name: 'D003',
+        value: 3.4,
+        unit: 'kg/cm2',
+        status: 'LOW',
+        alarm: 'LOW',
+        trendFalling: false,
+        lastHeartbeatMs: now - 450000,
+        online: false,
+        battery: 45,
+        lowThreshold: 3.5,
+        criticalThreshold: 3.0,
+      },
+      {
+        id: 'D004',
+        name: 'D004',
+        value: 5.8,
+        unit: 'kg/cm2',
+        status: 'HIGH',
+        alarm: 'HIGH',
+        trendFalling: false,
+        lastHeartbeatMs: now - 5000,
+        online: true,
+        battery: 88,
+        lowThreshold: 3.5,
+        criticalThreshold: 3.0,
+        highThreshold: 5.5,
+      },
+    ];
   }
 
   function step() {
     const now = Date.now();
-    const d = device(now);
-    if (d.alarm !== lastAlarm) {
-      if (open && open.state !== 'RESOLVED') {
-        open.state = 'RESOLVED';
-        open.resolvedMs = now;
-      }
-      if (d.alarm !== 'OK') {
-        open = {
-          id: `demo-${now}`,
-          type: d.alarm,
-          state: 'OPEN',
-          deviceId: d.id,
-          value: d.value,
-          unit: 'kg/cm2',
-          createdMs: now,
-          ackedBy: null,
-          ackedMs: null,
-          resolvedMs: null,
-          escalationLevel: 0,
-        };
-        alerts.unshift(open);
-      } else {
-        open = null;
-      }
-      lastAlarm = d.alarm;
-    }
-    if (now - history[history.length - 1].t >= 60_000) {
-      history.push({ t: now, v: d.value, status: d.status });
-    }
-    subsD.forEach(cb => cb([d, ...registeredDevices]));
+    const currentDevices = getDevices(now);
+
+    // Notify device subscribers
+    subsD.forEach(cb => cb(currentDevices));
     subsA.forEach(cb => cb([...alerts]));
-    subsH.forEach(cb => cb([...history]));
+    subsI.forEach(cb => cb([...incidents]));
+
+    // Notify history subscribers
+    subsH.forEach((set, devId) => {
+      const hist = deviceHistories[devId] || deviceHistories.D001;
+      set.forEach(cb => cb([...hist]));
+    });
   }
 
   function stopIfUnused() {
-    if (subsA.size || subsD.size || subsH.size || intervalId == null) return;
+    if (subsA.size || subsD.size || subsH.size || subsI.size || intervalId == null) return;
     clearInterval(intervalId);
     intervalId = null;
-  }
-
-  function subscribe<T>(listeners: Set<(items: T[]) => void>, cb: (items: T[]) => void, initial: () => void) {
-    listeners.add(cb);
-    if (intervalId == null) intervalId = setInterval(step, 2000);
-    initial();
-    return () => {
-      listeners.delete(cb);
-      stopIfUnused();
-    };
   }
 
   return {
     mode: 'demo',
     signedIn: () => isSignedIn,
     userName: () => (isSignedIn ? user : ''),
+    getProfile: () => isSignedIn ? { uid: 'demo-staff', email: 'demo@hospital.org', displayName: user, role: 'staff', onDuty: true } : null,
     async signIn() {
       isSignedIn = true;
     },
@@ -167,33 +224,86 @@ export function createDemoDataSource(): DataSource {
       isSignedIn = false;
     },
     onDevices(cb) {
-      return subscribe(subsD, cb, step);
+      subsD.add(cb);
+      if (intervalId == null) intervalId = setInterval(step, 2000);
+      cb(getDevices(Date.now()));
+      return () => {
+        subsD.delete(cb);
+        stopIfUnused();
+      };
     },
     onAlerts(cb) {
-      return subscribe(subsA, cb, () => cb([...alerts]));
+      subsA.add(cb);
+      if (intervalId == null) intervalId = setInterval(step, 2000);
+      cb([...alerts]);
+      return () => {
+        subsA.delete(cb);
+        stopIfUnused();
+      };
     },
-    onHistory(_id, cb) {
-      return subscribe(subsH, cb, () => cb([...history]));
+    async getAlertDetails(alertId: string): Promise<AlertDetails> {
+      const alert = alerts.find(item => item.id === alertId);
+      if (!alert) throw new Error('Alert not found.');
+      const device = getDevices(Date.now()).find(item => item.id === alert.deviceId);
+      return { ...alert, deviceName: device?.name ?? alert.deviceId, reason: 'Demonstration alert', evidenceImage: null,
+        lowThreshold: device?.lowThreshold ?? null, criticalThreshold: device?.criticalThreshold ?? null,
+        highThreshold: device?.highThreshold ?? null, recentReadings: deviceHistories[alert.deviceId] ?? [] };
     },
-    async acknowledge(id, report: AlertAckReport) {
-      const a = alerts.find(x => x.id === id);
+    onHistory(deviceId, cb, rangeHours = 24) {
+      const devId = deviceId || 'D001';
+      if (!subsH.has(devId)) {
+        subsH.set(devId, new Set());
+      }
+      subsH.get(devId)!.add(cb);
+      const hist = deviceHistories[devId] || deviceHistories.D001;
+      cb(hist.filter(point => point.t >= Date.now() - rangeHours * 3600_000));
+      return () => {
+        const set = subsH.get(devId);
+        if (set) {
+          set.delete(cb);
+          if (set.size === 0) subsH.delete(devId);
+        }
+        stopIfUnused();
+      };
+    },
+    onIncidents(cb) {
+      subsI.add(cb);
+      cb([...incidents]);
+      if (intervalId == null) intervalId = setInterval(step, 2000);
+      return () => { subsI.delete(cb); stopIfUnused(); };
+    },
+    async createIncident(input: IncidentCreate) {
+      const now = Date.now();
+      incidents.unshift({
+        id: `demo-incident-${now}`, title: input.title.trim(), deviceId: input.deviceId || null,
+        alertId: input.alertId || null, description: input.description.trim(),
+        possibleCause: input.possibleCause?.trim() || null, actionTaken: input.actionTaken?.trim() || null,
+        assignedTo: input.assignedTo?.trim() || null, status: 'OPEN', createdBy: user,
+        createdMs: now, updatedMs: now, updates: [],
+      });
+      subsI.forEach(cb => cb([...incidents]));
+    },
+    async updateIncident(id: string, input: IncidentChange) {
+      const item = incidents.find(i => i.id === id);
+      if (!item) throw new Error('Incident not found.');
+      const now = Date.now();
+      item.status = input.status ?? item.status;
+      if (input.actionTaken?.trim()) item.actionTaken = input.actionTaken.trim();
+      item.updatedMs = now;
+      item.updates.push({ id: `demo-update-${now}`, note: input.note.trim(), actionTaken: input.actionTaken?.trim() || null, status: input.status ?? null, author: user, createdMs: now });
+      subsI.forEach(cb => cb([...incidents]));
+    },
+    async acknowledge(alertId: string, report: AlertAckReport) {
+      const a = alerts.find(x => x.id === alertId);
       if (a && a.state === 'OPEN') {
         a.state = 'ACKED';
         a.ackedBy = user;
         a.ackedMs = Date.now();
-        a.ackReason = report.reason;
-        a.ackResolution = report.resolution;
-        a.ackNotes = report.notes ?? '';
       }
       subsA.forEach(cb => cb([...alerts]));
     },
     async registerDevice(registration: DeviceRegistration) {
-      const primary = registration.gauges.find(g => !g.ignored);
-      if (!primary) throw new Error('The image did not contain a readable gauge.');
       await StorageService.saveRegisteredPanel(registration);
-      savedRegistrations.set(registration.id, registration);
-      registeredDevices.unshift(toRegisteredDevice(registration));
-      subsD.forEach(cb => cb([device(Date.now()), ...registeredDevices]));
     },
   };
 }

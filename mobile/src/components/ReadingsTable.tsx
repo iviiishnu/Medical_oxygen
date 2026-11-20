@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import type { Point } from '../types/monitoring';
 import { StatusBadge } from './StatusBadge';
-import { colors as baseColors, type ThemePalette } from '../theme/colors';
-import { useThemeColors } from '../theme/ThemeContext';
+import { colors } from '../theme/colors';
 
 interface Props {
   points: Point[];
@@ -12,8 +11,6 @@ interface Props {
 }
 
 export const ReadingsTable: React.FC<Props> = ({ points, unit, maxRows = 200 }) => {
-  const colors = useThemeColors(baseColors);
-  const styles = createStyles(colors);
   const reversedData = React.useMemo(
     () => [...points].reverse().slice(0, maxRows),
     [points, maxRows]
@@ -44,7 +41,7 @@ export const ReadingsTable: React.FC<Props> = ({ points, unit, maxRows = 200 }) 
       </View>
       <FlatList
         data={reversedData}
-        keyExtractor={item => String(item.t)}
+        keyExtractor={(item: Point) => String(item.t)}
         renderItem={renderItem}
         style={styles.list}
         nestedScrollEnabled={true}
@@ -60,7 +57,7 @@ export const ReadingsTable: React.FC<Props> = ({ points, unit, maxRows = 200 }) 
   );
 };
 
-const createStyles = (colors: ThemePalette) => StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.surface,
     borderRadius: 8,
